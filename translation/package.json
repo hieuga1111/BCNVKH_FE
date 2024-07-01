@@ -1,0 +1,12 @@
+{
+	"name": "translation",
+	"version": "1.0.0",
+	"description": "",
+	"main": "translate.js",
+  "type": "module",
+	"scripts": {
+		"translate": "node translate.js"
+	},
+	"author": "",
+	"license": "ISC"
+}
