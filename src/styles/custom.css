@@ -1,0 +1,831 @@
+.initechNode {
+    border: solid 1px #476704;
+    display: inline-block;
+    background-color: #E9EBD5;
+    border-radius: 8px;
+    gap: 10px;
+    color: #082819 !important;
+    /* margin: auto !important; */
+}
+
+.initechNode h1 {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nodeLineTable * {
+    border-color: #476704 !important;
+}
+
+.reactOrgChart .level-0 {
+    /* text-transform: uppercase !important; */
+    /* width: 200px !important; */
+    /* height: 64px !important; */
+    font-size: 14px !important;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.avatar {
+    width: 50px!important;
+    /* height: 150px; */
+    border-radius: 50%;
+}
+
+.reactOrgChart .level-1 {
+    min-width: 180px !important;
+    padding: 8px 4px 8px 4px;
+    border-radius: 8px;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* .reactOrgChart .level-2 {
+    min-width: 180px !important;
+    padding: 8px 4px 8px 4px;
+    border-radius: 8px;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: center;
+} */
+
+.reactOrgChart .level-2 {
+    /* min-width: 50px !important; */
+    /* height: 106px !important; */
+    padding: 8px 4px 8px 4px;
+    border-radius: 8px;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: center;
+    display: flex;
+    /* flex-direction: column; */
+    /* min-height: 150px; */
+    /* min-height: 150px; */
+    /* max-width: 50px; */
+    justify-self: center;
+    align-self: center;
+    margin: auto;
+    max-width: 300px !important;
+    margin-left: 0.5rem;
+}
+
+.reactOrgChart .level-3 {
+    min-width: 50px !important;
+    /* height: 106px !important; */
+    padding: 8px 4px 8px 4px;
+    border-radius: 8px;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+    max-width: 50px;
+    justify-self: center;
+    align-self: center;
+    margin: auto;
+}
+
+
+.reactOrgChart .level-4 {
+    min-width: 50px !important;
+    /* height: 106px !important; */
+    padding: 8px 4px 8px 4px;
+    border-radius: 8px;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+    max-width: 50px;
+    justify-self: center;
+    align-self: center;
+    margin: auto;
+}
+
+
+#initechOrgChart .orgNodeChildGroup .nodeGroupLineVerticalMiddle {
+    border-right: solid 1px #ccc
+}
+
+#initechOrgChart .nodeLineBorderTop {
+    border-top: solid 1px #ccc;
+}
+
+.reactOrgChart td {
+    padding: 0 !important;
+}
+
+.reactOrgChart tr {
+    border-style: none;
+}
+
+/* css menu from there */
+
+.final-level-menu {
+    background-color: #F5F5F5 !important;
+    width: 176px;
+    height: 36px;
+    top: 20px;
+    left: 20px;
+    padding: 8px 12px 8px 12px;
+    border-radius: 4px;
+    gap: 8px;
+}
+
+.final-level-menu span {
+    font-weight: 400;
+}
+
+.final-level-menu:hover {
+    background-color: #EBEAEA !important;
+}
+
+.final-level-menu:hover svg {
+    stroke: #fff !important;
+}
+
+.final-level-menu.active svg {
+    stroke: #fff !important;
+}
+
+.final-level-menu:hover {
+    background-color: #EBEAEA !important;
+}
+
+.final-level-menu:hover span {
+    font-weight: 700 !important;
+}
+
+.final-level-menu.active {
+    background-color: #E9EBD5 !important;
+}
+
+.final-level-menu.active span {
+    font-weight: 700 !important;
+    color: #082819 !important;
+}
+
+.header-menu-color {
+    color: #285a21 !important;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+li.nav-item {
+    border-radius: 5px;
+    background-color: #fff !important;
+
+}
+
+/* a.active {
+    background: #7E8F12!important;
+} */
+/*
+a.active span {
+    background: #7E8F12!important;
+    color: #fff!important;
+} */
+
+div.divide {
+    width: 100%;
+    height: 1px;
+    background: #7E8F12;
+}
+
+li.menu>button {
+    border-radius: 8px;
+    gap: 12px;
+    background: #F4F6EB !important;
+    text-transform: uppercase;
+    height: 48px;
+    padding: 0px 12px 0px 12px;
+    margin-top: 0.75rem;
+}
+
+li.menu>button span {
+    text-transform: uppercase;
+    color: #000;
+    font-weight: 700;
+}
+
+li.menu>button:hover {
+    background: #5da552 !important;
+}
+
+li.menu>button.active {
+    background: #5da552 !important;
+}
+
+.group-menu-name {
+    width: 216px;
+    height: 31px;
+    padding: 8px 0px 8px 0px;
+    gap: 10px;
+    margin: 0.25rem 0rem;
+}
+
+#logo {
+    width: 97.33px;
+    /* height: 64px; */
+}
+
+#expandButton {
+    width: 115px;
+    height: 32px;
+    padding: 8px 12px 8px 12px;
+    border-radius: 16px 4px 4px 16px;
+    gap: 8px;
+    background: #285a21;
+}
+
+#collapsebtn {
+    width: 125px;
+    height: 32px;
+    padding: 8px 12px 8px 12px;
+    gap: 8px;
+    border-radius: 4px 16px 16px 4px;
+    background: #959E5E;
+    margin-left: 0.5rem!important;
+}
+
+
+
+#collapsebtn, #expandButton span {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    margin: auto;
+    line-height: 100%;
+}
+
+#expandButton:hover, #expandButton:active {
+    background: #476704;
+}
+
+#collapsebtn:hover, #collapsebtn:active {
+    background: #476704;
+}
+
+.menu1-text {
+    /* color: #046738 !important; */
+    font-weight: 700;
+}
+
+.header-page-bottom {
+    border-bottom: 1px solid #046738;
+}
+
+.page-title {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
+    text-transform: uppercase;
+    color: #046738;
+    align-self: center;
+}
+
+.back-button {
+    height: 32px;
+    padding: 0px 16px 0px 16px;
+    border-radius: 8px;
+    gap: 12px;
+    background-color: #DADADA !important;
+    color: #046738;
+    border-color: #DADADA !important;
+}
+
+.edit-page-btn {
+    height: 32px;
+    padding: 0px 16px 0px 16px;
+    border-radius: 8px;
+    gap: 12px;
+    background-color: #959E5E !important;
+    color: #DADADA;
+    border-color: #959E5E !important;
+}
+
+.back-button span {
+    color: #082819;
+    text-transform: uppercase !important;
+}
+
+.label {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #046738;
+}
+
+.cancel-button {
+    /* width: 74px; */
+    height: 40px;
+    padding: 0px 24px 0px 24px;
+    border-radius: 8px;
+    border: 1px;
+    gap: 12px;
+    border: 1px solid #082819;
+    text-transform: uppercase !important;
+    font-size: 12px !important;
+}
+
+.add-button {
+    height: 40px;
+    padding: 0px 24px 0px 24px;
+    border-radius: 8px;
+    border: 1px;
+    gap: 12px;
+    border: 1px solid #082819 !important;
+    text-transform: uppercase !important;
+    background: #285a21 !important;
+    color: #fff !important;
+    border-color: #285a21 !important;
+    font-size: 12px !important;
+}
+
+.gap-8 {
+    gap: 8px !important;
+}
+
+/* css icon menu */
+li.nav-item svg.icon-menu,
+.final-level-menu svg {
+    top: 20px;
+    left: 20px;
+    padding: 4px;
+    border-radius: 20px;
+    gap: 10px;
+    background-color: #E9EBD5;
+}
+
+li.nav-item svg.icon-menu {
+    width: 24px !important;
+    height: 24px !important;
+}
+
+.final-level-menu svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.final-level-menu svg {
+    filter: grayscale(100%);
+}
+
+li.menu>button.active svg.icon-menu {
+    background-color: #fff !important;
+}
+
+li.menu>button:hover svg.icon-menu {
+    background-color: #fff !important;
+}
+
+.final-level-menu.active svg {
+    background-color: #fff !important;
+    filter: none;
+}
+
+.final-level-menu:hover svg {
+    background-color: #fff !important;
+    filter: none;
+}
+
+
+.form-input {
+    font-size: 12px !important;
+}
+
+.text-danger {
+    font-size: 10px !important;
+}
+
+.mb-5 {
+    /* margin-bottom: 0 !important; */
+}
+
+.css-1jqq78o-placeholder {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.company-name {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #476704;
+}
+
+.confirm-delete {
+    padding: 40px 40px 40px 40px !important;
+    border-radius: 16px !important;
+    width: 25em !important;
+    /* gap: 24px!important; */
+
+}
+
+.confirm-reject {
+    padding: 40px 40px 40px 40px !important;
+    border-radius: 16px !important;
+    width: 25em !important;
+    /* gap: 24px!important; */
+
+}
+
+.confirm-popup .swal2-popup .swal2-html-container {
+    padding-right: 0 !important;
+}
+
+.confirm-popup .swal2-image {
+    margin: auto !important;
+}
+
+.confirm-popup .swal2-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    letter-spacing: 0em;
+    text-transform: uppercase;
+    color: #476704;
+    padding-left: 2.5rem !important;
+    /* padding-right: 0!important; */
+    /* padding-left: 0!important; */
+
+}
+
+.confirm-popup .swal2-html-container {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #082819;
+    padding-left: 2.5rem !important;
+}
+
+.confirm-popup .confirm-span {
+    font-weight: 400 !important;
+}
+
+.confirm-popup .swal2-cancel {
+    width: 79px;
+    height: 40px;
+    padding: 0px 24px 0px 24px;
+    border-radius: 8px;
+    border: 1px;
+    gap: 12px;
+    color: #082819;
+    text-transform: uppercase;
+    background: #fff;
+    border: 1px solid #082819;
+    font-size: 14px !important;
+}
+
+.confirm-popup .swal2-confirm {
+    width: Hug 124px;
+    height: 40px;
+    padding: 0px 24px 0px 24px;
+    border-radius: 8px;
+    gap: 12px;
+    background: #959E5E;
+    border-color: #959E5E;
+    color: #fff;
+    font-size: 14px !important;
+    text-transform: uppercase;
+}
+
+.custom-uploadfile {
+    width: 80px !important;
+    height: 80px;
+    border-radius: 50px;
+    border: 2px #BABABA dashed;
+    background-color: #E9EBD5;
+
+    .upfile_content {
+        color: #476704;
+        font-size: 12px;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 20px;
+
+        .icon_upload {
+            width: 22px;
+            margin-left: 27px;
+            height: 24px;
+        }
+    }
+}
+
+.company-name {
+    text-transform: uppercase !important;
+}
+
+.welcome {
+    font-size: 47px;
+    font-weight: 700;
+    line-height: 60px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #FFDE15;
+}
+
+.welcome-member {
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 30px;
+    letter-spacing: 0em;
+    color: #FFDE15;
+}
+
+.form-login-container {
+    background-color: #fff;
+}
+
+.sign-in-text {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #056839;
+
+}
+
+.sign-in-btn {
+    width: 100%;
+    height: 48px;
+    padding: 0px 24px 0px 24px;
+    border-radius: 8px;
+    gap: 12px;
+    background: #056839 !important;
+    color: #f5f5f5;
+    text-transform: uppercase !important;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 25px;
+    letter-spacing: 0em;
+}
+
+.forget-pass-text {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0em;
+    color: #056839;
+    text-decoration: underline;
+    text-align: center;
+}
+
+.label-login {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #354C3E;
+}
+
+.language-list {
+    width: 200px;
+    height: 160px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #082819;
+    gap: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.language-option {
+    padding: 0px 12px 0px 12px;
+    border-radius: 8px;
+    gap: 8px;
+}
+
+.language-option :hover,
+.language-option :active {
+    background: #EBEAEA !important;
+}
+
+#userName,
+#passWord {
+    height: 48px;
+    padding: 0px 12px 0px 12px;
+    border-radius: 8px;
+    border: 1px;
+    gap: 12px;
+    border: 1px solid #BABABA;
+}
+
+.form-checkbox:checked {
+    background-color: #046738 !important;
+}
+
+.zIndex-10 {
+    z-index: 10 !important;
+}
+
+.flatpickr-current-month {
+    background-color: #E9EBD5;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    border-radius: 4px;
+    margin-top: 3px;
+    height: 24px !important;
+    width: 150px !important;
+    padding-top: 3px !important;
+    left: 25% !important;
+}
+
+.flatpickr-weekdays {
+    background-color: #F4F6EB !important;
+}
+
+.flatpickr-weekday:last-child {
+    color: #E43940 !important;
+
+}
+
+.flatpickr-weekday {
+    color: #476704 !important;
+
+}
+
+.flatpickr-day.selected {
+    background-color: #959E5E !important;
+    border-radius: 4px;
+    border-color: #959E5E !important;
+}
+
+.flatpickr-day {
+    border-radius: 4px !important;
+    font-size: 14px !important;
+}
+
+.flatpickr-day.today {
+    border-radius: 4px;
+}
+
+.flatpickr-day:hover {
+    border-radius: 4px;
+}
+
+.calender-input {
+    background-position: 97% 7px !important;
+    background: url("/assets/images/calendar_icon.png") no-repeat right;
+    background-size: 20px;
+}
+
+/* .password-input {
+    background-position: 97% 7px !important;
+    background: url("/assets/images/calendar_icon.png") no-repeat right;
+    background-size: 20px;
+} */
+
+input:disabled, textarea:disabled {
+    color: black !important;
+    background-color: rgb(235 235 235) !important;
+}
+.custom-bell:hover {
+    border: 1px solid #BABABA !important;
+    background-color: white !important;
+}
+
+.button-create {
+    width: 120px;
+}
+
+.button-import {
+    width: 140px;
+}
+
+.button-download {
+    width: 180px;
+}
+
+.button-download-docs{
+    width: 120px;
+}
+
+
+.button-table  {
+    height: 40px;
+    padding: 0 16 0 16;
+    gap: 12px!important;
+    border-radius: 20!important;
+    background: #285a21 !important;
+    border-radius: 20px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-table span {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0em;
+    color: #F5F5F5;
+}
+
+.button-table:hover, .button-table:active {
+    background: #476704!important;
+    color: #fff;
+}
+
+.css-16xfy0z-control {
+    color: black !important;
+    background-color: rgb(235 235 235) !important;
+}
+
+.css-16xfy0z-control .css-olqui2-singleValue {
+    color: black !important;
+}
+
+.groupStyles {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.groupBadgeStyles {
+    background-color: #EBECF0;
+    border-radius: 2em;
+    color: #172B4D;
+    display: inline-block;
+    font-size: 12;
+    font-weight: normal;
+    line-height: 1;
+    min-width: 1;
+    padding: 0.16666666666667em 0.5em;
+    text-align: center;
+}
+
+.swal2-input, .swal2-textarea {
+    margin: 1rem 0rem!important;
+}
+
+.swal2-textarea {
+    height: 4em!important;
+}
+
+.hover\:bg-primary:hover {
+    background-color: #7E8F12 !important;
+    cursor: pointer;
+}
+
+.upload-file {
+    background-color: #ddd;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.upload-file button svg {
+    width: 16px;
+}
+
+.upload-file button svg:hover {
+    color: red
+}
