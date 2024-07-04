@@ -62,8 +62,7 @@ const Department = ({ ...props }: Props) => {
 
 	const [openModal, setOpenModal] = useState(false);
 
-	const { data: recordsData, pagination, mutate } = Departments({ ...router.query });
-	const { data: departmenttree, pagination: paginationDepartmentTree, mutate: mutateDepartmentTree } = DepartmentsTree({ ...router.query });
+	const { data: recordsData, pagination, mutate } = Departments({ ...router.query, size: 10 });
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
 			setGetStorge(DepartmentList);
@@ -110,7 +109,6 @@ const Department = ({ ...props }: Props) => {
 					deleteDepartment(data?.records.id)
 						.then(() => {
 							mutate();
-							mutateDepartmentTree();
 							showMessage(`${t('delete_department')}`, 'success');
 						})
 						.catch((err) => {
@@ -128,7 +126,7 @@ const Department = ({ ...props }: Props) => {
 			pathname: router.pathname,
 			query: {
 				...router.query,
-				search: param,
+				search_text: param,
 			},
 		});
 	};
@@ -250,7 +248,16 @@ const Department = ({ ...props }: Props) => {
 							totalRecords={recordsData?.total}
 							recordsPerPage={pageSize}
 							page={page}
-							onPageChange={(p) => setPage(p)}
+							onPageChange={(p) => {
+                                setPage(p)
+                                router.replace({
+                                    pathname: router.pathname,
+                                    query: {
+                                        ...router.query,
+                                        page: p,
+                                    },
+                                });
+                            } }
 							recordsPerPageOptions={PAGE_SIZES}
 							onRecordsPerPageChange={setPageSize}
 							minHeight={200}

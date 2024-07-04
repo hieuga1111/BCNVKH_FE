@@ -32,7 +32,7 @@ import IconNewEdit from '@/components/Icon/IconNewEdit';
 import IconNewTrash from '@/components/Icon/IconNewTrash';
 import IconNewPlus from '@/components/Icon/IconNewPlus';
 import { Humans, HumansByDepartment } from '@/services/swr/human.swr';
-import { deleteHuman, exportHuman } from '@/services/apis/human.api';
+import { deleteHuman, downloadUsers, exportHuman } from '@/services/apis/human.api';
 
 interface Props {
     [key: string]: any;
@@ -54,7 +54,7 @@ const Department = ({ ...props }: Props) => {
     const [pageSize, setPageSize] = useState(PAGE_SIZES_DEFAULT);
     const [total, setTotal] = useState(0);
     const [getStorge, setGetStorge] = useState<any>();
-    const { data: recordsData, pagination, mutate } = Humans({ sortBy: 'id.ASC', ...router.query });
+    const { data: recordsData, pagination, mutate } = Humans({ ...router.query, size: 10 });
     
 
     const [codeArr, setCodeArr] = useState<string[]>([]);
@@ -142,7 +142,7 @@ const Department = ({ ...props }: Props) => {
             pathname: router.pathname,
             query: {
                 ...router.query,
-                search: param,
+                search_text: param,
             },
         });
     };
@@ -191,6 +191,38 @@ const Department = ({ ...props }: Props) => {
 			),
 		},
 	];
+    const handleBackup = () => {
+        const swalDeletes = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-secondary',
+                cancelButton: 'btn btn-danger ltr:mr-3 rtl:ml-3',
+                popup: 'confirm-popup confirm-delete',
+            },
+            imageUrl: '/assets/images/delete_popup.png',
+            buttonsStyling: false,
+        });
+        swalDeletes
+            .fire({
+                title: `Bạn muốn tải báo cáo?`,
+                padding: '2em',
+                showCancelButton: true,
+                cancelButtonText: `${t('cancel')}`,
+                confirmButtonText: `${t('confirm')}`,
+                reverseButtons: true,
+            })
+            .then((result) => {
+                if (result.value) {
+                    downloadUsers().then((res) => {
+                        console.log(res)
+                        window.location.href = res;
+                        showMessage(`Tải thành công`, 'success');
+                    }).catch((err) => {
+                        showMessage(`${err.response.data}`, 'error');
+
+                    });
+                }
+            });
+    }
     return (
         <div >
             {/* {showLoader && (
@@ -219,6 +251,9 @@ const Department = ({ ...props }: Props) => {
                                 <span className="uppercase">{t('add')}</span>
                             </button>
                         </Link>
+                        <button type="button" className=" m-1 button-table button-create" onClick={() => handleBackup()}>
+                            <span className="uppercase">Xuất báo cáo</span>
+                        </button>
                     </div>
                     <div className='display-style'>
                         <input
@@ -247,7 +282,16 @@ const Department = ({ ...props }: Props) => {
 							totalRecords={recordsData?.total}
 							recordsPerPage={pageSize}
 							page={page}
-							onPageChange={(p) => setPage(p)}
+							onPageChange={(p) => {
+                                setPage(p)
+                                router.replace({
+                                    pathname: router.pathname,
+                                    query: {
+                                        ...router.query,
+                                        page: p,
+                                    },
+                                });
+                            } }
 							recordsPerPageOptions={PAGE_SIZES}
 							onRecordsPerPageChange={setPageSize}
 							minHeight={200}

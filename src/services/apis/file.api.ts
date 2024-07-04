@@ -12,3 +12,7 @@ export const deleteFile = async (data: any) => {
 	const endpoint = `/units/${data}`;
 	return callApi(endpoint, 'DELETE', data);
 };
+export const listAllFiles = async (data: any) => {
+	const endpoint = '/files/';
+	return callApi(endpoint, 'GET', data);
+};

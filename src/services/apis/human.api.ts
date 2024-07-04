@@ -35,4 +35,7 @@ export const deleteHuman = async (data: any) => {
 	const endpoint = `/users/${data}`;
 	return callApi(endpoint, 'DELETE', data);
 };
-
+export const downloadUsers = async () => {
+	const endpoint = `/reports/users`;
+	return callApi(endpoint, 'GET');
+};
