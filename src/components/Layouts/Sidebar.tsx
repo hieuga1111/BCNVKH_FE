@@ -224,6 +224,14 @@ const Sidebar = () => {
                                                                 </div>
                                                             </Link>
                                                         </li>
+                                                        <li className="nav-item">
+                                                            <Link href="/hrm/participants" className="final-level-menu group">
+                                                                <div className="flex it             ems-center">
+                                                                    <IconMenuPersonel className="shrink-0 group-hover:!text-primary" />
+                                                                    <span className="dark:group-hover:text-white-dar text-black dark:text-[#506690] ltr:pl-3 rtl:pr-3">Thành viên tham gia</span>
+                                                                </div>
+                                                            </Link>
+                                                        </li>
                                                         {/* </RBACWrapper> */}
 
                                                     </ul>
@@ -244,10 +252,34 @@ const Sidebar = () => {
                                                             </Link>
                                                         </li>
                                                         <li className="nav-item">
-                                                            <Link href="/hrm/role" className="final-level-menu group">
+                                                            <Link href="/hrm/history-accessbyreport" className="final-level-menu group">
                                                                 <div className="flex items-center">
                                                                     <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
-                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử truy cập</span>
+                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử truy cập người dùng theo báo cáo</span>
+                                                                </div>
+                                                            </Link>
+                                                        </li>
+                                                        <li className="nav-item">
+                                                            <Link href="/hrm/history-access" className="final-level-menu group">
+                                                                <div className="flex items-center">
+                                                                    <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
+                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử truy cập báo cáo theo người dùng</span>
+                                                                </div>
+                                                            </Link>
+                                                        </li>
+                                                        <li className="nav-item">
+                                                            <Link href="/hrm/history-edit" className="final-level-menu group">
+                                                                <div className="flex items-center">
+                                                                    <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
+                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử chỉnh sửa báo cáo</span>
+                                                                </div>
+                                                            </Link>
+                                                        </li>
+                                                        <li className="nav-item">
+                                                            <Link href="/hrm/history-signin" className="final-level-menu group">
+                                                                <div className="flex items-center">
+                                                                    <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
+                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử đăng nhập</span>
                                                                 </div>
                                                             </Link>
                                                         </li>
@@ -333,7 +365,7 @@ const Sidebar = () => {
                                             </Link>
                                         </li>
                                         <li className="nav-item">
-                                            <Link href="/hrm/driving-order" className="final-level-menu group">
+                                            <Link href="/hrm/file" className="final-level-menu group">
                                                 <div className="flex items-center">
                                                     <IconMenuFormOT className="shrink-0 group-hover:!text-primary" />
                                                     <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Tệp đính kèm báo cáo</span>

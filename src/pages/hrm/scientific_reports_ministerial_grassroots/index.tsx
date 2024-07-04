@@ -119,7 +119,7 @@ const Duty = ({ ...props }: Props) => {
                 pathname: router.pathname,
                 query: {
                     ...router.query,
-                    search: param
+                    search_text: param,
                 },
             }
         );
@@ -175,7 +175,7 @@ const Duty = ({ ...props }: Props) => {
             render: (records: any, index: any) => <span>{records?.acceptance_council}</span>
 
         },
-       
+
         {
             accessor: 'action',
             title: 'Thao tác',
@@ -257,10 +257,19 @@ const Duty = ({ ...props }: Props) => {
                         className="whitespace-nowrap table-hover custom_table"
                         records={shift?.data}
                         columns={columns}
-                        totalRecords={pagination?.totalRecords}
-                        recordsPerPage={pagination?.perPage}
-                        page={pagination?.page}
-                        onPageChange={(p) => handleChangePage(p, pagination?.perPage)}
+                        totalRecords={shift?.total}
+                        recordsPerPage={10}
+                        page={page}
+                        onPageChange={(p) => {
+                            setPage(p)
+                            router.replace({
+                                pathname: router.pathname,
+                                query: {
+                                    ...router.query,
+                                    page: p,
+                                },
+                            });
+                        }}
                         recordsPerPageOptions={PAGE_SIZES}
                         onRecordsPerPageChange={e => handleChangePage(pagination?.page, e)}
                         sortStatus={sortStatus}
