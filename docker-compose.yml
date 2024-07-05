@@ -1,10 +1,10 @@
 version: '3.3'
 services:
-    hrm_fe:
+    bctk_fe:
         build:
             context: .
             dockerfile: Dockerfile
-        container_name: hrm_fe_container
+        container_name: bctk_fe_container
         ports:
             - '80:80'
         restart: always
