@@ -22,20 +22,21 @@ import { useRouter } from 'next/router';
 import IconNewEdit from '@/components/Icon/IconNewEdit';
 import IconNewTrash from '@/components/Icon/IconNewTrash';
 import IconNewPlus from '@/components/Icon/IconNewPlus';
-import { Shifts } from '@/services/swr/shift.swr';
+import { History } from '@/services/swr/history.swr';
 import { deleteShift } from '@/services/apis/shift.api';
 import IconNewEye from '@/components/Icon/IconNewEye';
+import IconDownload from '@/components/Icon/IconDownload';
 
 interface Props {
     [key: string]: any;
 }
 
-const Duty = ({ ...props }: Props) => {
+const File = ({ ...props }: Props) => {
 
     const dispatch = useDispatch();
     const { t } = useTranslation();
     useEffect(() => {
-        dispatch(setPageTitle(`BCNVKH cấp Nhà nước`));
+        dispatch(setPageTitle(`Lịch sử truy cập báo cáo theo người dùng`));
     });
 
     const router = useRouter();
@@ -56,7 +57,7 @@ const Duty = ({ ...props }: Props) => {
     const [openModal, setOpenModal] = useState(false);
 
     // get data
-    const { data: shift, pagination, mutate } = Shifts({ management_level_id: 'NN', ...router.query });
+    const { data: shift, pagination, mutate } = History({ path: '/api/scientific_reports/', method: 'get', ...router.query, size: 10 });
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -114,12 +115,13 @@ const Duty = ({ ...props }: Props) => {
             ...filter,
             search: param
         })
+        
         router.replace(
             {
                 pathname: router.pathname,
                 query: {
                     ...router.query,
-                    search_text: param,
+                    username: param
                 },
             }
         );
@@ -150,57 +152,22 @@ const Duty = ({ ...props }: Props) => {
             render: (records: any, index: any) => <span>{(page - 1) * pageSize + index + 1}</span>,
         },
         {
-            accessor: 'code',
-            title: `Mã`,
+            accessor: 'username',
+            title: `Người dùng`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.code}</span>
+            render: (records: any, index: any) => <span>{records?.username}</span>
         },
         {
-            accessor: 'name',
-            title: `Tên`,
+            accessor: 'time',
+            title: `Thời gian`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.name}</span>
+            render: (records: any, index: any) => <span>{records?.time}</span>
         },
         {
-            accessor: 'release_time',
-            title: `Thời gian phát hành`,
+            accessor: 'user_agent',
+            title: `Trình duyệt`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.release_time}</span>
-
-        },
-        {
-            accessor: 'acceptance_council',
-            title: `Hội đồng nghiệm thu`,
-            sortable: false,
-            render: (records: any, index: any) => <span>{records?.acceptance_council}</span>
-
-        },
-       
-        {
-            accessor: 'action',
-            title: 'Thao tác',
-            titleClassName: '!text-center',
-            render: (records: any) => (
-                <div className="flex items-center w-max mx-auto gap-2">
-                    <div className="w-[auto]">
-
-                        <button type="button" className='button-edit' onClick={() => handleEdit(records)}>
-                            <IconNewEdit /><span>
-                                {t('edit')}
-                            </span>
-                        </button>
-                    </div>
-                    <div className="w-[auto]">
-
-                        <button type="button" className='button-delete' onClick={() => handleDelete(records)}>
-                            <IconNewTrash />
-                            <span>
-                                {t('delete')}
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            ),
+            render: (records: any, index: any) => <span>{records?.user_agent}</span>
         },
     ]
 
@@ -213,7 +180,7 @@ const Duty = ({ ...props }: Props) => {
                     </Link>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>BCNVKH cấp Nhà nước</span>
+                    <span>Lịch sử truy cập báo cáo theo người dùng</span>
 
                 </li>
             </ul>
@@ -226,21 +193,6 @@ const Duty = ({ ...props }: Props) => {
             <div className="panel mt-6">
                 <div className="flex md:items-center justify-between md:flex-row flex-col mb-4.5 gap-5">
                     <div className="flex items-center flex-wrap">
-                        <Link href="/hrm/scientific_reports_gorvement/create">
-                            <button type="button" className=" m-1 button-table button-create" >
-                                <IconNewPlus />
-                                <span className="uppercase">{t('add')}</span>
-                            </button>
-                        </Link>
-
-                        {/* <button type="button" className="btn btn-primary btn-sm m-1 custom-button" >
-                            <IconFolderMinus className="ltr:mr-2 rtl:ml-2" />
-                            Nhập file
-                        </button>
-                        <button type="button" className="btn btn-primary btn-sm m-1 custom-button" >
-                            <IconDownload className="ltr:mr-2 rtl:ml-2" />
-                            Xuất file excel
-                        </button> */}
                     </div>
                     <div className='flex gap-2'>
                         <div className='flex gap-1'>
@@ -283,4 +235,4 @@ const Duty = ({ ...props }: Props) => {
     );
 };
 
-export default Duty;
+export default File;
