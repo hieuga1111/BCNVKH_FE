@@ -22,20 +22,21 @@ import { useRouter } from 'next/router';
 import IconNewEdit from '@/components/Icon/IconNewEdit';
 import IconNewTrash from '@/components/Icon/IconNewTrash';
 import IconNewPlus from '@/components/Icon/IconNewPlus';
-import { Shifts } from '@/services/swr/shift.swr';
+import { Participants } from '@/services/swr/participants.swr';
 import { deleteShift } from '@/services/apis/shift.api';
 import IconNewEye from '@/components/Icon/IconNewEye';
+import { downloadParticipants } from '@/services/apis/participants.api';
 
 interface Props {
     [key: string]: any;
 }
 
-const Duty = ({ ...props }: Props) => {
+const Participant = ({ ...props }: Props) => {
 
     const dispatch = useDispatch();
     const { t } = useTranslation();
     useEffect(() => {
-        dispatch(setPageTitle(`BCNVKH cấp Nhà nước`));
+        dispatch(setPageTitle(`Thành viên tham gia`));
     });
 
     const router = useRouter();
@@ -56,7 +57,7 @@ const Duty = ({ ...props }: Props) => {
     const [openModal, setOpenModal] = useState(false);
 
     // get data
-    const { data: shift, pagination, mutate } = Shifts({ management_level_id: 'NN', ...router.query });
+    const { data: shift, pagination, mutate } = Participants({ ...router.query });
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -150,60 +151,57 @@ const Duty = ({ ...props }: Props) => {
             render: (records: any, index: any) => <span>{(page - 1) * pageSize + index + 1}</span>,
         },
         {
-            accessor: 'code',
-            title: `Mã`,
+            accessor: 'information',
+            title: `Thông tin`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.code}</span>
+            render: (records: any, index: any) => <span>{records?.information}</span>
         },
         {
-            accessor: 'name',
-            title: `Tên`,
+            accessor: 'unit',
+            title: `Đơn vị`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.name}</span>
+            render: (records: any, index: any) => <span>{records?.unit.name}</span>
         },
         {
-            accessor: 'release_time',
-            title: `Thời gian phát hành`,
+            accessor: 'scientific_report',
+            title: `Nhiệm vụ`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.release_time}</span>
+            render: (records: any, index: any) => <span>{records?.scientific_report.name}</span>
 
-        },
-        {
-            accessor: 'acceptance_council',
-            title: `Hội đồng nghiệm thu`,
-            sortable: false,
-            render: (records: any, index: any) => <span>{records?.acceptance_council}</span>
-
-        },
-       
-        {
-            accessor: 'action',
-            title: 'Thao tác',
-            titleClassName: '!text-center',
-            render: (records: any) => (
-                <div className="flex items-center w-max mx-auto gap-2">
-                    <div className="w-[auto]">
-
-                        <button type="button" className='button-edit' onClick={() => handleEdit(records)}>
-                            <IconNewEdit /><span>
-                                {t('edit')}
-                            </span>
-                        </button>
-                    </div>
-                    <div className="w-[auto]">
-
-                        <button type="button" className='button-delete' onClick={() => handleDelete(records)}>
-                            <IconNewTrash />
-                            <span>
-                                {t('delete')}
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            ),
-        },
+        }
     ]
+    const handleBackup = () => {
+        const swalDeletes = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-secondary',
+                cancelButton: 'btn btn-danger ltr:mr-3 rtl:ml-3',
+                popup: 'confirm-popup confirm-delete',
+            },
+            imageUrl: '/assets/images/delete_popup.png',
+            buttonsStyling: false,
+        });
+        swalDeletes
+            .fire({
+                title: `Bạn muốn tải báo cáo?`,
+                padding: '2em',
+                showCancelButton: true,
+                cancelButtonText: `${t('cancel')}`,
+                confirmButtonText: `${t('confirm')}`,
+                reverseButtons: true,
+            })
+            .then((result) => {
+                if (result.value) {
+                    downloadParticipants().then((res) => {
+                        console.log(res)
+                        window.location.href = res;
+                        showMessage(`Tải thành công`, 'success');
+                    }).catch((err) => {
+                        showMessage(`${err.response.data}`, 'error');
 
+                    });
+                }
+            });
+    }
     return (
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse mb-6">
@@ -213,7 +211,7 @@ const Duty = ({ ...props }: Props) => {
                     </Link>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>BCNVKH cấp Nhà nước</span>
+                    <span>Thành viên tham gia đề tài</span>
 
                 </li>
             </ul>
@@ -226,12 +224,9 @@ const Duty = ({ ...props }: Props) => {
             <div className="panel mt-6">
                 <div className="flex md:items-center justify-between md:flex-row flex-col mb-4.5 gap-5">
                     <div className="flex items-center flex-wrap">
-                        <Link href="/hrm/scientific_reports_gorvement/create">
-                            <button type="button" className=" m-1 button-table button-create" >
-                                <IconNewPlus />
-                                <span className="uppercase">{t('add')}</span>
-                            </button>
-                        </Link>
+                        <button type="button" className=" m-1 button-table button-create" onClick={() => handleBackup()}>
+                            <span className="uppercase">Xuất báo cáo</span>
+                        </button>
 
                         {/* <button type="button" className="btn btn-primary btn-sm m-1 custom-button" >
                             <IconFolderMinus className="ltr:mr-2 rtl:ml-2" />
@@ -283,4 +278,4 @@ const Duty = ({ ...props }: Props) => {
     );
 };
 
-export default Duty;
+export default Participant;
