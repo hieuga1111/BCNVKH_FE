@@ -47,7 +47,7 @@ const AddNewShift = ({ ...props }: Props) => {
 
     const [debouncedPage] = useDebounce(pageDepartment, 500);
     const [debouncedQuery] = useDebounce(queryDepartment, 500);
-    const { data: departmentparents } = Departments({ page: 1 });
+    const { data: departmentparents } = Departments({ page: 1, size: 200 });
 
     const [participants, setParticipants] = useState([{ information: '', unit_id: '', participant_role_id: '' }]);
     const extendedSchema = typeShift === 1 ? {
@@ -241,9 +241,9 @@ const AddNewShift = ({ ...props }: Props) => {
                             <div className="mb-5 w-1/2">
                                 <label htmlFor="release_time" className='label'>
                                     {' '}
-                                    Thời gian công bố
+                                    Lần ban hành
                                 </label>
-                                <Field autoComplete="off" name="release_time" type="text" id="release_time" placeholder={'Nhập thời gian công bố'} className="form-input"
+                                <Field autoComplete="off" name="release_time" type="number" id="release_time" placeholder={'Nhập lần ban hành'} className="form-input"
 
                                 />
                             </div>
