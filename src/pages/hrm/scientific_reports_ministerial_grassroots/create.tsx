@@ -361,7 +361,7 @@ const AddNewShift = ({ ...props }: Props) => {
                                     {' '}
                                     Tóm tắt
                                 </label>
-                                <Field autoComplete="off" name="summary" as="textarea" id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
+                               <Field autoComplete="off" name="summary" as="textarea" rows="4"  id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
                             </div>
                             <div className="mb-5 w-1/2">
                                 <label htmlFor="summary" className='label'>
