@@ -344,9 +344,9 @@ const AddNewShift = ({ ...props }: Props) => {
                             <div className="mb-5 w-1/2">
                                 <label htmlFor="release_time" className='label'>
                                     {' '}
-                                    Thời gian công bố
+                                    Lần ban hành
                                 </label>
-                                <Field autoComplete="off" name="release_time" type="text" id="release_time" placeholder={'Nhập thời gian công bố'} className="form-input"
+                                <Field autoComplete="off" name="release_time" type="number" id="release_time" placeholder={'Nhập lần ban hành'} className="form-input"
 
                                 />
                             </div>

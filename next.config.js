@@ -8,7 +8,7 @@ const nextConfig = {
             {
                 source: '/',
                 // destination: '/sign-in',
-                destination: '/hrm/dashboard',
+                destination: '/auth/boxed-signin',
                 permanent: true,
             },
 

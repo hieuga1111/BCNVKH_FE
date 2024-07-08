@@ -21,7 +21,7 @@ interface Props {
 
 const ParticalModal = ({ ...props }: Props) => {
     const { t } = useTranslation();
-    const { data: departmentparents } = Departments({ page: 1 });
+        const { data: departmentparents } = Departments({ page: 1, size: 200 });
 
     const [disabled, setDisabled] = useState(false);
     const [typeShift, setTypeShift] = useState("0"); // 0: time, 1: total hours

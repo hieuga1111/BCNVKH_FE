@@ -23,7 +23,7 @@ import IconNewEdit from '@/components/Icon/IconNewEdit';
 import IconNewTrash from '@/components/Icon/IconNewTrash';
 import IconNewPlus from '@/components/Icon/IconNewPlus';
 import { Shifts } from '@/services/swr/shift.swr';
-import { deleteShift } from '@/services/apis/shift.api';
+import { deleteShift, reportScientificReports } from '@/services/apis/shift.api';
 import IconNewEye from '@/components/Icon/IconNewEye';
 
 interface Props {
@@ -203,7 +203,38 @@ const Duty = ({ ...props }: Props) => {
             ),
         },
     ]
+    const handleBackup = () => {
+        const swalDeletes = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-secondary',
+                cancelButton: 'btn btn-danger ltr:mr-3 rtl:ml-3',
+                popup: 'confirm-popup confirm-delete',
+            },
+            imageUrl: '/assets/images/delete_popup.png',
+            buttonsStyling: false,
+        });
+        swalDeletes
+            .fire({
+                title: `Bạn muốn tải báo cáo?`,
+                padding: '2em',
+                showCancelButton: true,
+                cancelButtonText: `${t('cancel')}`,
+                confirmButtonText: `${t('confirm')}`,
+                reverseButtons: true,
+            })
+            .then((result) => {
+                if (result.value) {
+                    reportScientificReports('HV').then((res) => {
+                        console.log(res)
+                        window.location.href = res;
+                        showMessage(`Tải thành công`, 'success');
+                    }).catch((err) => {
+                        showMessage(`${err.response.data}`, 'error');
 
+                    });
+                }
+            });
+    }
     return (
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse mb-6">
@@ -232,7 +263,9 @@ const Duty = ({ ...props }: Props) => {
                                 <span className="uppercase">{t('add')}</span>
                             </button>
                         </Link>
-
+                        <button type="button" className=" m-1 button-table button-create" onClick={() => handleBackup()}>
+                            <span className="uppercase">Xuất báo cáo</span>
+                        </button>
                         {/* <button type="button" className="btn btn-primary btn-sm m-1 custom-button" >
                             <IconFolderMinus className="ltr:mr-2 rtl:ml-2" />
                             Nhập file

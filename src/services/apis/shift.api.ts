@@ -6,6 +6,10 @@ export const listAllShift = async (data: any) => {
 	const endpoint = '/scientific_reports';
 	return callApi(endpoint, 'GET', data);
 };
+export const reportScientificReports = async (data: any) => {
+	const endpoint = `/reports/scientific_reports?management_level_id=${data}`;
+	return callApi(endpoint, 'GET');
+};
 export const detailShift = async (id: any) => {
 	const endpoint = `/scientific_reports/${id}`;
 	return callApi(endpoint, 'GET');
