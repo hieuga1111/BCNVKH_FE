@@ -450,7 +450,6 @@ const AddNewShift = ({ ...props }: Props) => {
                                 </label>
                                 <Field autoComplete="off" name="keyword" type="text" id="keyword" placeholder={'Nhập từ khóa'} className="form-input" />
                             </div>
-
                             <div className="mb-5 w-1/2">
                                 <label htmlFor="storage" className='label'>
                                     {' '}
@@ -467,7 +466,6 @@ const AddNewShift = ({ ...props }: Props) => {
                                 </label>
                                <Field autoComplete="off" name="summary" as="textarea" rows="4"  id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
                             </div>
-
                         </div>
                         <div className="mt-8 flex items-center justify-end ltr:text-right rtl:text-left gap-8">
                             <Link href="/hrm/shift">

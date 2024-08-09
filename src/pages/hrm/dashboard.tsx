@@ -358,7 +358,7 @@ const DashBoard = () => {
                 </div>
                 <div className="panel">
                     <div className="mb-5 flex items-center justify-between">
-                        <h5 className="text-lg font-semibold dark:text-white">Số lượng nhân sự theo phòng ban</h5>
+                        <h5 className="text-lg font-semibold dark:text-white">Số lượng nhân sự theo đơn vị</h5>
                     </div>
                     <div className="mb-5">
                         {isMounted && <ReactApexChart series={columnChart.series} options={columnChart.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="bar" height={300} width={"100%"} />}
@@ -385,7 +385,7 @@ const DashBoard = () => {
                 </div>
                 <div className="panel">
                     <div className="mb-5 flex items-center justify-between">
-                        <h5 className="text-lg font-semibold dark:text-white-light">Thống kê nhiệm vụ theo phòng ban</h5>
+                        <h5 className="text-lg font-semibold dark:text-white-light">Thống kê nhiệm vụ theo đơn vị</h5>
                     </div>
                     <div className="mb-5">
                         {isMounted && <ReactApexChart series={barChart.series} options={barChart.options} className="rounded-lg bg-white dark:bg-black" type="bar" height={300} width={'100%'} />}

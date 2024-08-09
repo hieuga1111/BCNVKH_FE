@@ -16,11 +16,6 @@ import { downloadFile } from '@/@core/utils';
 // helper
 import { capitalize, formatDate, showMessage } from '@/@core/utils';
 // icons
-import IconPencil from '../../../components/Icon/IconPencil';
-import IconTrashLines from '../../../components/Icon/IconTrashLines';
-import { IconLoading } from '@/components/Icon/IconLoading';
-import IconPlus from '@/components/Icon/IconPlus';
-import IconCaretDown from '@/components/Icon/IconCaretDown';
 import { useRouter } from 'next/router';
 
 // json
@@ -33,6 +28,9 @@ import IconNewTrash from '@/components/Icon/IconNewTrash';
 import IconNewPlus from '@/components/Icon/IconNewPlus';
 import { Humans, HumansByDepartment } from '@/services/swr/human.swr';
 import { deleteHuman, downloadUsers, exportHuman } from '@/services/apis/human.api';
+import IconSearch from '@/components/Icon/IconSearch';
+import { MultiSelect, Select } from '@mantine/core';
+import { filter } from 'lodash';
 
 interface Props {
     [key: string]: any;
@@ -54,8 +52,8 @@ const Department = ({ ...props }: Props) => {
     const [pageSize, setPageSize] = useState(PAGE_SIZES_DEFAULT);
     const [total, setTotal] = useState(0);
     const [getStorge, setGetStorge] = useState<any>();
-    const { data: recordsData, pagination, mutate } = Humans({ ...router.query, size: 10 });
-    
+    const { data: recordsData, pagination, mutate } = Humans({ ...router.query, size: pageSize });
+    const [selectedDepartments, setSelectedDepartments] = useState<string>('');
 
     const [codeArr, setCodeArr] = useState<string[]>([]);
     const [search, setSearch] = useState<any>("");
@@ -74,7 +72,7 @@ const Department = ({ ...props }: Props) => {
     useEffect(() => {
         setTotal(getStorge?.length);
         setPageSize(PAGE_SIZES_DEFAULT);
-       
+
         // setShowLoader(false);
     }, [getStorge, getStorge?.length, page]);
 
@@ -120,7 +118,7 @@ const Department = ({ ...props }: Props) => {
                 }
             });
     };
-   
+
     const handleChangePage = (page: number, pageSize: number) => {
         router.replace(
             {
@@ -142,7 +140,7 @@ const Department = ({ ...props }: Props) => {
             pathname: router.pathname,
             query: {
                 ...router.query,
-                search_text: param,
+                username: param,
             },
         });
     };
@@ -153,44 +151,49 @@ const Department = ({ ...props }: Props) => {
             handleSearch(search)
         }
     };
-   
+
     const columns = [
-		{
-			accessor: 'id',
-			title: '#',
-			render: (records: any, index: any) => <span>{(page - 1) * pageSize + index + 1}</span>,
-		},
-		
-		{
-			accessor: 'name', title: 'Tên người dùng', sortable: false,
-			
-		},
-		{
-			accessor: 'username', title: 'Tên đăng nhập', sortable: false,
-		},
-		{
-			accessor: 'action',
-			title: 'Thao tác',
-			// width: "150px",
-			titleClassName: '!text-center',
-			render: (records: any) => (
-				<div className="mx-auto flex w-max items-center gap-2">
-					<div className="w-[auto]">
-						<button type="button" className="button-edit" onClick={() => handleEdit(records.id)}>
-							<IconNewEdit />
-							<span>{t('edit')}</span>
-						</button>
-					</div>
-					<div className="w-[auto]">
-						<button type="button" className="button-delete" onClick={() => handleDelete({ records })}>
-							<IconNewTrash />
-							<span>{t('delete')}</span>
-						</button>
-					</div>
-				</div>
-			),
-		},
-	];
+        {
+            accessor: 'id',
+            title: '#',
+            render: (records: any, index: any) => <span>{(page - 1) * pageSize + index + 1}</span>,
+        },
+
+        {
+            accessor: 'name', title: 'Tên người dùng', sortable: false,
+
+        },
+        {
+            accessor: 'username', title: 'Tên đăng nhập', sortable: false,
+
+        },
+        {
+            accessor: 'role_id', title: 'Loại tài khoản',
+            render: (records: any) => records.role_id === "A" ? 'Quản trị hệ thống' : 'Người dùng',
+        },
+        {
+            accessor: 'action',
+            title: 'Thao tác',
+            // width: "150px",
+            titleClassName: '!text-center',
+            render: (records: any) => (
+                <div className="mx-auto flex w-max items-center gap-2">
+                    <div className="w-[auto]">
+                        <button type="button" className="button-edit" onClick={() => handleEdit(records.id)}>
+                            <IconNewEdit />
+                            <span>{t('edit')}</span>
+                        </button>
+                    </div>
+                    <div className="w-[auto]">
+                        <button type="button" className="button-delete" onClick={() => handleDelete({ records })}>
+                            <IconNewTrash />
+                            <span>{t('delete')}</span>
+                        </button>
+                    </div>
+                </div>
+            ),
+        },
+    ];
     const handleBackup = () => {
         const swalDeletes = Swal.mixin({
             customClass: {
@@ -262,27 +265,39 @@ const Department = ({ ...props }: Props) => {
                             className="form-input w-auto"
                             placeholder={`${t('search')}`}
                             onKeyDown={(e) => handleKeyPress(e)}
-                            onChange={(e) => e.target.value === "" ? handleSearch("") : setSearch(e.target.value)} />
-                        {/* <button type="button" className="btn btn-primary btn-sm m-1  custom-button-display" style={{ backgroundColor: display === 'flat' ? '#E9EBD5' : '#FAFBFC', color: 'black' }} onClick={() => setDisplay('flat')}>
-                            <IconDisplaylist fill={display === 'flat' ? '#959E5E' : '#BABABA'}></IconDisplaylist>
-                        </button>
-                        <button type="button" className="btn btn-primary btn-sm m-1  custom-button-display" style={{ backgroundColor: display === 'tree' ? '#E9EBD5' : '#FAFBFC' }} onClick={() => setDisplay('tree')}>
-                            <IconDisplayTree fill={display === 'tree' ? '#959E5E' : '#BABABA'}></IconDisplayTree>
-
-                        </button> */}
+                            onChange={(e) => e.target.value === "" ? handleSearch("") : setSearch(e.target.value)} 
+                            style={{marginRight: '10px'}}
+                            />
+                        <Select
+                            data={['Quản trị hệ thống', 'Người dùng']}
+                            value={selectedDepartments}
+                            placeholder="Tìm theo loại tài khoản"
+                            onChange={(p: any) => {
+                                setSelectedDepartments(p)
+                                router.replace({
+                                    pathname: router.pathname,
+                                    query: {
+                                        ...router.query,
+                                        role_id: p === 'Quản trị hệ thống' ? 'A' : 'U',
+                                    },
+                                });
+                            }}
+                            clearable
+                            searchable
+                        />
                     </div>
                 </div>
                 <div className="mb-5">
-					<div className="datatables">
-						<DataTable
-							highlightOnHover
-							className="table-hover whitespace-nowrap custom_table"
-							records={recordsData?.data}
-							columns={columns}
-							totalRecords={recordsData?.total}
-							recordsPerPage={pageSize}
-							page={page}
-							onPageChange={(p) => {
+                    <div className="datatables">
+                        <DataTable
+                            highlightOnHover
+                            className="table-hover whitespace-nowrap custom_table"
+                            records={recordsData?.data}
+                            columns={columns}
+                            totalRecords={recordsData?.total}
+                            recordsPerPage={pageSize}
+                            page={page}
+                            onPageChange={(p) => {
                                 setPage(p)
                                 router.replace({
                                     pathname: router.pathname,
@@ -291,13 +306,22 @@ const Department = ({ ...props }: Props) => {
                                         page: p,
                                     },
                                 });
-                            } }
-							recordsPerPageOptions={PAGE_SIZES}
-							onRecordsPerPageChange={setPageSize}
-							minHeight={200}
-							paginationText={({ from, to, totalRecords }) => `${t('Showing_from_to_of_totalRecords_entries', { from: from, to: to, totalRecords: totalRecords })}`}
-						/>
-					</div>
+                            }}
+                            recordsPerPageOptions={PAGE_SIZES}
+                            onRecordsPerPageChange={(p) => {
+                                setPageSize(p)
+                                router.replace({
+                                    pathname: router.pathname,
+                                    query: {
+                                        ...router.query,
+                                        size: p,
+                                    },
+                                });
+                            }}
+                            minHeight={200}
+                            paginationText={({ from, to, totalRecords }) => `${t('Showing_from_to_of_totalRecords_entries', { from: from, to: to, totalRecords: totalRecords })}`}
+                        />
+                    </div>
                 </div>
 
             </div>
