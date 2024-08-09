@@ -57,7 +57,7 @@ const File = ({ ...props }: Props) => {
     const [openModal, setOpenModal] = useState(false);
 
     // get data
-    const { data: shift, pagination, mutate } = Files({ ...router.query });
+    const { data: shift, pagination, mutate } = Files({ ...router.query, size: pageSize });
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -234,7 +234,16 @@ const File = ({ ...props }: Props) => {
                             });
                         }}
                         recordsPerPageOptions={PAGE_SIZES}
-                        onRecordsPerPageChange={e => handleChangePage(pagination?.page, e)}
+                        onRecordsPerPageChange={(p) => {
+                            setPageSize(p)
+                            router.replace({
+                                pathname: router.pathname,
+                                query: {
+                                    ...router.query,
+                                    size: p,
+                                },
+                            });
+                        } }
                         sortStatus={sortStatus}
                         onSortStatusChange={setSortStatus}
                         minHeight={200}

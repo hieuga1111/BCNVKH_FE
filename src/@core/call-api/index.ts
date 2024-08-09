@@ -2,7 +2,6 @@ import Config from '@core/configs';
 import axios from 'axios';
 // import { FrappeApp } from 'frappe-js-sdk';
 import Cookies from 'js-cookie';
-
 const headers: any = {
     'Content-Type': 'application/json',
     'Access-Control-Request-Origin': '*',

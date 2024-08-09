@@ -62,7 +62,7 @@ const Department = ({ ...props }: Props) => {
 
 	const [openModal, setOpenModal] = useState(false);
 
-	const { data: recordsData, pagination, mutate } = Departments({ ...router.query, size: 10 });
+	const { data: recordsData, pagination, mutate } = Departments({ ...router.query, size: pageSize });
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
 			setGetStorge(DepartmentList);
@@ -119,7 +119,6 @@ const Department = ({ ...props }: Props) => {
 	};
 
 	const handleSearch = (param: any) => {
-		console.log('Enter key pressed', display);
 		if (display === 'tree') setDisplay('flat')
 		setSearch(param);
 		router.replace({
@@ -161,7 +160,7 @@ const Department = ({ ...props }: Props) => {
 		},
 		
 		{
-			accessor: 'name', title: 'Tên phòng ban', sortable: false,
+			accessor: 'name', title: 'Tên đơn vị', sortable: false,
 			
 		},
 		{
@@ -259,7 +258,16 @@ const Department = ({ ...props }: Props) => {
                                 });
                             } }
 							recordsPerPageOptions={PAGE_SIZES}
-							onRecordsPerPageChange={setPageSize}
+							onRecordsPerPageChange={(p) => {
+                                setPageSize(p)
+                                router.replace({
+                                    pathname: router.pathname,
+                                    query: {
+                                        ...router.query,
+                                        size: p,
+                                    },
+                                });
+                            } }
 							minHeight={200}
 							paginationText={({ from, to, totalRecords }) => `${t('Showing_from_to_of_totalRecords_entries', { from: from, to: to, totalRecords: totalRecords })}`}
 						/>
