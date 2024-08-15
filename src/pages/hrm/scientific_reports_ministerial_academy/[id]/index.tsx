@@ -23,6 +23,7 @@ import IconNewTrash from '@/components/Icon/IconNewTrash';
 import { deleteParticipants } from '@/services/apis/participants.api';
 import ParticalModal from './particalModal';
 import FilelModal from './fileModal';
+import { ReportTypes } from '@/services/swr/report-typeswr';
 
 interface Props {
     [key: string]: any;
@@ -37,6 +38,7 @@ const AddNewShift = ({ ...props }: Props) => {
     const [partical, setPatical] = useState<any>();
     const [openModal, setOpenModal] = useState<any>(false);
     const [openModalFile, setOpenModalFile] = useState<any>(false);
+    const { data: reporttypes } = ReportTypes({ page: 1, size: 200 });
 
     const [typeShift, setTypeShift] = useState(1); // 0: time, 1: total hours
     useEffect(() => {
@@ -285,6 +287,8 @@ const AddNewShift = ({ ...props }: Props) => {
                     storage: detail?.storage,
                     status: detail?.status,
                     management_level_id: detail?.management_level_id,
+                    report_type_id: detail?.report_type_id,
+
                 }}
                 enableReinitialize
                 validationSchema={SubmittedForm}
@@ -467,7 +471,27 @@ const AddNewShift = ({ ...props }: Props) => {
                                 </label>
                                <Field autoComplete="off" name="summary" as="textarea" rows="4"  id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
                             </div>
+                            <div className="mb-5 w-1/2">
+                                <label htmlFor="summary" className='label'>
+                                    {' '}
+                                    Phân nhóm NVKH
+                                </label>
+                                <Select
+                                    name="unit_id"
+                                    options={reporttypes?.data.map((item: any) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name
+                                        }
+                                    })}
+                                    placeholder={`Chọn nhóm NVKH`}
+                                    maxMenuHeight={160}
+                                    onChange={(e: any) => {
+                                        setFieldValue("report_type_id", e.value);
+                                    }}
 
+                                />
+                            </div>
                         </div>
                         <div className="mt-8 flex items-center justify-end ltr:text-right rtl:text-left gap-8">
                             <Link href="/hrm/shift">

@@ -30,21 +30,17 @@ import { Humans, HumansByDepartment } from '@/services/swr/human.swr';
 import { deleteHuman, downloadUsers, exportHuman } from '@/services/apis/human.api';
 import IconSearch from '@/components/Icon/IconSearch';
 import { MultiSelect, Select } from '@mantine/core';
-import { filter } from 'lodash';
-
 interface Props {
     [key: string]: any;
 }
 
 const Department = ({ ...props }: Props) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
-
     const dispatch = useDispatch();
     const { t } = useTranslation();
     useEffect(() => {
         dispatch(setPageTitle(`${t('staff')}`));
     });
-
     const router = useRouter();
     const [display, setDisplay] = useState('tree')
     const [showLoader, setShowLoader] = useState(false);
@@ -57,6 +53,8 @@ const Department = ({ ...props }: Props) => {
 
     const [codeArr, setCodeArr] = useState<string[]>([]);
     const [search, setSearch] = useState<any>("");
+    const canvasRef = useRef(null);
+    const url = "http://103.57.223.140:3001/files/Sinh hoat CB-T5, 6, 7.pdf"
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -68,7 +66,12 @@ const Department = ({ ...props }: Props) => {
             }
         }
     }, []);
+    const [numPages, setNumPages] = useState<number>();
+    const [pageNumber, setPageNumber] = useState<number>(1);
 
+    function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+        setNumPages(numPages);
+    }
     useEffect(() => {
         setTotal(getStorge?.length);
         setPageSize(PAGE_SIZES_DEFAULT);
@@ -265,9 +268,9 @@ const Department = ({ ...props }: Props) => {
                             className="form-input w-auto"
                             placeholder={`${t('search')}`}
                             onKeyDown={(e) => handleKeyPress(e)}
-                            onChange={(e) => e.target.value === "" ? handleSearch("") : setSearch(e.target.value)} 
-                            style={{marginRight: '10px'}}
-                            />
+                            onChange={(e) => e.target.value === "" ? handleSearch("") : setSearch(e.target.value)}
+                            style={{ marginRight: '10px' }}
+                        />
                         <Select
                             data={['Quản trị hệ thống', 'Người dùng']}
                             value={selectedDepartments}

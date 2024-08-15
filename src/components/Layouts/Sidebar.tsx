@@ -373,7 +373,7 @@ const Sidebar = () => {
                                             </Link>
                                         </li>
                                         <li className="nav-item">
-                                            <Link href="/hrm/travel-paper" className="final-level-menu group">
+                                            <Link href="/hrm/reportype" className="final-level-menu group">
                                                 <div className="flex items-center">
                                                     <IconMenuFormOT className="shrink-0 group-hover:!text-primary" />
                                                     <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Phân nhóm NVKH</span>

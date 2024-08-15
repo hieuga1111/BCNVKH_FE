@@ -24,6 +24,7 @@ import { loadMore } from '@/utils/commons';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import { useDebounce } from 'use-debounce';
+import { ReportTypes } from '@/services/swr/report-typeswr';
 
 interface Props {
     [key: string]: any;
@@ -48,6 +49,7 @@ const AddNewShift = ({ ...props }: Props) => {
     const [debouncedPage] = useDebounce(pageDepartment, 500);
     const [debouncedQuery] = useDebounce(queryDepartment, 500);
         const { data: departmentparents } = Departments({ page: 1, size: 200 });
+        const { data: reporttypes } = ReportTypes({ page: 1, size: 200 });
 
     const [participants, setParticipants] = useState([{ information: '', unit_id: '', participant_role_id: '' }]);
     const extendedSchema = typeShift === 1 ? {
@@ -76,6 +78,8 @@ const AddNewShift = ({ ...props }: Props) => {
         data.append('keyword', value.keyword);
         data.append('storage', value.storage);
         data.append('management_level_id', 'CS');
+        data.append('report_type_id', value.report_type_id);
+
         participants.map((item, index) => {
             data.append(`participants[${index}][information]`, item.information);
             data.append(`participants[${index}][unit_id]`, item.unit_id);
@@ -186,6 +190,7 @@ const AddNewShift = ({ ...props }: Props) => {
                     storage: "",
                     status: 1,
                     description: "",
+                    report_type_id: null,
                     management_level_id: 'CS',
                 }}
                 validationSchema={SubmittedForm}
@@ -359,9 +364,23 @@ const AddNewShift = ({ ...props }: Props) => {
                             <div className="mb-5 w-1/2">
                                 <label htmlFor="summary" className='label'>
                                     {' '}
-                                    Tóm tắt
+                                    Phân nhóm NVKH
                                 </label>
-                               <Field autoComplete="off" name="summary" as="textarea" rows="4"  id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
+                                <Select
+                                    name="unit_id"
+                                    options={reporttypes?.data.map((item: any) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name
+                                        }
+                                    })}
+                                    placeholder={`Chọn nhóm NVKH`}
+                                    maxMenuHeight={160}
+                                    onChange={(e: any) => {
+                                        setFieldValue("report_type_id", e.value);
+                                    }}
+
+                                />
                             </div>
                             <div className="mb-5 w-1/2">
                                 <label htmlFor="summary" className='label'>
@@ -370,6 +389,13 @@ const AddNewShift = ({ ...props }: Props) => {
                                 </label>
                                 <input name="summary" type="file" onChange={e => setFile(e.target.files)} id="description" className="form-input" multiple />
                             </div>
+                        </div>
+                        <div className="mb-5">
+                            <label htmlFor="summary" className='label'>
+                                {' '}
+                                Tóm tắt
+                            </label>
+                            <Field autoComplete="off" name="summary" as="textarea" rows="4" id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
                         </div>
                         {participants.map((input, index) => (
 
