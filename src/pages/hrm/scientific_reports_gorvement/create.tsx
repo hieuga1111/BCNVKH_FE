@@ -60,6 +60,7 @@ const AddNewShift = ({ ...props }: Props) => {
             setSizeDepartment(pageDepartment + 1);
         }, 1000);
     };
+    
     const SubmittedForm = Yup.object().shape(extendedSchema);
     const handleAddShift = (value: any) => {
         removeNullProperties(value);
@@ -143,6 +144,35 @@ const AddNewShift = ({ ...props }: Props) => {
         values.splice(index, 1);
         setParticipants(values);
     };
+    const [ip, setIp] = useState<string>('IP Not Found');
+
+  useEffect(() => {
+    const findIP = async () => {
+      try {
+        const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
+        const peerConnection = new RTCPeerConnection();
+
+        peerConnection.createDataChannel('');
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+
+        peerConnection.onicecandidate = (event) => {
+          if (event && event.candidate && event.candidate.candidate) {
+            const ipMatch = event.candidate.candidate.match(ipRegex);
+            if (ipMatch) {
+                console.log(ipMatch[1])
+              setIp(ipMatch[1]);
+              peerConnection.close();
+            }
+          }
+        };
+      } catch (err) {
+        console.error('Error retrieving IP: ', err);
+      }
+    };
+
+    findIP();
+  }, []);
     return (
 
         <div className="p-5">

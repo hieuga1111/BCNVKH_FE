@@ -24,10 +24,39 @@ const LoginBoxed = () => {
     useEffect(() => {
         dispatch(setPageTitle(`${t('login')}`));
     });
+    const [ip, setIp] = useState<string>('IP Not Found');
+
+    useEffect(() => {
+        const findIP = async () => {
+          try {
+            const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
+            const peerConnection = new RTCPeerConnection();
+    
+            peerConnection.createDataChannel('');
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+    
+            peerConnection.onicecandidate = (event) => {
+              if (event && event.candidate && event.candidate.candidate) {
+                const ipMatch = event.candidate.candidate.match(ipRegex);
+                if (ipMatch) {
+                    console.log(ipMatch[1])
+                  setIp(ipMatch[1]);
+                  peerConnection.close();
+                }
+              }
+            };
+          } catch (err) {
+            console.error('Error retrieving IP: ', err);
+          }
+        };
+    
+        findIP();
+      }, []);
     const router = useRouter();
 
     const submitForm = ({ userName, passWord }: any) => {
-        signIn(userName, passWord)
+        signIn(userName, passWord, ip)
             .then((res: any) => {
                 const token = res.token;
                 const accessTokenKey = Config.Env.NEXT_PUBLIC_X_ACCESS_TOKEN as string;
@@ -36,7 +65,7 @@ const LoginBoxed = () => {
             })
             .then(() => {
                 // Profile().then((res) => localStorage.setItem('profile', JSON.stringify(res.user)))
-                // const returnUrl = (router.query.returnUrl as string) ?? '/hrm/dashboard';
+                const returnUrl = (router.query.returnUrl as string) ?? '/hrm/dashboard';
                 const defaultUrl = '/hrm/dashboard'
                 router.push(defaultUrl).finally(() => {
                     setTimeout(() => {

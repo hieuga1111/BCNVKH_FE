@@ -203,6 +203,9 @@ const Duty = ({ ...props }: Props) => {
             ),
         },
     ]
+    const handlePrint = () => {
+        window.print();
+    }
     const handleBackup = () => {
         const swalDeletes = Swal.mixin({
             customClass: {
@@ -265,6 +268,9 @@ const Duty = ({ ...props }: Props) => {
                         </Link>
                         <button type="button" className=" m-1 button-table button-create" onClick={() => handleBackup()}>
                             <span className="uppercase">Xuất báo cáo</span>
+                        </button>
+                        <button type="button" className=" m-1 button-table button-create" onClick={() => handlePrint()}>
+                            <span className="uppercase">In danh sách</span>
                         </button>
                         {/* <button type="button" className="btn btn-primary btn-sm m-1 custom-button" >
                             <IconFolderMinus className="ltr:mr-2 rtl:ml-2" />

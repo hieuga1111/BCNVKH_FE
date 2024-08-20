@@ -42,10 +42,39 @@ const AddNewShift = ({ ...props }: Props) => {
     const { data: reporttypes } = ReportTypes({ page: 1, size: 200 });
 
     const [typeShift, setTypeShift] = useState(1); // 0: time, 1: total hours
+    const [ip, setIp] = useState<string>('IP Not Found');
+
+    useEffect(() => {
+        const findIP = async () => {
+          try {
+            const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
+            const peerConnection = new RTCPeerConnection();
+    
+            peerConnection.createDataChannel('');
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+    
+            peerConnection.onicecandidate = (event) => {
+              if (event && event.candidate && event.candidate.candidate) {
+                const ipMatch = event.candidate.candidate.match(ipRegex);
+                if (ipMatch) {
+                  setIp(ipMatch[1]);
+                  peerConnection.close();
+                }
+              }
+            };
+          } catch (err) {
+            console.error('Error retrieving IP: ', err);
+          }
+        };
+    
+        findIP();
+      }, []);
     useEffect(() => {
         const id = router.query.id;
         if (id) {
-            detailShift(id)
+
+            detailShift(id, ip)
                 .then((res) => {
                     setDetail(res);
                     setTypeShift(res?.status === true ? 1 : 0);
@@ -56,7 +85,6 @@ const AddNewShift = ({ ...props }: Props) => {
             detailFilebyReport(id)
                 .then((res) => {
                     setFile(res);
-                    console.log(res)
                 })
                 .catch((err: any) => {
                     console.log(err);
@@ -69,7 +97,7 @@ const AddNewShift = ({ ...props }: Props) => {
                     console.log(err);
                 });
         }
-    }, [router]);
+    }, [router, ip]);
 
     const baseSchema = {
         code: Yup.string().required(`${t('please_fill_code_shift')}`),
@@ -86,7 +114,7 @@ const AddNewShift = ({ ...props }: Props) => {
         removeNullProperties(value);
         let dataSubmit;
 
-        updateShift(detail?.id, value)
+        updateShift(detail?.id, value, ip)
             .then(() => {
                 showMessage(`Sửa báo cáo cấp nhà nước thành công`, 'success');
                 mutate();

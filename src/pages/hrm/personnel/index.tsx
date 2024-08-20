@@ -100,10 +100,11 @@ const Department = ({ ...props }: Props) => {
             imageUrl: '/assets/images/delete_popup.png',
             buttonsStyling: false,
         });
+        console.log(data)
         swalDeletes
             .fire({
                 title: `${t('delete_staff')}`,
-                html: `<span class='confirm-span'>${t('confirm_delete')}</span> ${data.fullName}?`,
+                html: `<span class='confirm-span'>${t('confirm_delete')}</span> ${data.username}?`,
                 padding: '2em',
                 showCancelButton: true,
                 cancelButtonText: `${t('cancel')}`,
@@ -188,7 +189,7 @@ const Department = ({ ...props }: Props) => {
                         </button>
                     </div>
                     <div className="w-[auto]">
-                        <button type="button" className="button-delete" onClick={() => handleDelete({ records })}>
+                        <button type="button" className="button-delete" onClick={() => handleDelete( records )}>
                             <IconNewTrash />
                             <span>{t('delete')}</span>
                         </button>

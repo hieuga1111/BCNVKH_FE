@@ -10,9 +10,11 @@ export const reportScientificReports = async (data: any) => {
 	const endpoint = `/reports/scientific_reports?management_level_id=${data}`;
 	return callApi(endpoint, 'GET');
 };
-export const detailShift = async (id: any) => {
+export const detailShift = async (id: any, ip: any) => {
 	const endpoint = `/scientific_reports/${id}`;
-	return callApi(endpoint, 'GET');
+	return callApi(endpoint, 'GET', id, {
+		'client_ip': ip,
+	});
 };
 export const detailParticalbyReport = async (id: any) => {
 	const endpoint = `/participants/?report_id=${id}`;
@@ -28,9 +30,11 @@ export const createShift = async (data: any) => {
 		'Content-Type': 'multipart/form-data',
 	});
 };
-export const updateShift = async (id: any, data: any) => {
+export const updateShift = async (id: any, data: any, ip: string) => {
 	const endpoint = `/scientific_reports/${id}`;
-	return callApi(endpoint, 'PUT', data);
+	return callApi(endpoint, 'PUT', data, {
+		'client_ip': ip,
+	});
 };
 
 export const deleteShift = async (data: any) => {

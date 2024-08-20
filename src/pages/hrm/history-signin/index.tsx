@@ -163,10 +163,10 @@ const File = ({ ...props }: Props) => {
             render: (records: any, index: any) => <span>{records?.time}</span>
         },
         {
-            accessor: 'user_agent',
-            title: `Trình duyệt`,
+            accessor: 'ip',
+            title: `IP`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.user_agent}</span>
+            render: (records: any, index: any) => <span>{records?.ip}</span>
         },
     ]
 
