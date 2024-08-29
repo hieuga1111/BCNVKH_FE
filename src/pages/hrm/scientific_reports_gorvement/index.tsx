@@ -24,7 +24,6 @@ import IconNewTrash from '@/components/Icon/IconNewTrash';
 import IconNewPlus from '@/components/Icon/IconNewPlus';
 import { Shifts } from '@/services/swr/shift.swr';
 import { deleteShift, reportScientificReports } from '@/services/apis/shift.api';
-import IconNewEye from '@/components/Icon/IconNewEye';
 
 interface Props {
     [key: string]: any;
@@ -319,7 +318,7 @@ const Duty = ({ ...props }: Props) => {
                                     size: p,
                                 },
                             });
-                        } }
+                        }}
                         sortStatus={sortStatus}
                         onSortStatusChange={setSortStatus}
                         minHeight={200}

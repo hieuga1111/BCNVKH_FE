@@ -25,6 +25,7 @@ import IconNewTrash from '@/components/Icon/IconNewTrash';
 import { deleteParticipants } from '@/services/apis/participants.api';
 import ParticalModal from './particalModal';
 import FilelModal from './fileModal';
+import IconEye from '@/components/Icon/IconEye';
 
 interface Props {
     [key: string]: any;
@@ -46,30 +47,30 @@ const AddNewShift = ({ ...props }: Props) => {
 
     useEffect(() => {
         const findIP = async () => {
-          try {
-            const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
-            const peerConnection = new RTCPeerConnection();
-    
-            peerConnection.createDataChannel('');
-            const offer = await peerConnection.createOffer();
-            await peerConnection.setLocalDescription(offer);
-    
-            peerConnection.onicecandidate = (event) => {
-              if (event && event.candidate && event.candidate.candidate) {
-                const ipMatch = event.candidate.candidate.match(ipRegex);
-                if (ipMatch) {
-                  setIp(ipMatch[1]);
-                  peerConnection.close();
-                }
-              }
-            };
-          } catch (err) {
-            console.error('Error retrieving IP: ', err);
-          }
+            try {
+                const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
+                const peerConnection = new RTCPeerConnection();
+
+                peerConnection.createDataChannel('');
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+
+                peerConnection.onicecandidate = (event) => {
+                    if (event && event.candidate && event.candidate.candidate) {
+                        const ipMatch = event.candidate.candidate.match(ipRegex);
+                        if (ipMatch) {
+                            setIp(ipMatch[1]);
+                            peerConnection.close();
+                        }
+                    }
+                };
+            } catch (err) {
+                console.error('Error retrieving IP: ', err);
+            }
         };
-    
+
         findIP();
-      }, []);
+    }, []);
     useEffect(() => {
         const id = router.query.id;
         if (id) {
@@ -152,17 +153,20 @@ const AddNewShift = ({ ...props }: Props) => {
             title: 'Thao tác',
             titleClassName: '!text-center',
             render: (records: any) => (
-                <div className="flex items-center w-max mx-auto gap-2">
-                    <div className="w-[auto]">
+                <a href={`/hrm/view-file?path=${records?.url.split('/')[1]}&id=${records?.id}`} target='_blank'>
+                    <div className="flex items-center w-max mx-auto gap-2">
+                        <div className="w-[auto]">
 
-                        <button type="button" className='button-delete'>
-                            <IconNewTrash />
-                            <span>
-                                {t('delete')}
-                            </span>
-                        </button>
+                            <button type="button" className='button-edit'>
+                                <IconEye />
+                                <span>
+                                    Xem
+                                </span>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </a>
+
             ),
         },
     ]
@@ -497,7 +501,7 @@ const AddNewShift = ({ ...props }: Props) => {
                                     {' '}
                                     Tóm tắt
                                 </label>
-                               <Field autoComplete="off" name="summary" as="textarea" rows="4"  id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
+                                <Field autoComplete="off" name="summary" as="textarea" rows="4" id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
                             </div>
 
                             <div className="mb-5 w-1/2">
@@ -606,7 +610,7 @@ const AddNewShift = ({ ...props }: Props) => {
                 scientific_report_id={router.query.id}
                 setData={updatePar}
             />
-             <FilelModal
+            <FilelModal
                 openModal={openModalFile}
                 setOpenModal={setOpenModalFile}
                 scientific_report_id={router.query.id}

@@ -10,6 +10,10 @@ export const reportScientificReports = async (data: any) => {
 	const endpoint = `/reports/scientific_reports?management_level_id=${data}`;
 	return callApi(endpoint, 'GET');
 };
+export const downloadFile = async (data: any, url: any) => {
+	const endpoint = `/download_histories/${url}`;
+	return callApi(endpoint, 'POST', data);
+};
 export const detailShift = async (id: any, ip: any) => {
 	const endpoint = `/scientific_reports/${id}`;
 	return callApi(endpoint, 'GET', id, {

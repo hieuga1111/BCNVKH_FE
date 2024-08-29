@@ -57,7 +57,7 @@ const File = ({ ...props }: Props) => {
     const [openModal, setOpenModal] = useState(false);
 
     // get data
-    const { data: shift, pagination, mutate } = History({ path: '/api/scientific_reports/', method: 'get', ...router.query, size: pageSize });
+    const { data: shift, pagination, mutate } = History({ path: '/api/scientific_reports/', method: 'get', ...router.query, size: pageSize, username : 'super_admin' });
 
     useEffect(() => {
         if (typeof window !== 'undefined') {

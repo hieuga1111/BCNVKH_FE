@@ -24,6 +24,7 @@ import { deleteParticipants } from '@/services/apis/participants.api';
 import ParticalModal from './particalModal';
 import FilelModal from './fileModal';
 import { ReportTypes } from '@/services/swr/report-typeswr';
+import IconEye from '@/components/Icon/IconEye';
 
 interface Props {
     [key: string]: any;
@@ -150,17 +151,20 @@ const AddNewShift = ({ ...props }: Props) => {
             title: 'Thao tác',
             titleClassName: '!text-center',
             render: (records: any) => (
-                <div className="flex items-center w-max mx-auto gap-2">
-                    <div className="w-[auto]">
+                <a href={`/hrm/view-file?path=${records?.url.split('/')[1]}&id=${records?.id}`} target='_blank'>
+                    <div className="flex items-center w-max mx-auto gap-2">
+                        <div className="w-[auto]">
 
-                        <button type="button" className='button-delete'>
-                            <IconNewTrash />
-                            <span>
-                                {t('delete')}
-                            </span>
-                        </button>
+                            <button type="button" className='button-edit'>
+                                <IconEye />
+                                <span>
+                                    Xem
+                                </span>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </a>
+
             ),
         },
     ]
