@@ -24,6 +24,8 @@ import IconNewTrash from '@/components/Icon/IconNewTrash';
 import IconNewPlus from '@/components/Icon/IconNewPlus';
 import { Shifts } from '@/services/swr/shift.swr';
 import { deleteShift, downloadFile, reportScientificReports } from '@/services/apis/shift.api';
+import { saveAs } from 'file-saver'
+import { pdf } from '@react-pdf/renderer'
 interface Props {
     [key: string]: any;
 }
@@ -110,12 +112,11 @@ const ViewFile = ({ ...props }: Props) => {
                     }
                     downloadFile(
                         data, router.query.id,
-                    ).then((res) => {
-                        const link = document.createElement('a');
-                        link.href = `http://103.57.223.140:3001/${res.path}`;
-                        link.setAttribute('download', res.path); // Đặt tên cho file PDF tải xuống
-                        document.body.appendChild(link);
-                        link.click();
+                    ).then(async (res) => {
+                        const blob = await pdf(<iframe src={`http://103.57.223.140:3001/files/${router.query.path}#toolbar=0`} width="100%" height="800px">
+                        </iframe>).toBlob()
+                        saveAs(blob, `${router.query.path}`)
+                        
                         showMessage(`${res.mess}`, 'success');
                     }).catch((err) => {
                         showMessage(`${err.response.data.mess}`, 'error');
