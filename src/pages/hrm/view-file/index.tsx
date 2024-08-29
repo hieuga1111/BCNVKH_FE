@@ -113,10 +113,13 @@ const ViewFile = ({ ...props }: Props) => {
                     downloadFile(
                         data, router.query.id,
                     ).then(async (res) => {
-                        const blob = await pdf(<iframe src={`http://103.57.223.140:3001/files/${router.query.path}#toolbar=0`} width="100%" height="800px">
-                        </iframe>).toBlob()
-                        saveAs(blob, `${router.query.path}`)
-                        
+                        fetch(`http://103.57.223.140:3001/${res.path}`).then((response) => {
+                            response.blob().then((blob) => {
+
+                                // Creating new object of PDF file
+                                saveAs(blob, `${router.query.path}`)
+                            });
+                        });
                         showMessage(`${res.mess}`, 'success');
                     }).catch((err) => {
                         showMessage(`${err.response.data.mess}`, 'error');
