@@ -13,7 +13,7 @@ import Select from 'react-select';
 import Link from 'next/link';
 import IconBack from '@/components/Icon/IconBack';
 import dayjs from 'dayjs';
-import { removeNullProperties } from '@/utils/commons';
+import { compareObjects, removeNullProperties } from '@/utils/commons';
 import { detailFilebyReport, detailParticalbyReport, detailShift, updateShift } from '@/services/apis/shift.api';
 import { Shifts } from '@/services/swr/shift.swr';
 import { ReportTypes } from '@/services/swr/report-typeswr';
@@ -114,12 +114,11 @@ const AddNewShift = ({ ...props }: Props) => {
     const handleUpdateShift = (value: any) => {
         removeNullProperties(value);
         let dataSubmit;
-
-        updateShift(detail?.id, value, ip)
+        updateShift(detail?.id, compareObjects(detail, value), ip)
             .then(() => {
                 showMessage(`Sửa báo cáo cấp nhà nước thành công`, 'success');
                 mutate();
-                router.push('/hrm/scientific_reports_ministerial')
+                router.push('/hrm/scientific_reports_gorvement')
             })
             .catch((err) => {
                 showMessage(`${err.response.data}`, 'error');

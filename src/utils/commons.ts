@@ -16,7 +16,22 @@ interface Department {
     value?: number;
     label?: string | null;
 }
-
+export function compareObjects (obj1: any, obj2: any) {
+    let differences: any = {};
+    delete obj1.creator
+    delete obj1.deleted
+    delete obj1.editor
+    delete obj1.id
+    delete obj1.time_created
+    delete obj1.time_updated
+    
+    for (let key in obj1) {
+      if (obj1[key] !== obj2[key]) {
+        differences[key] = obj2[key];
+      }
+    }
+    return differences;
+  };
 
 export function formatDate(date: Date): string {
     const weekDays = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];

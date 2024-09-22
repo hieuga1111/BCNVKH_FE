@@ -26,6 +26,8 @@ import { History } from '@/services/swr/history.swr';
 import { deleteShift } from '@/services/apis/shift.api';
 import IconNewEye from '@/components/Icon/IconNewEye';
 import IconDownload from '@/components/Icon/IconDownload';
+import { Shifts } from '@/services/swr/shift.swr';
+import IconEye from '@/components/Icon/IconEye';
 
 interface Props {
     [key: string]: any;
@@ -57,7 +59,8 @@ const File = ({ ...props }: Props) => {
     const [openModal, setOpenModal] = useState(false);
 
     // get data
-    const { data: shift, pagination, mutate } = History({ path: '/api/scientific_reports/', method: 'get', ...router.query, size: pageSize });
+    const { data: shift, pagination, mutate } = Shifts({ ...router.query, size: pageSize });
+
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -73,49 +76,14 @@ const File = ({ ...props }: Props) => {
         setShowLoader(false);
     }, [recordsData])
 
-    const handleEdit = (data: any) => {
-        router.push(`/hrm/scientific_reports_gorvement/${data.id}`)
-    };
 
-    const handleDelete = (data: any) => {
-        const swalDeletes = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-secondary',
-                cancelButton: 'btn btn-danger ltr:mr-3 rtl:ml-3',
-                popup: 'confirm-popup confirm-delete',
-            },
-            imageUrl: '/assets/images/delete_popup.png',
-            buttonsStyling: false,
-        });
-        swalDeletes
-            .fire({
-                title: `Xóa BCNVKH cấp Nhà nước`,
-                html: `<span class='confirm-span'>${t('confirm_delete')}</span> ${data.name}?`,
-                padding: '2em',
-                showCancelButton: true,
-                cancelButtonText: `${t('cancel')}`,
-                confirmButtonText: `${t('confirm')}`,
-                reverseButtons: true,
-            })
-            .then((result) => {
-                if (result.value) {
-                    deleteShift(data?.id).then(() => {
-                        mutate();
-                        showMessage(`Xóa thành công`, 'success');
-                    }).catch((err) => {
-                        showMessage(`${err.response.data}`, 'error');
-
-                    });
-                }
-            });
-    };
 
     const handleSearch = (param: any) => {
         setFilter({
             ...filter,
             search: param
         })
-        
+
         router.replace(
             {
                 pathname: router.pathname,
@@ -143,7 +111,7 @@ const File = ({ ...props }: Props) => {
     };
 
     const handleDetail = (data: any) => {
-        setData(data);
+        router.push(`/hrm/history-accessbyreport/${data.id}`)
     };
     const columns = [
         {
@@ -152,22 +120,48 @@ const File = ({ ...props }: Props) => {
             render: (records: any, index: any) => <span>{(page - 1) * pageSize + index + 1}</span>,
         },
         {
-            accessor: 'username',
-            title: `Người dùng`,
+            accessor: 'code',
+            title: `Mã`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.username}</span>
+            render: (records: any, index: any) => <span>{records?.code}</span>
         },
         {
-            accessor: 'time',
-            title: `Thời gian`,
+            accessor: 'name',
+            title: `Tên`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.time}</span>
+            render: (records: any, index: any) => <span>{records?.name}</span>
         },
         {
-            accessor: 'ip',
-            title: `IP`,
+            accessor: 'release_time',
+            title: `Thời gian phát hành`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.ip}</span>
+            render: (records: any, index: any) => <span>{records?.release_time}</span>
+
+        },
+        {
+            accessor: 'acceptance_council',
+            title: `Hội đồng nghiệm thu`,
+            sortable: false,
+            render: (records: any, index: any) => <span>{records?.acceptance_council}</span>
+
+        },
+
+        {
+            accessor: 'action',
+            title: 'Thao tác',
+            titleClassName: '!text-center',
+            render: (records: any) => (
+                <div className="flex items-center w-max mx-auto gap-2">
+                    <div className="w-[auto]">
+
+                        <button type="button" className='button-detail' onClick={() => handleDetail(records)}>
+                            <IconEye /><span>
+                                Xem lịch sử
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            ),
         },
     ]
 
@@ -232,7 +226,7 @@ const File = ({ ...props }: Props) => {
                                     size: p,
                                 },
                             });
-                        } }
+                        }}
                         sortStatus={sortStatus}
                         onSortStatusChange={setSortStatus}
                         minHeight={200}

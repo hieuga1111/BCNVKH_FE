@@ -25,6 +25,7 @@ import IconNewPlus from '@/components/Icon/IconNewPlus';
 import { Shifts } from '@/services/swr/shift.swr';
 import { deleteShift, reportScientificReports } from '@/services/apis/shift.api';
 import IconNewEye from '@/components/Icon/IconNewEye';
+import IconEye from '@/components/Icon/IconEye';
 
 interface Props {
     [key: string]: any;
@@ -141,7 +142,7 @@ const Duty = ({ ...props }: Props) => {
     };
 
     const handleDetail = (data: any) => {
-        setData(data);
+        router.push(`/hrm/scientific_reports_ministerial_grassroots/detail/${data.id}`)
     };
     const columns = [
         {
@@ -182,6 +183,14 @@ const Duty = ({ ...props }: Props) => {
             titleClassName: '!text-center',
             render: (records: any) => (
                 <div className="flex items-center w-max mx-auto gap-2">
+                    <div className="w-[auto]">
+
+                        <button type="button" className='button-detail' onClick={() => handleDetail(records)}>
+                            <IconEye /><span>
+                                {t('detail')}
+                            </span>
+                        </button>
+                    </div>
                     <div className="w-[auto]">
 
                         <button type="button" className='button-edit' onClick={() => handleEdit(records)}>
@@ -319,7 +328,7 @@ const Duty = ({ ...props }: Props) => {
                                     size: p,
                                 },
                             });
-                        } }
+                        }}
                         sortStatus={sortStatus}
                         onSortStatusChange={setSortStatus}
                         minHeight={200}

@@ -164,9 +164,59 @@ const File = ({ ...props }: Props) => {
         },
         {
             accessor: 'ip',
+            title: `Tên báo cáo`,
+            sortable: false,
+            render: (records: any, index: any) => <span>{records?.scientific_report?.name}</span>
+        },
+        {
+            accessor: 'ip',
             title: `IP`,
             sortable: false,
             render: (records: any, index: any) => <span>{records?.ip}</span>
+        },
+        {
+            accessor: 'ip',
+            title: `Nội dung chỉnh sửa`,
+            sortable: false,
+            render: (records: any, index: any) => <div>
+                {
+                    records?.content?.new_data?.code !== records?.content?.old_data?.code ? <p>Mã báo cáo: {records?.content?.old_data?.code} ={'>'} {records?.content?.new_data?.code}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.name !== records?.content?.old_data?.name ? <p>Tên báo cáo: {records?.content?.old_data?.name} ={'>'} {records?.content?.new_data?.name}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.result !== records?.content?.old_data?.result ? <p>Kết quả: {records?.content?.old_data?.result} ={'>'} {records?.content?.new_data?.result}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.keyword !== records?.content?.old_data?.keyword ? <p>Từ khóa: {records?.content?.old_data?.keyword} ={'>'} {records?.content?.new_data?.keyword}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.storage !== records?.content?.old_data?.storage ? <p>Lưu trữ: {records?.content?.old_data?.storage} ={'>'} {records?.content?.new_data?.storage}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.summary !== records?.content?.old_data?.summary ? <p>Tóm tắt: {records?.content?.old_data?.summary} ={'>'} {records?.content?.new_data?.summary}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.end_time !== records?.content?.old_data?.end_time ? <p>Thời gian kết thúc: {records?.content?.old_data?.end_time} ={'>'} {records?.content?.new_data?.end_time}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.execution_time !== records?.content?.old_data?.execution_time ? <p>Thời gian thực thi: {records?.content?.old_data?.execution_time} ={'>'} {records?.content?.new_data?.execution_time}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.release_time !== records?.content?.old_data?.release_time ? <p>Thời gian phát hành: {records?.content?.old_data?.release_time} ={'>'} {records?.content?.new_data?.release_time}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.acceptance_council !== records?.content?.old_data?.acceptance_council ? <p>Hội đồng: {records?.content?.old_data?.acceptance_council} ={'>'} {records?.content?.new_data?.acceptance_council}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.assitant_chair !== records?.content?.old_data?.assitant_chair ? <p>Trợ lý chính: {records?.content?.old_data?.assitant_chair} ={'>'} {records?.content?.new_data?.assitant_chair}</p> : <></>
+                }
+                {
+                    records?.content?.new_data?.assitant_oversee !== records?.content?.old_data?.assitant_oversee ? <p>Trợ lý giám sát:{records?.content?.old_data?.assitant_oversee} ={'>'} {records?.content?.new_data?.assitant_oversee}</p> : <></>
+                }
+
+            </div>
         },
     ]
 
@@ -231,7 +281,7 @@ const File = ({ ...props }: Props) => {
                                     size: p,
                                 },
                             });
-                        } }
+                        }}
                         sortStatus={sortStatus}
                         onSortStatusChange={setSortStatus}
                         minHeight={200}

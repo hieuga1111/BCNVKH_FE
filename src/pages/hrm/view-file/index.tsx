@@ -1,4 +1,4 @@
-import { useEffect, Fragment, useState, useCallback } from 'react';
+import { useEffect, Fragment, useState, useCallback, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { setPageTitle } from '../../../store/themeConfigSlice';
 import { lazy } from 'react';
@@ -19,17 +19,17 @@ import { IconLoading } from '@/components/Icon/IconLoading';
 
 import { useRouter } from 'next/router';
 // json
-import IconNewEdit from '@/components/Icon/IconNewEdit';
-import IconNewTrash from '@/components/Icon/IconNewTrash';
-import IconNewPlus from '@/components/Icon/IconNewPlus';
-import { Shifts } from '@/services/swr/shift.swr';
 import { deleteShift, downloadFile, reportScientificReports } from '@/services/apis/shift.api';
 import { saveAs } from 'file-saver'
-import { pdf } from '@react-pdf/renderer'
+
+// Cấu hình worker cho pdf.js
+
 interface Props {
     [key: string]: any;
 }
 
+// default layout plugin
+// Import styles of default layout plugin
 const ViewFile = ({ ...props }: Props) => {
 
     const dispatch = useDispatch();
@@ -37,10 +37,12 @@ const ViewFile = ({ ...props }: Props) => {
     useEffect(() => {
         dispatch(setPageTitle(`Xem tài liệu đính kèm`));
     });
+    const iframeRef = useRef(null);
+
 
     const router = useRouter();
 
-    const [showLoader, setShowLoader] = useState(true);
+    const [showLoader, setShowLoader] = useState(false);
     const [page, setPage] = useState<any>(PAGE_NUMBER_DEFAULT);
     const [pageSize, setPageSize] = useState(PAGE_SIZES_DEFAULT);
     const [recordsData, setRecordsData] = useState<any>();
@@ -51,13 +53,7 @@ const ViewFile = ({ ...props }: Props) => {
         search: '',
         type: ''
     });
-    const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({ columnAccessor: 'id', direction: 'desc' });
-
-    const [openModal, setOpenModal] = useState(false);
-
-    // get data
-    const { data: shift, pagination, mutate } = Shifts({ management_level_id: 'NN', ...router.query, size: pageSize });
-
+    const [numPages, setNumPages] = useState<number | null>(null);
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const data = localStorage.getItem('shiftList');
@@ -67,13 +63,18 @@ const ViewFile = ({ ...props }: Props) => {
             }
         }
     }, [])
+    const countPdfPages = async (pdfUrl: string) => {
+        // const loadingTask = pdfjs.getDocument(pdfUrl);
+        // const pdf = await loadingTask.promise;
+        // setNumPages(pdf.numPages);
+    };
 
     useEffect(() => {
-        setShowLoader(false);
-    }, [recordsData])
-
-
-
+        countPdfPages(`http://103.57.223.140:3001/files/${router.query.path}`);
+    }, [router.query.path]);
+    const handleRightClick = (event: any) => {
+        event.preventDefault(); // Ngăn chặn menu chuột phải mặc định
+    };
     const handlePrint = () => {
         const swalDeletes = Swal.mixin({
             customClass: {
@@ -127,8 +128,13 @@ const ViewFile = ({ ...props }: Props) => {
                 }
             });
     }
+    const disableContextMenu = () => {
+        var myFrame = document.getElementById('pdfframe');
+        console.log(myFrame)
+    }
     return (
         <div>
+
             <ul className="flex space-x-2 rtl:space-x-reverse mb-6">
                 <li>
                     <Link href="/hrm/dashboard" className="text-primary hover:underline">
@@ -146,7 +152,9 @@ const ViewFile = ({ ...props }: Props) => {
                 </div>
             )}
             <title>{t('shift')}</title>
-            <div className="panel mt-6">
+            <div className="panel mt-6" id="container" onContextMenu={handleRightClick}
+                onLoad={disableContextMenu}
+            >
                 <div className="flex md:items-center justify-between md:flex-row flex-col mb-4.5 gap-5">
                     <div className="flex items-center flex-wrap">
                         <button type="button" className=" m-1 button-table button-create" onClick={() => handlePrint()}>
@@ -155,10 +163,18 @@ const ViewFile = ({ ...props }: Props) => {
 
                     </div>
                 </div>
-                <iframe src={`http://103.57.223.140:3001/files/${router.query.path}#toolbar=0`} width="100%" height="800px">
+
+                <iframe
+                    src={`http://103.57.223.140:3001/files/${router.query.path}#toolbar=0`}
+                    width="100%"
+                    height="800px"
+                    style={{ pointerEvents: 'inherit' }}
+                    id='pdfframe'
+                >
                 </iframe>
             </div>
-        </div>
+
+        </div >
     );
 };
 
