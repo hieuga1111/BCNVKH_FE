@@ -24,4 +24,7 @@ export const deleteReportType = async (data: any) => {
 	const endpoint = `/report_types/${data}`;
 	return callApi(endpoint, 'DELETE');
 };
-
+export const reportReportType = async () => {
+	const endpoint = `/reports/report_types`;
+	return callApi(endpoint, 'GET');
+};

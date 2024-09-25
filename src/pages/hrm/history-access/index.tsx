@@ -1,8 +1,7 @@
-import { useEffect, Fragment, useState, useCallback } from 'react';
+import { useEffect, Fragment, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { setPageTitle } from '../../../store/themeConfigSlice';
 import { lazy } from 'react';
-import Link from 'next/link';
 // Third party libs
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import Swal from 'sweetalert2';
@@ -10,73 +9,85 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { useTranslation } from 'react-i18next';
 // API
+import { deleteDepartment, detailDepartment, listAllDepartment } from '../../../services/apis/department.api';
 // constants
 import { PAGE_SIZES, PAGE_SIZES_DEFAULT, PAGE_NUMBER_DEFAULT } from '@/utils/constants';
+import { downloadFile } from '@/@core/utils';
 // helper
 import { capitalize, formatDate, showMessage } from '@/@core/utils';
 // icons
-import { IconLoading } from '@/components/Icon/IconLoading';
-
 import { useRouter } from 'next/router';
+
 // json
+import Link from 'next/link';
+
+
 import IconNewEdit from '@/components/Icon/IconNewEdit';
 import IconNewTrash from '@/components/Icon/IconNewTrash';
 import IconNewPlus from '@/components/Icon/IconNewPlus';
-import { History } from '@/services/swr/history.swr';
-import { deleteShift } from '@/services/apis/shift.api';
-import IconNewEye from '@/components/Icon/IconNewEye';
-import IconDownload from '@/components/Icon/IconDownload';
-
+import { Humans, HumansByDepartment } from '@/services/swr/human.swr';
+import { deleteHuman, downloadUsers, exportHuman } from '@/services/apis/human.api';
+import IconSearch from '@/components/Icon/IconSearch';
+import { MultiSelect, Select } from '@mantine/core';
+import IconEye from '@/components/Icon/IconEye';
 interface Props {
     [key: string]: any;
 }
 
-const File = ({ ...props }: Props) => {
-
+const Department = ({ ...props }: Props) => {
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const dispatch = useDispatch();
     const { t } = useTranslation();
     useEffect(() => {
-        dispatch(setPageTitle(`Lịch sử truy cập báo cáo theo người dùng`));
+        dispatch(setPageTitle(`${t('staff')}`));
     });
-
     const router = useRouter();
-
-    const [showLoader, setShowLoader] = useState(true);
+    const [display, setDisplay] = useState('tree')
+    const [showLoader, setShowLoader] = useState(false);
     const [page, setPage] = useState<any>(PAGE_NUMBER_DEFAULT);
     const [pageSize, setPageSize] = useState(PAGE_SIZES_DEFAULT);
-    const [recordsData, setRecordsData] = useState<any>();
     const [total, setTotal] = useState(0);
     const [getStorge, setGetStorge] = useState<any>();
-    const [data, setData] = useState<any>();
-    const [filter, setFilter] = useState<any>({
-        search: '',
-        type: ''
-    });
-    const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({ columnAccessor: 'id', direction: 'desc' });
+    const { data: recordsData, pagination, mutate } = Humans({ ...router.query, size: pageSize });
+    const [selectedDepartments, setSelectedDepartments] = useState<string>('');
 
-    const [openModal, setOpenModal] = useState(false);
-
-    // get data
-    const { data: shift, pagination, mutate } = History({ path: '/api/scientific_reports/', method: 'get', ...router.query, size: pageSize, username : 'super_admin' });
+    const [codeArr, setCodeArr] = useState<string[]>([]);
+    const [search, setSearch] = useState<any>("");
+    const canvasRef = useRef(null);
+    const url = "http://103.57.223.140:3001/files/Sinh hoat CB-T5, 6, 7.pdf"
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const data = localStorage.getItem('shiftList');
+            const data = localStorage.getItem('staffList');
             if (data) {
                 setGetStorge(JSON.parse(data));
             } else {
             }
         }
-    }, [])
+    }, []);
+    const [numPages, setNumPages] = useState<number>();
+    const [pageNumber, setPageNumber] = useState<number>(1);
 
+    function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+        setNumPages(numPages);
+    }
     useEffect(() => {
-        setShowLoader(false);
-    }, [recordsData])
+        setTotal(getStorge?.length);
+        setPageSize(PAGE_SIZES_DEFAULT);
+
+        // setShowLoader(false);
+    }, [getStorge, getStorge?.length, page]);
+
+    // useEffect(() => {
+    // 	setShowLoader(false);
+    // }, [recordsData]);
 
     const handleEdit = (data: any) => {
-        router.push(`/hrm/scientific_reports_gorvement/${data.id}`)
+        router.push(`/hrm/personnel/${data}`)
     };
-
+    const handleDetail = (data: any) => {
+        router.push(`/hrm/history-access/${data.username}`)
+    };
     const handleDelete = (data: any) => {
         const swalDeletes = Swal.mixin({
             customClass: {
@@ -87,10 +98,11 @@ const File = ({ ...props }: Props) => {
             imageUrl: '/assets/images/delete_popup.png',
             buttonsStyling: false,
         });
+        console.log(data)
         swalDeletes
             .fire({
-                title: `Xóa BCNVKH cấp Nhà nước`,
-                html: `<span class='confirm-span'>${t('confirm_delete')}</span> ${data.name}?`,
+                title: `${t('delete_staff')}`,
+                html: `<span class='confirm-span'>${t('confirm_delete')}</span> ${data.username}?`,
                 padding: '2em',
                 showCancelButton: true,
                 cancelButtonText: `${t('cancel')}`,
@@ -99,33 +111,16 @@ const File = ({ ...props }: Props) => {
             })
             .then((result) => {
                 if (result.value) {
-                    deleteShift(data?.id).then(() => {
+                    deleteHuman(data?.id).then(() => {
                         mutate();
-                        showMessage(`Xóa thành công`, 'success');
+                        showMessage(`${t('delete_staff_success')}`, 'success');
                     }).catch((err) => {
-                        showMessage(`${err.response.data}`, 'error');
-
+                        showMessage(`${err?.response?.data?.message}`, 'error');
                     });
                 }
             });
     };
 
-    const handleSearch = (param: any) => {
-        setFilter({
-            ...filter,
-            search: param
-        })
-        
-        router.replace(
-            {
-                pathname: router.pathname,
-                query: {
-                    ...router.query,
-                    username: param
-                },
-            }
-        );
-    }
     const handleChangePage = (page: number, pageSize: number) => {
         router.replace(
             {
@@ -141,38 +136,71 @@ const File = ({ ...props }: Props) => {
         );
         return pageSize;
     };
-
-    const handleDetail = (data: any) => {
-        setData(data);
+    const handleSearch = (param: any) => {
+        setSearch(param);
+        router.replace({
+            pathname: router.pathname,
+            query: {
+                ...router.query,
+                username: param,
+            },
+        });
     };
+    const handleKeyPress = (event: any) => {
+        if (event.key === 'Enter') {
+            // Xử lý sự kiện khi nhấn phím Enter ở đây
+            console.log('Enter key pressed');
+            handleSearch(search)
+        }
+    };
+
     const columns = [
         {
             accessor: 'id',
             title: '#',
             render: (records: any, index: any) => <span>{(page - 1) * pageSize + index + 1}</span>,
         },
-        {
-            accessor: 'username',
-            title: `Người dùng`,
-            sortable: false,
-            render: (records: any, index: any) => <span>{records?.username}</span>
-        },
-        {
-            accessor: 'time',
-            title: `Thời gian`,
-            sortable: false,
-            render: (records: any, index: any) => <span>{records?.time}</span>
-        },
-        {
-            accessor: 'ip',
-            title: `IP`,
-            sortable: false,
-            render: (records: any, index: any) => <span>{records?.ip}</span>
-        },
-    ]
 
+        {
+            accessor: 'name', title: 'Tên người dùng', sortable: false,
+
+        },
+        {
+            accessor: 'username', title: 'Tên đăng nhập', sortable: false,
+
+        },
+        {
+            accessor: 'role_id', title: 'Loại tài khoản',
+            render: (records: any) => records.role_id === "A" ? 'Quản trị hệ thống' : 'Người dùng',
+        },
+       
+        {
+            accessor: 'action',
+            title: 'Thao tác',
+            // width: "150px",
+            titleClassName: '!text-center',
+            render: (records: any) => (
+                <div className="flex items-center w-max mx-auto gap-2">
+                    <div className="w-[auto]">
+
+                        <button type="button" className='button-detail' onClick={() => handleDetail(records)}>
+                            <IconEye /><span>
+                                Xem lịch sử
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            ),
+        },
+    ];
+    
     return (
-        <div>
+        <div >
+            {/* {showLoader && (
+				<div className="screen_loader animate__animated fixed inset-0 z-[60] grid place-content-center bg-[#fafafa] dark:bg-[#060818]">
+					<IconLoading />
+				</div>
+			)} */}
             <ul className="flex space-x-2 rtl:space-x-reverse mb-6">
                 <li>
                     <Link href="/hrm/dashboard" className="text-primary hover:underline">
@@ -184,64 +212,80 @@ const File = ({ ...props }: Props) => {
 
                 </li>
             </ul>
-            {showLoader && (
-                <div className="screen_loader fixed inset-0 bg-[#fafafa] dark:bg-[#060818] z-[60] grid place-content-center animate__animated">
-                    <IconLoading />
-                </div>
-            )}
-            <title>{t('shift')}</title>
-            <div className="panel mt-6">
-                <div className="flex md:items-center justify-between md:flex-row flex-col mb-4.5 gap-5">
-                    <div className="flex items-center flex-wrap">
+            <title>Lịch sử truy cập báo cáo theo người dùng</title>
+            <div className="panel mt-6" style={{ overflowX: 'auto' }}>
+                <div className="mb-4.5 flex flex-col justify-between gap-5 md:flex-row md:items-center">
+                    <div className="flex flex-wrap items-center">
                     </div>
-                    <div className='flex gap-2'>
-                        <div className='flex gap-1'>
-                            <div className="flex-1">
-                                <input autoComplete="off" type="text" className="form-input w-auto" placeholder={`${t('search')}`} value={filter?.search} onChange={(e) => handleSearch(e.target.value)} />
+                    <div className='display-style'>
+                        <input
+                            autoComplete="off"
+                            type="text"
+                            className="form-input w-auto"
+                            placeholder={`${t('search')}`}
+                            onKeyDown={(e) => handleKeyPress(e)}
+                            onChange={(e) => e.target.value === "" ? handleSearch("") : setSearch(e.target.value)}
+                            style={{ marginRight: '10px' }}
+                        />
+                        <Select
+                            data={['Quản trị hệ thống', 'Người dùng']}
+                            value={selectedDepartments}
+                            placeholder="Tìm theo loại tài khoản"
+                            onChange={(p: any) => {
+                                setSelectedDepartments(p)
+                                router.replace({
+                                    pathname: router.pathname,
+                                    query: {
+                                        ...router.query,
+                                        role_id: p === 'Quản trị hệ thống' ? 'A' : 'U',
+                                    },
+                                });
+                            }}
+                            clearable
+                            searchable
+                        />
+                    </div>
+                </div>
+                <div className="mb-5">
+                    <div className="datatables">
+                        <DataTable
+                            highlightOnHover
+                            className="table-hover whitespace-nowrap custom_table"
+                            records={recordsData?.data}
+                            columns={columns}
+                            totalRecords={recordsData?.total}
+                            recordsPerPage={pageSize}
+                            page={page}
+                            onPageChange={(p) => {
+                                setPage(p)
+                                router.replace({
+                                    pathname: router.pathname,
+                                    query: {
+                                        ...router.query,
+                                        page: p,
+                                    },
+                                });
+                            }}
+                            recordsPerPageOptions={PAGE_SIZES}
+                            onRecordsPerPageChange={(p) => {
+                                setPageSize(p)
+                                router.replace({
+                                    pathname: router.pathname,
+                                    query: {
+                                        ...router.query,
+                                        size: p,
+                                    },
+                                });
+                            }}
+                            minHeight={200}
+                            paginationText={({ from, to, totalRecords }) => `${t('Showing_from_to_of_totalRecords_entries', { from: from, to: to, totalRecords: totalRecords })}`}
+                        />
+                    </div>
+                </div>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="datatables">
-                    <DataTable
-                        highlightOnHover
-                        className="whitespace-nowrap table-hover custom_table"
-                        records={shift?.data}
-                        columns={columns}
-                        totalRecords={shift?.total}
-                        recordsPerPage={10}
-                        page={page}
-                        onPageChange={(p) => {
-                            setPage(p)
-                            router.replace({
-                                pathname: router.pathname,
-                                query: {
-                                    ...router.query,
-                                    page: p,
-                                },
-                            });
-                        }}
-                        recordsPerPageOptions={PAGE_SIZES}
-                        onRecordsPerPageChange={(p) => {
-                            setPageSize(p)
-                            router.replace({
-                                pathname: router.pathname,
-                                query: {
-                                    ...router.query,
-                                    size: p,
-                                },
-                            });
-                        } }
-                        sortStatus={sortStatus}
-                        onSortStatusChange={setSortStatus}
-                        minHeight={200}
-                        paginationText={({ from, to, totalRecords }) => `${t('Showing_from_to_of_totalRecords_entries', { from: from, to: to, totalRecords: totalRecords })}`}
-                    />
-                </div>
             </div>
         </div>
     );
 };
 
-export default File;
+export default Department;

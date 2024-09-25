@@ -30,6 +30,10 @@ export const updateHuman = async (id: any, data: any) => {
 	const endpoint = `/users/${id}`;
 	return callApi(endpoint, 'PUT', data);
 };
+export const changePass = async (id: any, data: any) => {
+	const endpoint = `/users/change_pass_by_sa/${id}`;
+	return callApi(endpoint, 'PUT', data);
+};
 
 export const deleteHuman = async (data: any) => {
 	const endpoint = `/users/${data}`;

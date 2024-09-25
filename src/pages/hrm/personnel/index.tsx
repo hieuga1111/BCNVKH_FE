@@ -30,6 +30,7 @@ import { Humans, HumansByDepartment } from '@/services/swr/human.swr';
 import { deleteHuman, downloadUsers, exportHuman } from '@/services/apis/human.api';
 import IconSearch from '@/components/Icon/IconSearch';
 import { MultiSelect, Select } from '@mantine/core';
+import IconLock from '@/components/Icon/IconLock';
 interface Props {
     [key: string]: any;
 }
@@ -82,14 +83,16 @@ const Department = ({ ...props }: Props) => {
     // useEffect(() => {
     // 	setShowLoader(false);
     // }, [recordsData]);
-
+    
     const handleEdit = (data: any) => {
         router.push(`/hrm/personnel/${data}`)
     };
     const handleDetail = (data: any) => {
         router.push(`/hrm/personnel/detail/${data}`)
     };
-
+    const handlePass = (data: any) => {
+        router.push(`/hrm/personnel/changepass/${data}`)
+    };
     const handleDelete = (data: any) => {
         const swalDeletes = Swal.mixin({
             customClass: {
@@ -186,6 +189,12 @@ const Department = ({ ...props }: Props) => {
                         <button type="button" className="button-edit" onClick={() => handleEdit(records.id)}>
                             <IconNewEdit />
                             <span>{t('edit')}</span>
+                        </button>
+                    </div>
+                    <div className="w-[auto]">
+                        <button type="button" className="button-detail" onClick={() => handlePass(records.id)}>
+                            <IconLock />
+                            <span>Đổi mật khẩu</span>
                         </button>
                     </div>
                     <div className="w-[auto]">

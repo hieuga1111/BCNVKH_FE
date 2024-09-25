@@ -164,13 +164,13 @@ const EditPersonel = ({ ...props }: Props) => {
 		name: Yup.string()
 			.min(2, 'Too Short!')
 			.required(`${t('please_fill_name_staff')}`),
-		username: Yup.string()
-			.min(2, 'Too Short!')
-			.required(`${t('please_fill_code')}`),
-		password: Yup.string().required(`${t('please_enter_password')}`),
-		password_: Yup.string()
-			.required('Vui lòng nhập lại mật khẩu')
-			.oneOf([Yup.ref('password'), null], 'Mật khẩu không khớp'),
+		// username: Yup.string()
+		// 	.min(2, 'Too Short!')
+		// 	.required(`${t('please_fill_code')}`),
+		// password: Yup.string().required(`${t('please_enter_password')}`),
+		// password_: Yup.string()
+		// 	.required('Vui lòng nhập lại mật khẩu')
+		// 	.oneOf([Yup.ref('password'), null], 'Mật khẩu không khớp'),
 	});
 	const handleSearch = (param: any) => {
 		setQuery(param);
@@ -190,11 +190,9 @@ const EditPersonel = ({ ...props }: Props) => {
 	};
 	const handleHuman = (value: any) => {
 		removeNullProperties(value);
-
+		console.log(value)
 		updateHuman(detail?.id, {
 			name: value.name,
-			username: value.username,
-			password: value.password,
 			role_id: value.role_id.value
 		})
 			.then(() => {
@@ -251,8 +249,8 @@ const EditPersonel = ({ ...props }: Props) => {
 					initialValues={{
 						username: detail ? `${detail?.username}` : '',
 						name: detail ? `${detail?.name}` : '',
-						password: detail?.password ? `${detail?.password}` : '',
-						password_: detail?.password ? `${detail?.password}` : '',
+						// password: detail?.password ? `${detail?.password}` : '',
+						// password_: detail?.password ? `${detail?.password}` : '',
 						role_id: detail?.role_id ? detail?.role_id : '',
 
 					}}
@@ -274,10 +272,9 @@ const EditPersonel = ({ ...props }: Props) => {
 													<div className="flex justify-between gap-5">
 														<div className="mb-5 w-1/2">
 															<label htmlFor="username" className="label">
-																Tên đăng nhập <span style={{ color: 'red' }}>* </span>
+																Tên đăng nhập
 															</label>
-															<Field autoComplete="off" name="username" type="text" id="username" placeholder={`Nhập tên đăng nhập`} className="form-input" />
-															{submitCount ? errors.username ? <div className="mt-1 text-danger"> {`${errors.username}`} </div> : null : ''}
+															<Field autoComplete="off" name="username" type="text" id="username" placeholder={`Nhập tên đăng nhập`} className="form-input" disabled/>
 														</div>
 														<div className="mb-5 w-1/2">
 															<label htmlFor="name" className="label">
@@ -288,7 +285,7 @@ const EditPersonel = ({ ...props }: Props) => {
 															{submitCount ? errors.name ? <div className="mt-1 text-danger"> {`${errors.name}`} </div> : null : ''}
 														</div>
 													</div>
-													<div className="flex justify-between gap-5">
+													{/* <div className="flex justify-between gap-5">
 														<div className="mb-5 w-1/2">
 															<label htmlFor="password" className="label">
 																{t('password')} <span style={{ color: 'red' }}>* </span>
@@ -311,7 +308,7 @@ const EditPersonel = ({ ...props }: Props) => {
 															<Field autoComplete="off" name="password_" type="password" id="password_" placeholder={t('enter_password_')} className="form-input" />
 															{errors.password_ ? <div className="mt-1 text-danger"> {`${errors.password_}`} </div> : null}
 														</div>
-													</div>
+													</div> */}
 													<div className="flex justify-between gap-5">
 														<div className="mb-5 w-1/2">
 															<label htmlFor="role_id" className="label">
@@ -354,7 +351,7 @@ const EditPersonel = ({ ...props }: Props) => {
 										{t('cancel')}
 									</button>
 								</Link>
-								<button type="submit" className="btn :ml-4 add-button rtl:mr-4" disabled={disabled}>
+								<button type="submit" className="btn :ml-4 add-button rtl:mr-4">
 									{t('update')}
 								</button>
 							</div>

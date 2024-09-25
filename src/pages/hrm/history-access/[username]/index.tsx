@@ -1,6 +1,6 @@
 import { useEffect, Fragment, useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { setPageTitle } from '../../../store/themeConfigSlice';
+import { setPageTitle } from '../../../../store/themeConfigSlice';
 import { lazy } from 'react';
 import Link from 'next/link';
 // Third party libs
@@ -22,21 +22,21 @@ import { useRouter } from 'next/router';
 import IconNewEdit from '@/components/Icon/IconNewEdit';
 import IconNewTrash from '@/components/Icon/IconNewTrash';
 import IconNewPlus from '@/components/Icon/IconNewPlus';
-import { ReportTypes } from '@/services/swr/report-typeswr';
-import { deleteShift, reportScientificReports } from '@/services/apis/shift.api';
+import { History } from '@/services/swr/history.swr';
+import { deleteShift } from '@/services/apis/shift.api';
 import IconNewEye from '@/components/Icon/IconNewEye';
-import { deleteReportType, reportReportType } from '@/services/apis/report-type.api';
+import IconDownload from '@/components/Icon/IconDownload';
 
 interface Props {
     [key: string]: any;
 }
 
-const Duty = ({ ...props }: Props) => {
+const File = ({ ...props }: Props) => {
 
     const dispatch = useDispatch();
     const { t } = useTranslation();
     useEffect(() => {
-        dispatch(setPageTitle(`Phân nhóm NVKH`));
+        dispatch(setPageTitle(`Lịch sử truy cập báo cáo theo người dùng`));
     });
 
     const router = useRouter();
@@ -57,7 +57,7 @@ const Duty = ({ ...props }: Props) => {
     const [openModal, setOpenModal] = useState(false);
 
     // get data
-    const { data: shift, pagination, mutate } = ReportTypes({...router.query, size: pageSize });
+    const { data: shift, pagination, mutate } = History({ path: '/api/scientific_reports/', method: 'get', ...router.query, size: pageSize, username : router.query.username });
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -74,7 +74,7 @@ const Duty = ({ ...props }: Props) => {
     }, [recordsData])
 
     const handleEdit = (data: any) => {
-        router.push(`/hrm/reportype/${data.id}`)
+        router.push(`/hrm/scientific_reports_gorvement/${data.id}`)
     };
 
     const handleDelete = (data: any) => {
@@ -89,7 +89,7 @@ const Duty = ({ ...props }: Props) => {
         });
         swalDeletes
             .fire({
-                title: `Xóa nhóm NVKH`,
+                title: `Xóa BCNVKH cấp Nhà nước`,
                 html: `<span class='confirm-span'>${t('confirm_delete')}</span> ${data.name}?`,
                 padding: '2em',
                 showCancelButton: true,
@@ -99,7 +99,7 @@ const Duty = ({ ...props }: Props) => {
             })
             .then((result) => {
                 if (result.value) {
-                    deleteReportType(data?.id).then(() => {
+                    deleteShift(data?.id).then(() => {
                         mutate();
                         showMessage(`Xóa thành công`, 'success');
                     }).catch((err) => {
@@ -115,12 +115,13 @@ const Duty = ({ ...props }: Props) => {
             ...filter,
             search: param
         })
+        
         router.replace(
             {
                 pathname: router.pathname,
                 query: {
                     ...router.query,
-                    search_text: param,
+                    username: param
                 },
             }
         );
@@ -151,70 +152,31 @@ const Duty = ({ ...props }: Props) => {
             render: (records: any, index: any) => <span>{(page - 1) * pageSize + index + 1}</span>,
         },
         {
-            accessor: 'name',
-            title: `Tên`,
+            accessor: 'username',
+            title: `Người dùng`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.name}</span>
+            render: (records: any, index: any) => <span>{records?.username}</span>
         },
         {
-            accessor: 'action',
-            title: 'Thao tác',
-            titleClassName: '!text-center',
-            render: (records: any) => (
-                <div className="flex items-center w-max mx-auto gap-2">
-                    <div className="w-[auto]">
+            accessor: 'time',
+            title: `Thời gian`,
+            sortable: false,
+            render: (records: any, index: any) => <span>{records?.time}</span>
+        },
+        {
+            accessor: 'ip',
+            title: `IP`,
+            sortable: false,
+            render: (records: any, index: any) => <span>{records?.ip}</span>
+        },
+        {
+            accessor: 'scientific_report', title: 'Tên báo cáo', sortable: false,
+            render: (records: any) => records.scientific_report.name,
 
-                        <button type="button" className='button-edit' onClick={() => handleEdit(records)}>
-                            <IconNewEdit /><span>
-                                {t('edit')}
-                            </span>
-                        </button>
-                    </div>
-                    <div className="w-[auto]">
 
-                        <button type="button" className='button-delete' onClick={() => handleDelete(records)}>
-                            <IconNewTrash />
-                            <span>
-                                {t('delete')}
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            ),
         },
     ]
-    const handleBackup = () => {
-        const swalDeletes = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-secondary',
-                cancelButton: 'btn btn-danger ltr:mr-3 rtl:ml-3',
-                popup: 'confirm-popup confirm-delete',
-            },
-            imageUrl: '/assets/images/delete_popup.png',
-            buttonsStyling: false,
-        });
-        swalDeletes
-            .fire({
-                title: `Bạn muốn tải báo cáo?`,
-                padding: '2em',
-                showCancelButton: true,
-                cancelButtonText: `${t('cancel')}`,
-                confirmButtonText: `${t('confirm')}`,
-                reverseButtons: true,
-            })
-            .then((result) => {
-                if (result.value) {
-                    reportReportType().then((res) => {
-                        console.log(res)
-                        window.location.href = res;
-                        showMessage(`Tải thành công`, 'success');
-                    }).catch((err) => {
-                        showMessage(`${err.response.data}`, 'error');
 
-                    });
-                }
-            });
-    }
     return (
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse mb-6">
@@ -224,7 +186,7 @@ const Duty = ({ ...props }: Props) => {
                     </Link>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>Phân nhóm NVKH</span>
+                    <span>Lịch sử truy cập báo cáo theo người dùng</span>
 
                 </li>
             </ul>
@@ -237,15 +199,6 @@ const Duty = ({ ...props }: Props) => {
             <div className="panel mt-6">
                 <div className="flex md:items-center justify-between md:flex-row flex-col mb-4.5 gap-5">
                     <div className="flex items-center flex-wrap">
-                        <Link href="/hrm/reportype/create">
-                            <button type="button" className=" m-1 button-table button-create" >
-                                <IconNewPlus />
-                                <span className="uppercase">{t('add')}</span>
-                            </button>
-                        </Link>
-                        <button type="button" className=" m-1 button-table button-create" onClick={() => handleBackup()}>
-                            <span className="uppercase">Xuất báo cáo</span>
-                        </button>
                     </div>
                     <div className='flex gap-2'>
                         <div className='flex gap-1'>
@@ -297,4 +250,4 @@ const Duty = ({ ...props }: Props) => {
     );
 };
 
-export default Duty;
+export default File;
