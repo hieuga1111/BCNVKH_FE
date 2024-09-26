@@ -16,3 +16,15 @@ export const listAllFiles = async (data: any) => {
 	const endpoint = '/files/';
 	return callApi(endpoint, 'GET', data);
 };
+export const numberOfReport = async () => {
+	const endpoint = '/statistical/get_num_of_report/';
+	return callApi(endpoint, 'GET');
+};
+export const numberOfReportByLevel = async () => {
+	const endpoint = '/statistical/get_num_of_repor_by_level/';
+	return callApi(endpoint, 'GET');
+};
+export const numberOfReportByType = async () => {
+	const endpoint = '/statistical/get_num_of_repor_by_type/';
+	return callApi(endpoint, 'GET');
+};
