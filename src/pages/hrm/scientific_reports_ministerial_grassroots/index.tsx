@@ -58,6 +58,7 @@ const Duty = ({ ...props }: Props) => {
 
     // get data
     const { data: shift, pagination, mutate } = Shifts({ management_level_id: 'CS', ...router.query, size: pageSize });
+    const [role_id, setUser] = useState()
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -67,6 +68,8 @@ const Duty = ({ ...props }: Props) => {
             } else {
             }
         }
+        const user = localStorage.getItem('profile') || ''
+        setUser(JSON.parse(user).role_id)
     }, [])
 
     useEffect(() => {
@@ -191,23 +194,27 @@ const Duty = ({ ...props }: Props) => {
                             </span>
                         </button>
                     </div>
-                    <div className="w-[auto]">
+                    {
+                        role_id === 'U' ? <></> : <>
+                            <div className="w-[auto]">
 
-                        <button type="button" className='button-edit' onClick={() => handleEdit(records)}>
-                            <IconNewEdit /><span>
-                                {t('edit')}
-                            </span>
-                        </button>
-                    </div>
-                    <div className="w-[auto]">
+                                <button type="button" className='button-edit' onClick={() => handleEdit(records)}>
+                                    <IconNewEdit /><span>
+                                        {t('edit')}
+                                    </span>
+                                </button>
+                            </div>
+                            <div className="w-[auto]">
 
-                        <button type="button" className='button-delete' onClick={() => handleDelete(records)}>
-                            <IconNewTrash />
-                            <span>
-                                {t('delete')}
-                            </span>
-                        </button>
-                    </div>
+                                <button type="button" className='button-delete' onClick={() => handleDelete(records)}>
+                                    <IconNewTrash />
+                                    <span>
+                                        {t('delete')}
+                                    </span>
+                                </button>
+                            </div>
+                        </>
+                    }
                 </div>
             ),
         },
@@ -269,12 +276,17 @@ const Duty = ({ ...props }: Props) => {
             <div className="panel mt-6">
                 <div className="flex md:items-center justify-between md:flex-row flex-col mb-4.5 gap-5">
                     <div className="flex items-center flex-wrap">
-                        <Link href="/hrm/scientific_reports_ministerial_grassroots/create">
-                            <button type="button" className=" m-1 button-table button-create" >
-                                <IconNewPlus />
-                                <span className="uppercase">{t('add')}</span>
-                            </button>
-                        </Link>
+                        
+                        {
+                            role_id === 'U' ? <></> : <>
+                                <Link href="/hrm/scientific_reports_ministerial_grassroots/create">
+                                    <button type="button" className=" m-1 button-table button-create" >
+                                        <IconNewPlus />
+                                        <span className="uppercase">{t('add')}</span>
+                                    </button>
+                                </Link>
+                            </>
+                        }
                         <button type="button" className=" m-1 button-table button-create" onClick={() => handleBackup()}>
                             <span className="uppercase">Xuất báo cáo</span>
                         </button>

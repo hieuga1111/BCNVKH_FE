@@ -52,6 +52,7 @@ const Duty = ({ ...props }: Props) => {
         type: ''
     });
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({ columnAccessor: 'id', direction: 'desc' });
+    const [role_id, setUser] = useState()
 
     const [openModal, setOpenModal] = useState(false);
 
@@ -66,6 +67,8 @@ const Duty = ({ ...props }: Props) => {
             } else {
             }
         }
+        const user = localStorage.getItem('profile') || ''
+        setUser(JSON.parse(user).role_id)
     }, [])
 
     useEffect(() => {
@@ -190,23 +193,27 @@ const Duty = ({ ...props }: Props) => {
                             </span>
                         </button>
                     </div>
-                    <div className="w-[auto]">
+                    {
+                        role_id === 'U' ? <></> : <>
+                            <div className="w-[auto]">
 
-                        <button type="button" className='button-edit' onClick={() => handleEdit(records)}>
-                            <IconNewEdit /><span>
-                                {t('edit')}
-                            </span>
-                        </button>
-                    </div>
-                    <div className="w-[auto]">
+                                <button type="button" className='button-edit' onClick={() => handleEdit(records)}>
+                                    <IconNewEdit /><span>
+                                        {t('edit')}
+                                    </span>
+                                </button>
+                            </div>
+                            <div className="w-[auto]">
 
-                        <button type="button" className='button-delete' onClick={() => handleDelete(records)}>
-                            <IconNewTrash />
-                            <span>
-                                {t('delete')}
-                            </span>
-                        </button>
-                    </div>
+                                <button type="button" className='button-delete' onClick={() => handleDelete(records)}>
+                                    <IconNewTrash />
+                                    <span>
+                                        {t('delete')}
+                                    </span>
+                                </button>
+                            </div>
+                        </>
+                    }
                 </div>
             ),
         },
@@ -268,12 +275,17 @@ const Duty = ({ ...props }: Props) => {
             <div className="panel mt-6">
                 <div className="flex md:items-center justify-between md:flex-row flex-col mb-4.5 gap-5">
                     <div className="flex items-center flex-wrap">
-                        <Link href="/hrm/scientific_reports_gorvement/create">
-                            <button type="button" className=" m-1 button-table button-create" >
-                                <IconNewPlus />
-                                <span className="uppercase">{t('add')}</span>
-                            </button>
-                        </Link>
+                        {
+                            role_id === 'U' ? <></> : <>
+                                <Link href="/hrm/scientific_reports_gorvement/create">
+                                    <button type="button" className=" m-1 button-table button-create" >
+                                        <IconNewPlus />
+                                        <span className="uppercase">{t('add')}</span>
+                                    </button>
+                                </Link>
+                            </>
+                        }
+
                         <button type="button" className=" m-1 button-table button-create" onClick={() => handleBackup()}>
                             <span className="uppercase">Xuất báo cáo</span>
                         </button>

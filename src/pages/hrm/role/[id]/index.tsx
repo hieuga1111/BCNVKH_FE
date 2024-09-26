@@ -20,7 +20,6 @@ import { Humans } from '@/services/swr/human.swr';
 import AnimateHeight from 'react-animate-height';
 import IconCaretDown from '@/components/Icon/IconCaretDown';
 import IconBack from '@/components/Icon/IconBack';
-import personnel_list from '../personnel_list.json';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import list_departments from '../../department/department_list.json';
 import list_personnels from '../../personnel/personnel_list.json';
@@ -161,16 +160,8 @@ const EditPersonel = ({ ...props }: Props) => {
 	}));
 	///////////////////////////
 	const SubmittedForm = Yup.object().shape({
-		name: Yup.string()
-			.min(2, 'Too Short!')
-			.required(`${t('please_fill_name_staff')}`),
-		// username: Yup.string()
-		// 	.min(2, 'Too Short!')
-		// 	.required(`${t('please_fill_code')}`),
-		// password: Yup.string().required(`${t('please_enter_password')}`),
-		// password_: Yup.string()
-		// 	.required('Vui lòng nhập lại mật khẩu')
-		// 	.oneOf([Yup.ref('password'), null], 'Mật khẩu không khớp'),
+	
+		
 	});
 	const handleSearch = (param: any) => {
 		setQuery(param);
@@ -227,7 +218,7 @@ const EditPersonel = ({ ...props }: Props) => {
 						</Link>
 					</li>
 					<li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-						<Link href="/hrm/personnel" className="text-primary hover:underline">
+						<Link href="/hrm/role" className="text-primary hover:underline">
 							<span>{t('staff')}</span>
 						</Link>
 					</li>
@@ -237,7 +228,7 @@ const EditPersonel = ({ ...props }: Props) => {
 				</ul>
 				<div className="header-page-bottom mb-4 flex justify-between pb-4">
 					<h1 className="page-title">{t('edit_staff')}</h1>
-					<Link href="/hrm/personnel">
+					<Link href="/hrm/role">
 						<button type="button" className="btn btn-primary btn-sm back-button m-1">
 							<IconBack className="h-5 w-5 ltr:mr-2 rtl:ml-2" />
 							<span>{t('back')}</span>
@@ -269,46 +260,7 @@ const EditPersonel = ({ ...props }: Props) => {
 										<div className={`custom-content-accordion`}>
 											<AnimateHeight duration={300} height={active.includes(1) ? 'auto' : 0}>
 												<div className="space-y-2 border-[#d3d3d3] p-4 text-[13px] dark:border-[#1b2e4b]">
-													<div className="flex justify-between gap-5">
-														<div className="mb-5 w-1/2">
-															<label htmlFor="username" className="label">
-																Tên đăng nhập
-															</label>
-															<Field autoComplete="off" name="username" type="text" id="username" placeholder={`Nhập tên đăng nhập`} className="form-input" disabled/>
-														</div>
-														<div className="mb-5 w-1/2">
-															<label htmlFor="name" className="label">
-																Tên người dùng
-																<span style={{ color: 'red' }}>* </span>
-															</label>
-															<Field autoComplete="off" name="name" type="text" id="name" placeholder={'Nhập tên người dùng'} className="form-input" />
-															{submitCount ? errors.name ? <div className="mt-1 text-danger"> {`${errors.name}`} </div> : null : ''}
-														</div>
-													</div>
-													{/* <div className="flex justify-between gap-5">
-														<div className="mb-5 w-1/2">
-															<label htmlFor="password" className="label">
-																{t('password')} <span style={{ color: 'red' }}>* </span>
-															</label>
-															<Field
-																autoComplete="off"
-																name="password"
-																type="password"
-																id="password"
-																placeholder={`${t('enter_password')}`}
-																className="password-input form-control rounded-0 form-input"
-															/>
-															{submitCount ? errors.password ? <div className="mt-1 text-danger"> {`${errors.password}`} </div> : null : ''}
-														</div>
-														<div className="mb-5 w-1/2">
-															<label htmlFor="password_" className="label">
-																{t('password_')}
-																<span style={{ color: 'red' }}>* </span>
-															</label>
-															<Field autoComplete="off" name="password_" type="password" id="password_" placeholder={t('enter_password_')} className="form-input" />
-															{errors.password_ ? <div className="mt-1 text-danger"> {`${errors.password_}`} </div> : null}
-														</div>
-													</div> */}
+												
 													<div className="flex justify-between gap-5">
 														<div className="mb-5 w-1/2">
 															<label htmlFor="role_id" className="label">

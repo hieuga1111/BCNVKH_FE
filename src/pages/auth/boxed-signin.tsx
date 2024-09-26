@@ -61,6 +61,8 @@ const LoginBoxed = () => {
                 const token = res.token;
                 const accessTokenKey = Config.Env.NEXT_PUBLIC_X_ACCESS_TOKEN as string;
                 Cookies.set(accessTokenKey, token);
+                localStorage.setItem('profile', JSON.stringify(res.user))
+
                 return true;
             })
             .then(() => {

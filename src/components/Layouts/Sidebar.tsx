@@ -61,6 +61,8 @@ const Sidebar = () => {
             return oldValue === value ? '' : value;
         });
     };
+    const [role_id, setUser] = useState()
+
     useEffect(() => {
         const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
         if (selector) {
@@ -76,6 +78,8 @@ const Sidebar = () => {
                 }
             }
         }
+        const user = localStorage.getItem('profile') || ''
+        setUser(JSON.parse(user).role_id)
     }, []);
 
     useEffect(() => {
@@ -179,128 +183,134 @@ const Sidebar = () => {
                                     </Link>
                                 </button>
                             </li>
-                            <li className="menu nav-item">
-                                <button type="button" className={`${currentMenu === 'hrm' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('hrm')}>
-                                    <div className="flex items-center">
-                                        <IconMenuUser className="icon-menu icon-menu-1 shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('hrmanagement')}</span>
-                                    </div>
+                            {
 
-                                    <div className={currentMenu !== 'hrm' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-                                <AnimateHeight duration={300} height={currentMenu === 'hrm' ? 'auto' : 0}>
-                                    <ul className="text-gray-500">
-                                        <li className="nav-item">
-                                            <ul>
-                                                <li className="menu menu1 nav-item">
-                                                    <div className="group-menu-name flex items-start">
-                                                        <span className="header-menu-color uppercase text-black dark:text-[#506690] dark:group-hover:text-white-dark rtl:pr-3">
-                                                            {t('general_info_menu')}
-                                                        </span>
-                                                    </div>
-                                                    <ul className="text-gray-500">
-                                                        {/* <RBACWrapper permissionKey={['department:findAll']} type={'AND'}> */}
-                                                        <li className="nav-item">
-                                                            <Link href="/hrm/department" className="final-level-menu group">
-                                                                <div className="flex items-center">
-                                                                    <IconMenuDepartment className="shrink-0 group-hover:!text-primary" />
+                            }
+                            {
+                                role_id === 'A' ? <li className="menu nav-item">
+                                    <button type="button" className={`${currentMenu === 'hrm' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('hrm')}>
+                                        <div className="flex items-center">
+                                            <IconMenuUser className="icon-menu icon-menu-1 shrink-0 group-hover:!text-primary" />
+                                            <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('hrmanagement')}</span>
+                                        </div>
 
-                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                                        {t('department_list')}
-                                                                    </span>
-                                                                </div>
-                                                            </Link>
-                                                        </li>
-                                                        {/* </RBACWrapper> */}
+                                        <div className={currentMenu !== 'hrm' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                            <IconCaretDown />
+                                        </div>
+                                    </button>
+                                    <AnimateHeight duration={300} height={currentMenu === 'hrm' ? 'auto' : 0}>
+                                        <ul className="text-gray-500">
+                                            <li className="nav-item">
+                                                <ul>
+                                                    <li className="menu menu1 nav-item">
+                                                        <div className="group-menu-name flex items-start">
+                                                            <span className="header-menu-color uppercase text-black dark:text-[#506690] dark:group-hover:text-white-dark rtl:pr-3">
+                                                                {t('general_info_menu')}
+                                                            </span>
+                                                        </div>
+                                                        <ul className="text-gray-500">
+                                                            {/* <RBACWrapper permissionKey={['department:findAll']} type={'AND'}> */}
+                                                            <li className="nav-item">
+                                                                <Link href="/hrm/department" className="final-level-menu group">
+                                                                    <div className="flex items-center">
+                                                                        <IconMenuDepartment className="shrink-0 group-hover:!text-primary" />
 
-                                                        {/* <RBACWrapper permissionKey={['human:findAll']} type={'AND'}> */}
-                                                        <li className="nav-item">
-                                                            <Link href="/hrm/personnel" className="final-level-menu group">
-                                                                <div className="flex it             ems-center">
-                                                                    <IconMenuPersonel className="shrink-0 group-hover:!text-primary" />
-                                                                    <span className="dark:group-hover:text-white-dar text-black dark:text-[#506690] ltr:pl-3 rtl:pr-3">{t('staff_list')}</span>
-                                                                </div>
-                                                            </Link>
-                                                        </li>
-                                                        <li className="nav-item">
-                                                            <Link href="/hrm/participants" className="final-level-menu group">
-                                                                <div className="flex it             ems-center">
-                                                                    <IconMenuPersonel className="shrink-0 group-hover:!text-primary" />
-                                                                    <span className="dark:group-hover:text-white-dar text-black dark:text-[#506690] ltr:pl-3 rtl:pr-3">Thành viên tham gia</span>
-                                                                </div>
-                                                            </Link>
-                                                        </li>
-                                                        {/* </RBACWrapper> */}
+                                                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                                            {t('department_list')}
+                                                                        </span>
+                                                                    </div>
+                                                                </Link>
+                                                            </li>
+                                                            {/* </RBACWrapper> */}
 
-                                                    </ul>
-                                                </li>
-                                                <div className="divide"></div>
-                                                <li className="menu menu1 nav-item">
-                                                    <div className="group-menu-name flex items-center">
-                                                        <span className="header-menu-color uppercase text-black dark:text-[#506690] dark:group-hover:text-white-dark rtl:pr-3">{t('other_task')}</span>
-                                                    </div>
-                                                    <ul className="text-gray-500">
-                                                        {/* <RBACWrapper permissionKey={['role:findAll']} type={'AND'}> */}
-                                                        <li className="nav-item">
-                                                            <Link href="/hrm/role" className="final-level-menu group">
-                                                                <div className="flex items-center">
-                                                                    <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
-                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('role_list')}</span>
-                                                                </div>
-                                                            </Link>
-                                                        </li>
-                                                        <li className="nav-item">
-                                                            <Link href="/hrm/history-accessbyreport" className="final-level-menu group">
-                                                                <div className="flex items-center">
-                                                                    <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
-                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử truy cập người dùng theo báo cáo</span>
-                                                                </div>
-                                                            </Link>
-                                                        </li>
-                                                        <li className="nav-item">
-                                                            <Link href="/hrm/history-access" className="final-level-menu group">
-                                                                <div className="flex items-center">
-                                                                    <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
-                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử truy cập báo cáo theo người dùng</span>
-                                                                </div>
-                                                            </Link>
-                                                        </li>
-                                                        <li className="nav-item">
-                                                            <Link href="/hrm/history-edit" className="final-level-menu group">
-                                                                <div className="flex items-center">
-                                                                    <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
-                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử chỉnh sửa báo cáo</span>
-                                                                </div>
-                                                            </Link>
-                                                        </li>
-                                                        <li className="nav-item">
-                                                            <Link href="/hrm/history-signin" className="final-level-menu group">
-                                                                <div className="flex items-center">
-                                                                    <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
-                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử đăng nhập</span>
-                                                                </div>
-                                                            </Link>
-                                                        </li>
-                                                        <li className="nav-item">
-                                                            <button onClick={() => handleBackup()}>
-                                                                <div className="flex items-center">
-                                                                    <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
-                                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Backup CSDL</span>
-                                                                </div>
-                                                            </button>
+                                                            {/* <RBACWrapper permissionKey={['human:findAll']} type={'AND'}> */}
+                                                            <li className="nav-item">
+                                                                <Link href="/hrm/personnel" className="final-level-menu group">
+                                                                    <div className="flex it             ems-center">
+                                                                        <IconMenuPersonel className="shrink-0 group-hover:!text-primary" />
+                                                                        <span className="dark:group-hover:text-white-dar text-black dark:text-[#506690] ltr:pl-3 rtl:pr-3">{t('staff_list')}</span>
+                                                                    </div>
+                                                                </Link>
+                                                            </li>
+                                                            <li className="nav-item">
+                                                                <Link href="/hrm/participants" className="final-level-menu group">
+                                                                    <div className="flex it             ems-center">
+                                                                        <IconMenuPersonel className="shrink-0 group-hover:!text-primary" />
+                                                                        <span className="dark:group-hover:text-white-dar text-black dark:text-[#506690] ltr:pl-3 rtl:pr-3">Thành viên tham gia</span>
+                                                                    </div>
+                                                                </Link>
+                                                            </li>
+                                                            {/* </RBACWrapper> */}
 
-                                                        </li>
-                                                        {/* </RBACWrapper> */}
+                                                        </ul>
+                                                    </li>
+                                                    <div className="divide"></div>
+                                                    <li className="menu menu1 nav-item">
+                                                        <div className="group-menu-name flex items-center">
+                                                            <span className="header-menu-color uppercase text-black dark:text-[#506690] dark:group-hover:text-white-dark rtl:pr-3">{t('other_task')}</span>
+                                                        </div>
+                                                        <ul className="text-gray-500">
+                                                            {/* <RBACWrapper permissionKey={['role:findAll']} type={'AND'}> */}
+                                                            <li className="nav-item">
+                                                                <Link href="/hrm/role" className="final-level-menu group">
+                                                                    <div className="flex items-center">
+                                                                        <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
+                                                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('role_list')}</span>
+                                                                    </div>
+                                                                </Link>
+                                                            </li>
+                                                            <li className="nav-item">
+                                                                <Link href="/hrm/history-accessbyreport" className="final-level-menu group">
+                                                                    <div className="flex items-center">
+                                                                        <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
+                                                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử truy cập người dùng theo báo cáo</span>
+                                                                    </div>
+                                                                </Link>
+                                                            </li>
+                                                            <li className="nav-item">
+                                                                <Link href="/hrm/history-access" className="final-level-menu group">
+                                                                    <div className="flex items-center">
+                                                                        <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
+                                                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử truy cập báo cáo theo người dùng</span>
+                                                                    </div>
+                                                                </Link>
+                                                            </li>
+                                                            <li className="nav-item">
+                                                                <Link href="/hrm/history-edit" className="final-level-menu group">
+                                                                    <div className="flex items-center">
+                                                                        <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
+                                                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử chỉnh sửa báo cáo</span>
+                                                                    </div>
+                                                                </Link>
+                                                            </li>
+                                                            <li className="nav-item">
+                                                                <Link href="/hrm/history-signin" className="final-level-menu group">
+                                                                    <div className="flex items-center">
+                                                                        <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
+                                                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Lịch sử đăng nhập</span>
+                                                                    </div>
+                                                                </Link>
+                                                            </li>
+                                                            <li className="nav-item">
+                                                                <button onClick={() => handleBackup()}>
+                                                                    <div className="flex items-center">
+                                                                        <IconMenuPermission className="shrink-0 group-hover:!text-primary" />
+                                                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Backup CSDL</span>
+                                                                    </div>
+                                                                </button>
 
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </AnimateHeight>
-                            </li>
+                                                            </li>
+                                                            {/* </RBACWrapper> */}
+
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </AnimateHeight>
+                                </li> : <></>
+                            }
+
                             <li className="menu nav-item">
                                 {/* === QUẢN LÝ ĐƠN */}
                                 <button type="button" className={`${currentMenu === 'form' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('form')}>
@@ -364,22 +374,25 @@ const Sidebar = () => {
                                                 </div>
                                             </Link>
                                         </li>
-                                        <li className="nav-item">
-                                            <Link href="/hrm/file" className="final-level-menu group">
-                                                <div className="flex items-center">
-                                                    <IconMenuFormOT className="shrink-0 group-hover:!text-primary" />
-                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Tệp đính kèm báo cáo</span>
-                                                </div>
-                                            </Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link href="/hrm/reportype" className="final-level-menu group">
-                                                <div className="flex items-center">
-                                                    <IconMenuFormOT className="shrink-0 group-hover:!text-primary" />
-                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Phân nhóm NVKH</span>
-                                                </div>
-                                            </Link>
-                                        </li>
+                                        {
+                                            role_id === 'U' ? <></> : <><li className="nav-item">
+                                                <Link href="/hrm/file" className="final-level-menu group">
+                                                    <div className="flex items-center">
+                                                        <IconMenuFormOT className="shrink-0 group-hover:!text-primary" />
+                                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Tệp đính kèm báo cáo</span>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                                <li className="nav-item">
+                                                    <Link href="/hrm/reportype" className="final-level-menu group">
+                                                        <div className="flex items-center">
+                                                            <IconMenuFormOT className="shrink-0 group-hover:!text-primary" />
+                                                            <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Phân nhóm NVKH</span>
+                                                        </div>
+                                                    </Link>
+                                                </li>
+                                            </>
+                                        }
 
                                         {/* <li className="nav-item">
                                             <Link href="/hrm/exempt-form" className="group final-level-menu">

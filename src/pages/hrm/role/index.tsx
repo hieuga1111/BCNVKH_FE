@@ -19,7 +19,6 @@ import { capitalize, formatDate, showMessage } from '@/@core/utils';
 import { useRouter } from 'next/router';
 
 // json
-import PersonnelList from './personnel_list.json';
 import Link from 'next/link';
 
 
@@ -63,7 +62,6 @@ const Department = ({ ...props }: Props) => {
             if (data) {
                 setGetStorge(JSON.parse(data));
             } else {
-                localStorage.setItem('staffList', JSON.stringify(PersonnelList));
             }
         }
     }, []);
@@ -85,13 +83,7 @@ const Department = ({ ...props }: Props) => {
     // }, [recordsData]);
     
     const handleEdit = (data: any) => {
-        router.push(`/hrm/personnel/${data}`)
-    };
-    const handleDetail = (data: any) => {
-        router.push(`/hrm/personnel/detail/${data}`)
-    };
-    const handlePass = (data: any) => {
-        router.push(`/hrm/personnel/changepass/${data}`)
+        router.push(`/hrm/role/${data}`)
     };
     const handleDelete = (data: any) => {
         const swalDeletes = Swal.mixin({
@@ -190,21 +182,10 @@ const Department = ({ ...props }: Props) => {
                     <div className="w-[auto]">
                         <button type="button" className="button-edit" onClick={() => handleEdit(records.id)}>
                             <IconNewEdit />
-                            <span>{t('edit')}</span>
+                            <span>Phân quyền</span>
                         </button>
                     </div>
-                    <div className="w-[auto]">
-                        <button type="button" className="button-detail" onClick={() => handlePass(records.id)}>
-                            <IconLock />
-                            <span>Đổi mật khẩu</span>
-                        </button>
-                    </div>
-                    <div className="w-[auto]">
-                        <button type="button" className="button-delete" onClick={() => handleDelete( records )}>
-                            <IconNewTrash />
-                            <span>{t('delete')}</span>
-                        </button>
-                    </div>
+                   
                 </div>
             ),
         },
@@ -255,24 +236,14 @@ const Department = ({ ...props }: Props) => {
                     </Link>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>{t('staff')}</span>
+                    <span>Phân quyền</span>
 
                 </li>
             </ul>
-            <title>{t('staff')}</title>
+            <title>Phân quyền</title>
             <div className="panel mt-6" style={{ overflowX: 'auto' }}>
                 <div className="mb-4.5 flex flex-col justify-between gap-5 md:flex-row md:items-center">
-                    <div className="flex flex-wrap items-center">
-                        <Link href="/hrm/personnel/AddNewPersonel">
-                            <button type="button" className=" m-1 button-table button-create" >
-                                <IconNewPlus />
-                                <span className="uppercase">{t('add')}</span>
-                            </button>
-                        </Link>
-                        <button type="button" className=" m-1 button-table button-create" onClick={() => handleBackup()}>
-                            <span className="uppercase">Xuất báo cáo</span>
-                        </button>
-                    </div>
+                   
                     <div className='display-style'>
                         <input
                             autoComplete="off"
@@ -284,7 +255,7 @@ const Department = ({ ...props }: Props) => {
                             style={{ marginRight: '10px' }}
                         />
                         <Select
-                            data={['Quản trị hệ thống', 'Người dùng']}
+                            data={['Quản trị viên', 'Người dùng', 'Trợ lý']}
                             value={selectedDepartments}
                             placeholder="Tìm theo loại tài khoản"
                             onChange={(p: any) => {

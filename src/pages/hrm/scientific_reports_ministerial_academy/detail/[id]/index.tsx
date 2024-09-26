@@ -42,6 +42,7 @@ const AddNewShift = ({ ...props }: Props) => {
 
     const [typeShift, setTypeShift] = useState(1); // 0: time, 1: total hours
     const [ip, setIp] = useState<string>('IP Not Found');
+    const [role_id, setUser] = useState()
 
     useEffect(() => {
         const findIP = async () => {
@@ -96,6 +97,8 @@ const AddNewShift = ({ ...props }: Props) => {
                     console.log(err);
                 });
         }
+        const user = localStorage.getItem('profile') || ''
+        setUser(JSON.parse(user).role_id)
     }, [router, ip]);
 
     const baseSchema = {
@@ -344,12 +347,14 @@ const AddNewShift = ({ ...props }: Props) => {
                             </div>
                         </div>
                         <div className="mt-8 flex items-center justify-end ltr:text-right rtl:text-left gap-8">
-                            <Link href={`/hrm/scientific_reports_ministerial_academy/${router.query.id}`}>
-                                <button type="submit" className="btn :ml-4 rtl:mr-4 add-button">
-                                    {t('edit')}
-                                </button>
-                            </Link>
-
+                           
+                            {
+                                role_id === 'U' ? <></> : <Link href={`/hrm/scientific_reports_ministerial_academy/${router.query.id}`}>
+                                    <button type="submit" className="btn :ml-4 rtl:mr-4 add-button">
+                                        {t('edit')}
+                                    </button>
+                                </Link>
+                            }
                         </div>
                     </Form>
                 )}

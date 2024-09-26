@@ -262,14 +262,17 @@ const AddNewPersonel = ({ ...props }: Props) => {
 															name="role_id"
 															options={[
 																{
-																	value: 'A',
-																	label: 'Admin',
+																	value: "A",
+																	label: 'Quản trị viên',
 																},
 																{
-																	value: 'U',
-																	label: 'User',
+																	value: "U",
+																	label: 'Người dùng',
 																},
-															
+																{
+																	value: "As",
+																	label: 'Trợ lý',
+																},
 															]}
 															value={values.role_id}
 															placeholder={`Chọn loại tài khoản`}
