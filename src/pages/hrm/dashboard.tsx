@@ -41,7 +41,7 @@ const DashBoard = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        setIsMounted(true);
+       
     });
     
     const [columnChart, setColumnChart] = useState<any>()
@@ -53,6 +53,7 @@ const DashBoard = () => {
         })
         numberOfReportByType().then(res => {
             console.log(res)
+            const label = res.data.map((item:any) => {return item?.type} )
             setDonutChart({
                 series: res.data.map((item:any) => {return item.report_count} ),
                 options: {
@@ -89,7 +90,7 @@ const DashBoard = () => {
                             }
                         }
                     },
-                    labels: res.data.map((item:any) => {return item.type} ),
+                    labels: label,
                     responsive: [
                         {
                             breakpoint: 480,
@@ -107,6 +108,8 @@ const DashBoard = () => {
             })
         })
         numberOfReportByLevel().then(res => {
+            const label = res.data.map((item:any) => {return item?.level} )
+
             setColumnChart({
                 series: [
                     {
@@ -153,7 +156,7 @@ const DashBoard = () => {
                         show: false
                     },
                     xaxis: {
-                        categories: res.data.map((item:any) => {return item.level} ),
+                        categories: label,
                         axisBorder: {
                             color: isDark ? '#191e3a' : '#e0e6ed',
                         },
@@ -176,6 +179,7 @@ const DashBoard = () => {
             }
         )
         })
+        setIsMounted(true);
        }, []);
     const router = useRouter();
 
@@ -223,7 +227,7 @@ const DashBoard = () => {
                         <h5 className="text-lg font-semibold dark:text-white">Số lượng báo cáo theo từng cấp</h5>
                     </div>
                     <div className="mb-5">
-                        {isMounted && <ReactApexChart series={columnChart?.series} options={columnChart?.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="bar" height={300} width={"100%"} />}
+                        {columnChart && <ReactApexChart series={columnChart?.series} options={columnChart?.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="bar" height={300} width={"100%"} />}
                     </div>
                 </div>
                 <div className="panel">
@@ -232,7 +236,7 @@ const DashBoard = () => {
                     </div>
 
                     <div className="mb-5" style={{ zIndex: '9999999', position: "relative" }}>
-                        {isMounted && <ReactApexChart series={donutChart?.series} options={donutChart?.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="donut" height={300} width={"100%"} />}
+                        {donutChart && <ReactApexChart series={donutChart?.series} options={donutChart?.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="donut" height={300} width={"100%"} />}
                     </div>
                 </div>
                
