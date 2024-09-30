@@ -126,7 +126,7 @@ const AddNewShift = ({ ...props }: Props) => {
             accessor: 'url',
             title: `Tên file`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.url}</span>
+            render: (records: any, index: any) => <span>{records?.name}</span>
         },
 
 
@@ -135,7 +135,8 @@ const AddNewShift = ({ ...props }: Props) => {
             title: 'Thao tác',
             titleClassName: '!text-center',
             render: (records: any) => (
-                <a href={`/hrm/view-file?path=${records?.url.split('/')[1]}&id=${records?.id}`} target='_blank'>
+               <a href={`/hrm/view-file?path=${records?.url.split('/')[1]}&id=${records?.id}&page=${records?.total_pages}`} target='_blank'>
+
                     <div className="flex items-center w-max mx-auto gap-2">
                         <div className="w-[auto]">
 
@@ -169,7 +170,9 @@ const AddNewShift = ({ ...props }: Props) => {
             accessor: 'participant_role_id',
             title: `Vai trò`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.participant_role_id}</span>
+            render: (records: any, index: any) => (records.participant_role_id === 'Collaborating') ? 'Cơ quan, đơn vị phối hợp' :
+            (records.participant_role_id === 'Executing') ? 'Cơ quan, đơn vị thực hiện' :
+            'Cơ quan, đơn vị chủ trì',
         },
         {
             accessor: 'participant_role_id',

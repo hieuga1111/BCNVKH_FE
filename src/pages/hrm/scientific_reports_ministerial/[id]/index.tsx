@@ -25,6 +25,7 @@ import ParticalModal from './particalModal';
 import FilelModal from './fileModal';
 import { ReportTypes } from '@/services/swr/report-typeswr';
 import IconEye from '@/components/Icon/IconEye';
+import { deleteFile } from '@/services/apis/file.api';
 
 interface Props {
     [key: string]: any;
@@ -45,57 +46,57 @@ const AddNewShift = ({ ...props }: Props) => {
     const [ip, setIp] = useState<string>('IP Not Found');
     useEffect(() => {
         const findIP = async () => {
-          try {
-            const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
-            const peerConnection = new RTCPeerConnection();
-    
-            peerConnection.createDataChannel('');
-            const offer = await peerConnection.createOffer();
-            await peerConnection.setLocalDescription(offer);
-    
-            peerConnection.onicecandidate = (event) => {
-              if (event && event.candidate && event.candidate.candidate) {
-                const ipMatch = event.candidate.candidate.match(ipRegex);
-                if (ipMatch) {
-                  setIp(ipMatch[1]);
-                  peerConnection.close();
-                }
-              }
-            };
-          } catch (err) {
-            console.error('Error retrieving IP: ', err);
-          }
+            try {
+                const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
+                const peerConnection = new RTCPeerConnection();
+
+                peerConnection.createDataChannel('');
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+
+                peerConnection.onicecandidate = (event) => {
+                    if (event && event.candidate && event.candidate.candidate) {
+                        const ipMatch = event.candidate.candidate.match(ipRegex);
+                        if (ipMatch) {
+                            setIp(ipMatch[1]);
+                            peerConnection.close();
+                        }
+                    }
+                };
+            } catch (err) {
+                console.error('Error retrieving IP: ', err);
+            }
         };
-    
+
         findIP();
     }, [router, ip]);
     useEffect(() => {
         const findIP = async () => {
-          try {
-            const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
-            const peerConnection = new RTCPeerConnection();
-    
-            peerConnection.createDataChannel('');
-            const offer = await peerConnection.createOffer();
-            await peerConnection.setLocalDescription(offer);
-    
-            peerConnection.onicecandidate = (event) => {
-              if (event && event.candidate && event.candidate.candidate) {
-                const ipMatch = event.candidate.candidate.match(ipRegex);
-                if (ipMatch) {
-                    console.log(ipMatch[1])
-                  setIp(ipMatch[1]);
-                  peerConnection.close();
-                }
-              }
-            };
-          } catch (err) {
-            console.error('Error retrieving IP: ', err);
-          }
+            try {
+                const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
+                const peerConnection = new RTCPeerConnection();
+
+                peerConnection.createDataChannel('');
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+
+                peerConnection.onicecandidate = (event) => {
+                    if (event && event.candidate && event.candidate.candidate) {
+                        const ipMatch = event.candidate.candidate.match(ipRegex);
+                        if (ipMatch) {
+                            console.log(ipMatch[1])
+                            setIp(ipMatch[1]);
+                            peerConnection.close();
+                        }
+                    }
+                };
+            } catch (err) {
+                console.error('Error retrieving IP: ', err);
+            }
         };
-    
+
         findIP();
-      }, []);
+    }, []);
     useEffect(() => {
         const id = router.query.id;
         if (id) {
@@ -169,7 +170,7 @@ const AddNewShift = ({ ...props }: Props) => {
             accessor: 'url',
             title: `Tên file`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.url}</span>
+            render: (records: any, index: any) => <span>{records?.name}</span>
         },
 
 
@@ -178,9 +179,9 @@ const AddNewShift = ({ ...props }: Props) => {
             title: 'Thao tác',
             titleClassName: '!text-center',
             render: (records: any) => (
-                <a href={`/hrm/view-file?path=${records?.url.split('/')[1]}&id=${records?.id}`} target='_blank'>
-                    <div className="flex items-center w-max mx-auto gap-2">
-                        <div className="w-[auto]">
+                <div className="flex items-center w-max mx-auto gap-2">
+                    <div className="w-[auto]">
+                        <a href={`/hrm/view-file?path=${records?.url.split('/')[1]}&id=${records?.id}&page=${records?.total_pages}`} target='_blank'>
 
                             <button type="button" className='button-edit'>
                                 <IconEye />
@@ -188,13 +189,64 @@ const AddNewShift = ({ ...props }: Props) => {
                                     Xem
                                 </span>
                             </button>
-                        </div>
+                        </a>
+
                     </div>
-                </a>
+                    <div className="w-[auto]">
+
+                        <button type="button" className='button-delete' onClick={() => handleDeleteFile(records)}>
+                            <IconNewTrash />
+                            <span>
+                                {t('delete')}
+                            </span>
+                        </button>
+                    </div>
+                </div>
 
             ),
         },
     ]
+    const handleDeleteFile = (data: any) => {
+        const swalDeletes = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-secondary',
+                cancelButton: 'btn btn-danger ltr:mr-3 rtl:ml-3',
+                popup: 'confirm-popup confirm-delete',
+            },
+            imageUrl: '/assets/images/delete_popup.png',
+            buttonsStyling: false,
+        });
+        swalDeletes
+            .fire({
+                title: `Xóa tệp đính kèm`,
+                html: `<span class='confirm-span'>${t('confirm_delete')}</span> ${data.name}?`,
+                padding: '2em',
+                showCancelButton: true,
+                cancelButtonText: `${t('cancel')}`,
+                confirmButtonText: `${t('confirm')}`,
+                reverseButtons: true,
+            })
+            .then((result) => {
+                if (result.value) {
+                    deleteFile(data?.id).then(() => {
+                        const id = router.query.id;
+                        if (id) {
+                            detailFilebyReport(id)
+                                .then((res) => {
+                                    setFile(res);
+                                })
+                                .catch((err: any) => {
+                                    console.log(err);
+                                });
+                        }
+                        showMessage(`Xóa thành công`, 'success');
+                    }).catch((err) => {
+                        showMessage(`${err.response.data}`, 'error');
+
+                    });
+                }
+            });
+    };
     const handleDeletePartical = (data: any) => {
         const swalDeletes = Swal.mixin({
             customClass: {
@@ -275,7 +327,9 @@ const AddNewShift = ({ ...props }: Props) => {
             accessor: 'participant_role_id',
             title: `Vai trò`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.participant_role_id}</span>
+            render: (records: any, index: any) => (records.participant_role_id === 'Collaborating') ? 'Cơ quan, đơn vị phối hợp' :
+                (records.participant_role_id === 'Executing') ? 'Cơ quan, đơn vị thực hiện' :
+                    'Cơ quan, đơn vị chủ trì',
         },
         {
             accessor: 'participant_role_id',
@@ -527,7 +581,7 @@ const AddNewShift = ({ ...props }: Props) => {
                                     {' '}
                                     Tóm tắt
                                 </label>
-                               <Field autoComplete="off" name="summary" as="textarea" rows="4"  id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
+                                <Field autoComplete="off" name="summary" as="textarea" rows="4" id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
                             </div>
                             <div className="mb-5 w-1/2">
                                 <label htmlFor="summary" className='label'>
@@ -635,7 +689,7 @@ const AddNewShift = ({ ...props }: Props) => {
                 scientific_report_id={router.query.id}
                 setData={updatePar}
             />
-             <FilelModal
+            <FilelModal
                 openModal={openModalFile}
                 setOpenModal={setOpenModalFile}
                 scientific_report_id={router.query.id}

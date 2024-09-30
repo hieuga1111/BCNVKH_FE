@@ -81,7 +81,7 @@ const FilelModal = ({ ...props }: Props) => {
                                     <IconX />
                                 </button>
                                 <div className="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]">
-                                    {props.data !== undefined ? `Sửa người tham gia` : `Thêm người tham gia`}
+                                    {props.data !== undefined ? `Sửa tệp` : `Thêm tệp đính kèm`}
                                 </div>
                                 <div className="p-5">
                                     <Formik

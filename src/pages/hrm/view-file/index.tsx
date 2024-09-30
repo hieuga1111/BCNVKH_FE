@@ -46,7 +46,7 @@ const ViewFile = ({ ...props }: Props) => {
     const [page, setPage] = useState<any>(PAGE_NUMBER_DEFAULT);
     const [pageSize, setPageSize] = useState(PAGE_SIZES_DEFAULT);
     const [recordsData, setRecordsData] = useState<any>();
-    const [total, setTotal] = useState(0);
+    const [total, setTotal] = useState<any>();
     const [getStorge, setGetStorge] = useState<any>();
     const [data, setData] = useState<any>();
     const [filter, setFilter] = useState<any>({
@@ -62,6 +62,7 @@ const ViewFile = ({ ...props }: Props) => {
             } else {
             }
         }
+        setTotal(router.query.page || '')
     }, [])
     const countPdfPages = async (pdfUrl: string) => {
         // const loadingTask = pdfjs.getDocument(pdfUrl);
@@ -163,15 +164,18 @@ const ViewFile = ({ ...props }: Props) => {
 
                     </div>
                 </div>
-
-                <iframe
-                    src={`http://103.57.223.140:3001/files/${router.query.path}#toolbar=0`}
-                    width="100%"
-                    height="800px"
-                    style={{ pointerEvents: 'inherit' }}
-                    id='pdfframe'
-                >
-                </iframe>
+                <div style={{ position: 'relative', width: '100%', height:`${parseInt((router.query.page || 1).toString())  * 1100 || 1100}`, pointerEvents: 'none' }}>
+                    <iframe
+                        src={`http://103.57.223.140:3001/files/${router.query.path}#toolbar=0`}
+                        width="100%"
+                        height={`${parseInt((router.query.page || 1).toString())  * 1100 || 1100}`}
+                        style={{ pointerEvents: 'inherit' }}
+                        id='pdfframe'
+                    >
+                    </iframe>
+                    <div style={{position: 'absolute', top: '0', left: '0', width: '100%', height: `${parseInt((router.query.page || 1).toString())  * 1100 || 1100}`, zIndex: '10', pointerEvents: 'none' }}>
+                    </div>
+                </div>
             </div>
 
         </div >

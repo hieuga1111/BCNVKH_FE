@@ -26,6 +26,7 @@ import { deleteParticipants } from '@/services/apis/participants.api';
 import ParticalModal from './particalModal';
 import FilelModal from './fileModal';
 import IconEye from '@/components/Icon/IconEye';
+import { deleteFile } from '@/services/apis/file.api';
 
 interface Props {
     [key: string]: any;
@@ -134,6 +135,47 @@ const AddNewShift = ({ ...props }: Props) => {
         props.setOpenModal(false);
         props.setData(undefined);
     };
+    const handleDeleteFile = (data: any) => {
+        const swalDeletes = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-secondary',
+                cancelButton: 'btn btn-danger ltr:mr-3 rtl:ml-3',
+                popup: 'confirm-popup confirm-delete',
+            },
+            imageUrl: '/assets/images/delete_popup.png',
+            buttonsStyling: false,
+        });
+        swalDeletes
+            .fire({
+                title: `Xóa tệp đính kèm`,
+                html: `<span class='confirm-span'>${t('confirm_delete')}</span> ${data.name}?`,
+                padding: '2em',
+                showCancelButton: true,
+                cancelButtonText: `${t('cancel')}`,
+                confirmButtonText: `${t('confirm')}`,
+                reverseButtons: true,
+            })
+            .then((result) => {
+                if (result.value) {
+                    deleteFile(data?.id).then(() => {
+                        const id = router.query.id;
+                        if (id) {
+                            detailFilebyReport(id)
+                                .then((res) => {
+                                    setFile(res);
+                                })
+                                .catch((err: any) => {
+                                    console.log(err);
+                                });
+                        }
+                        showMessage(`Xóa thành công`, 'success');
+                    }).catch((err) => {
+                        showMessage(`${err.response.data}`, 'error');
+
+                    });
+                }
+            });
+    };
     const columns = [
         {
             accessor: 'id',
@@ -143,7 +185,7 @@ const AddNewShift = ({ ...props }: Props) => {
             accessor: 'url',
             title: `Tên file`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.url}</span>
+            render: (records: any, index: any) => <span>{records?.name}</span>
         },
 
 
@@ -152,9 +194,9 @@ const AddNewShift = ({ ...props }: Props) => {
             title: 'Thao tác',
             titleClassName: '!text-center',
             render: (records: any) => (
-                <a href={`/hrm/view-file?path=${records?.url.split('/')[1]}&id=${records?.id}`} target='_blank'>
-                    <div className="flex items-center w-max mx-auto gap-2">
-                        <div className="w-[auto]">
+                <div className="flex items-center w-max mx-auto gap-2">
+                    <div className="w-[auto]">
+                        <a href={`/hrm/view-file?path=${records?.url.split('/')[1]}&id=${records?.id}&page=${records?.total_pages}`} target='_blank'>
 
                             <button type="button" className='button-edit'>
                                 <IconEye />
@@ -162,9 +204,19 @@ const AddNewShift = ({ ...props }: Props) => {
                                     Xem
                                 </span>
                             </button>
-                        </div>
+                        </a>
+
                     </div>
-                </a>
+                    <div className="w-[auto]">
+
+                        <button type="button" className='button-delete' onClick={() => handleDeleteFile(records)}>
+                            <IconNewTrash />
+                            <span>
+                                {t('delete')}
+                            </span>
+                        </button>
+                    </div>
+                </div>
 
             ),
         },
@@ -249,7 +301,9 @@ const AddNewShift = ({ ...props }: Props) => {
             accessor: 'participant_role_id',
             title: `Vai trò`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.participant_role_id}</span>
+            render: (records: any, index: any) => (records.participant_role_id === 'Collaborating') ? 'Cơ quan, đơn vị phối hợp' :
+            (records.participant_role_id === 'Executing') ? 'Cơ quan, đơn vị thực hiện' :
+            'Cơ quan, đơn vị chủ trì',
         },
         {
             accessor: 'participant_role_id',
