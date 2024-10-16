@@ -38,7 +38,6 @@ import IconNewArrowLeft from '../Icon/IconNewArrowLeft';
 import { IconMenuStocktake } from '../Icon/IconMenuStocktake';
 import { IconMenuWarehousingBill } from '../Icon/IconMenuWarehousingBill';
 import IconNewExpand from '../Icon/IconNewExpand';
-import RBACWrapper from '@/@core/rbac/RBACWrapper';
 import Swal from 'sweetalert2';
 import { showMessage } from '@/@core/utils';
 import { CreateBackup } from '@/services/apis/backup.api';

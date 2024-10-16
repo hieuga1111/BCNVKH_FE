@@ -160,10 +160,8 @@ const ViewFile = ({ ...props }: Props) => {
 
                     </div>
                 </div>
-                <div style={{ position: 'relative', width: '100%', height: `${parseInt((router.query.page || 1).toString()) * 1100 || 1100}`, pointerEvents: 'none' }}>
                     
-                    <PdfViewer pdfUrl={`http://103.57.223.140:3001/files/${router.query.path}`}></PdfViewer>
-                </div>
+                    <PdfViewer pdfUrl={`http://103.57.223.140:3001/files/${router.query.path}`} total={(router.query.page || 1).toString()}></PdfViewer>
                 
             </div>
 
