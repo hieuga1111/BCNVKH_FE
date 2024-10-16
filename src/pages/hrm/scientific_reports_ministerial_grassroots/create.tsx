@@ -87,8 +87,12 @@ const AddNewShift = ({ ...props }: Props) => {
         }
         )
         Array.from(file).map((item: any) => data.append('files', item))
+        Swal.fire('Vui lòng đợi!', 'Dữ liệu đang được tải lên!', 'info');
 
+        Swal.showLoading();
         createShift(data).then(() => {
+            Swal.close();
+
             showMessage(`Tạo báo cáo cấp cơ sở thành công`, 'success');
             router.push('/hrm/scientific_reports_ministerial_grassroots');
         }).catch((err) => {

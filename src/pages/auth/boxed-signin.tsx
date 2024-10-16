@@ -107,54 +107,14 @@ const LoginBoxed = () => {
             </div>
             <div className="relative flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-28 gap-20 ml-8 mr-8" style={{ margin: "auto" }}>
                 <div className='flex-1 items-center' style={{ display: "flex", flexDirection: 'column' }}>
-                    <img src='/assets/images/logo_login.png' style={{ width: "70%" }} className='' />
+                    <img src='/assets/images/logo_login.png' style={{ width: "50%" }} className='' />
                     {/* <h1 className='company-name mb-2'>vangtat mining</h1> */}
-                    <span className='welcome uppercase'>{t('welcome')}</span>
-                    <span className='welcome-member uppercase'>{t('vangtat_participants')}</span>
+                    <span className='welcome-member uppercase'>Báo cáo tổng kết</span>
+                    <span className='welcome-member uppercase'>nhiệm vụ KH&CN</span>
                 </div>
                 <div className="relative w-full rounded-md p-2 flex-1 form-login-container">
                     <div className="relative flex flex-col justify-center rounded-md bg-white/60 px-6 py-20 backdrop-blur-lg dark:bg-black/50 lg:min-h-[70vh]">
-                        <div className="absolute end-6 top-6">
-                            <div className="dropdown">
-                                <Dropdown
-                                    offset={[0, 8]}
-                                    placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                    btnClassName="flex items-center gap-2.5 rounded-lg border border-white-dark/30 bg-white px-2 py-1.5 text-white-dark hover:border-primary hover:text-primary dark:bg-black"
-                                    button={
-                                        <>
-                                            <div>
-                                                <img src={`/assets/images/flags/${flag.toUpperCase()}.svg`} alt="image" className="h-5 w-5 rounded-full object-cover" />
-                                            </div>
-                                            <div className="text-base font-bold uppercase">{flag}</div>
-                                            <span className="shrink-0">
-                                                <IconCaretDown />
-                                            </span>
-                                        </>
-                                    }
-                                >
-                                    <ul className="w-[200px] font-semibold text-dark dark:text-white-dark dark:text-white-light/90 language-list">
-                                        {themeConfig.languageList.map((item: any) => {
-                                            return (
-                                                <li className="language-option" key={item.code}>
-                                                    <button
-                                                        type="button"
-                                                        className={`flex w-full rounded-lg hover:text-primary ${flag === item.code ? 'bg-primary/10 text-primary' : ''}`}
-                                                        onClick={() => {
-                                                            dispatch(toggleLocale(item.code));
-                                                            i18n.changeLanguage(item.code);
-                                                            setLocale(item.code);
-                                                        }}
-                                                    >
-                                                        <img src={`/assets/images/flags/${item.code.toUpperCase()}.svg`} alt="flag" className="h-5 w-5 rounded-full object-cover" />
-                                                        <span className="ltr:ml-3 rtl:mr-3">{item.name}</span>
-                                                    </button>
-                                                </li>
-                                            );
-                                        })}
-                                    </ul>
-                                </Dropdown>
-                            </div>
-                        </div>
+                            
                         <div className="mx-auto w-full max-w-[440px]">
                             <div className="mb-10">
                                 <h1 className="uppercase !leading-snug sign-in-text !text-center">{t('sign_in')}</h1>
@@ -221,12 +181,6 @@ const LoginBoxed = () => {
                                     </Form>
                                 )}
                             </Formik>
-                            <div className="relative my-7 md:mb-9 !text-center">
-                                <Link href="/auth/cover-password-reset">
-                                    <span className='forget-pass-text'>{t('forget_password')}
-                                    </span></Link>
-                            </div>
-
                         </div>
                     </div>
                 </div>

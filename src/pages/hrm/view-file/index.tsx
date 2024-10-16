@@ -21,7 +21,7 @@ import { useRouter } from 'next/router';
 // json
 import { deleteShift, downloadFile, reportScientificReports } from '@/services/apis/shift.api';
 import { saveAs } from 'file-saver'
-
+import PdfViewer from './PdfViewer';
 // Cấu hình worker cho pdf.js
 
 interface Props {
@@ -44,8 +44,6 @@ const ViewFile = ({ ...props }: Props) => {
 
     const [showLoader, setShowLoader] = useState(false);
     const [page, setPage] = useState<any>(PAGE_NUMBER_DEFAULT);
-    const [pageSize, setPageSize] = useState(PAGE_SIZES_DEFAULT);
-    const [recordsData, setRecordsData] = useState<any>();
     const [total, setTotal] = useState<any>();
     const [getStorge, setGetStorge] = useState<any>();
     const [data, setData] = useState<any>();
@@ -71,7 +69,6 @@ const ViewFile = ({ ...props }: Props) => {
     };
 
     useEffect(() => {
-        countPdfPages(`http://103.57.223.140:3001/files/${router.query.path}`);
     }, [router.query.path]);
     const handleRightClick = (event: any) => {
         event.preventDefault(); // Ngăn chặn menu chuột phải mặc định
@@ -153,8 +150,7 @@ const ViewFile = ({ ...props }: Props) => {
                 </div>
             )}
             <title>{t('shift')}</title>
-            <div className="panel mt-6" id="container" onContextMenu={handleRightClick}
-                onLoad={disableContextMenu}
+            <div className="panel mt-6" id="container"
             >
                 <div className="flex md:items-center justify-between md:flex-row flex-col mb-4.5 gap-5">
                     <div className="flex items-center flex-wrap">
@@ -164,18 +160,11 @@ const ViewFile = ({ ...props }: Props) => {
 
                     </div>
                 </div>
-                <div style={{ position: 'relative', width: '100%', height:`${parseInt((router.query.page || 1).toString())  * 1100 || 1100}`, pointerEvents: 'none' }}>
-                    <iframe
-                        src={`http://103.57.223.140:3001/files/${router.query.path}#toolbar=0`}
-                        width="100%"
-                        height={`${parseInt((router.query.page || 1).toString())  * 1100 || 1100}`}
-                        style={{ pointerEvents: 'inherit' }}
-                        id='pdfframe'
-                    >
-                    </iframe>
-                    <div style={{position: 'absolute', top: '0', left: '0', width: '100%', height: `${parseInt((router.query.page || 1).toString())  * 1100 || 1100}`, zIndex: '10', pointerEvents: 'none' }}>
-                    </div>
+                <div style={{ position: 'relative', width: '100%', height: `${parseInt((router.query.page || 1).toString()) * 1100 || 1100}`, pointerEvents: 'none' }}>
+                    
+                    <PdfViewer pdfUrl={`http://103.57.223.140:3001/files/${router.query.path}`}></PdfViewer>
                 </div>
+                
             </div>
 
         </div >

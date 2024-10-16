@@ -35,11 +35,15 @@ const FilelModal = ({ ...props }: Props) => {
         const data = new FormData();
         data.append('scientific_report_id', props?.scientific_report_id);
         Array.from(file).map((item: any) => data.append('files', item))
+        Swal.fire('Vui lòng đợi!', 'Dữ liệu đang được tải lên!', 'info');
 
+        Swal.showLoading();
         CreateFile(data).then(() => {
             props.setFile;
             props.setOpenModal(false);
             props.setData(undefined);
+            Swal.close();
+
             showMessage(`Thêm tệp định kèm thành công`, 'success');
         }).catch((err) => {
             showMessage(`${err}`, 'error');

@@ -5,7 +5,6 @@ import { Dialog, Transition } from '@headlessui/react';
 
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
-import Swal from 'sweetalert2';
 import { showMessage } from '@/@core/utils';
 import IconX from '@/components/Icon/IconX';
 
@@ -25,6 +24,7 @@ import { useRouter } from 'next/router';
 import moment from 'moment';
 import { useDebounce } from 'use-debounce';
 import { ReportTypes } from '@/services/swr/report-typeswr';
+import Swal from 'sweetalert2';
 
 interface Props {
     [key: string]: any;
@@ -88,10 +88,14 @@ const AddNewShift = ({ ...props }: Props) => {
         }
         )
         Array.from(file).map((item: any) => data.append('files', item))
+        Swal.fire('Vui lòng đợi!', 'Dữ liệu đang được tải lên!', 'info');
 
+        Swal.showLoading();
+      
         createShift(data).then(() => {
             showMessage(`Tạo báo cáo cấp nhà nước thành công`, 'success');
             router.push('/hrm/scientific_reports_gorvement');
+            Swal.close();
         }).catch((err) => {
             showMessage(`${err.response.data}`, 'error');
         })

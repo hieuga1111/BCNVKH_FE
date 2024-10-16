@@ -87,7 +87,9 @@ const AddNewShift = ({ ...props }: Props) => {
         }
         )
         Array.from(file).map((item: any) => data.append('files', item))
+        Swal.fire('Vui lòng đợi!', 'Dữ liệu đang được tải lên!', 'info');
 
+        Swal.showLoading();
         createShift(data).then(() => {
             showMessage(`Tạo báo cáo cấp bộ thành công`, 'success');
             router.push('/hrm/scientific_reports_ministerial');
