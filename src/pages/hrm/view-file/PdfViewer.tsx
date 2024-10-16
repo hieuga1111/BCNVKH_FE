@@ -45,7 +45,7 @@ const PdfViewer = ({ pdfUrl, total }: { pdfUrl: string, total: string }) => {
     if (pdfDocument) {
       listpage.forEach(async (pageNum: any) => {
         const page = await pdfDocument.getPage(pageNum);
-        const viewport = page.getViewport({ scale: 1.5 });
+        const viewport = page.getViewport({ scale: 1 });
         const canvas = document.getElementById(`pdf-page-${pageNum}`)as HTMLCanvasElement | null;
         if (canvas !== null) {
           // Tiến hành vẽ trên canvas
