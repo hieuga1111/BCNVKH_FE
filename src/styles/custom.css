@@ -18,9 +18,7 @@
 .nodeLineTable * {
     border-color: #476704 !important;
 }
-canvas {
-    width: 1164px !important;
-}
+
 .reactOrgChart .level-0 {
     /* text-transform: uppercase !important; */
     /* width: 200px !important; */

@@ -30,7 +30,7 @@ const PdfViewer = ({ pdfUrl, total }: { pdfUrl: string, total: string }) => {
   const renderPage = (pageNum: any) => {
     return (
       <div key={pageNum} style={{ marginBottom: '20px' }}>
-        <canvas id={`pdf-page-${pageNum}`} />
+        <canvas id={`pdf-page-${pageNum}`} style={{maxWidth:'1163px'}}/>
       </div>
     );
   };
@@ -39,14 +39,14 @@ const PdfViewer = ({ pdfUrl, total }: { pdfUrl: string, total: string }) => {
     const temp = Array.from({ length: Math.min(currentPages[0] + 4, parseInt(total)) - currentPages[0] + 1 }, (_, i) => currentPages[0] + i);
     setListPages(temp)
 
-  
+
   }, [pdfDocument, currentPages]);
   useEffect(() => {
     if (pdfDocument) {
       listpage.forEach(async (pageNum: any) => {
         const page = await pdfDocument.getPage(pageNum);
         const viewport = page.getViewport({ scale: 1 });
-        const canvas = document.getElementById(`pdf-page-${pageNum}`)as HTMLCanvasElement | null;
+        const canvas = document.getElementById(`pdf-page-${pageNum}`) as HTMLCanvasElement | null;
         if (canvas !== null) {
           // Tiến hành vẽ trên canvas
           const context = canvas.getContext('2d');
@@ -62,31 +62,90 @@ const PdfViewer = ({ pdfUrl, total }: { pdfUrl: string, total: string }) => {
         } else {
           console.error("Canvas element not found");
         }
-       
+
       });
     }
   }, [listpage]);
   const handleNextPages = () => {
     setCurrentPages((prev) => prev.map((page) => page + 5));
     document.body.scrollTop = 0;
-		document.documentElement.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 
   };
-
+  const [scale, setScale] = useState(1);
   const handlePreviousPages = () => {
-    setCurrentPages((prev) => prev.map((page) => Math.max(page - 5, 1))); 
+    setCurrentPages((prev) => prev.map((page) => Math.max(page - 5, 1)));
     document.body.scrollTop = 0;
-		document.documentElement.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  };
+  const zoomOut = () => {
+    if (pdfDocument) {
+      listpage.forEach(async (pageNum: any) => {
+        const page = await pdfDocument.getPage(pageNum);
+        const viewport = page.getViewport({ scale: scale - 0.1 });
+        const canvas = document.getElementById(`pdf-page-${pageNum}`) as HTMLCanvasElement | null;
+        if (canvas !== null) {
+          // Tiến hành vẽ trên canvas
+          const context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport,
+          };
+          page.render(renderContext);
+          // Thực hiện các thao tác khác
+        } else {
+          console.error("Canvas element not found");
+        }
+
+      });
+    }
+    setScale(scale - 0.1);
+  };
+
+  const zoomIn = () => {
+    listpage.forEach(async (pageNum: any) => {
+      const page = await pdfDocument.getPage(pageNum);
+      const viewport = page.getViewport({ scale: scale + 0.1 });
+      const canvas = document.getElementById(`pdf-page-${pageNum}`) as HTMLCanvasElement | null;
+      if (canvas !== null) {
+        // Tiến hành vẽ trên canvas
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport,
+        };
+        page.render(renderContext);
+        // Thực hiện các thao tác khác
+      } else {
+        console.error("Canvas element not found");
+      }
+
+    });
+    setScale(scale + 0.1);
+
   };
 
   return (
-    <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-      <div>
-        {listpage.map((pageNum: any) => renderPage(pageNum))}
-        <button className=' m-1 button-table button-create' style={{display: 'inline'}}onClick={handlePreviousPages}>Previous</button>
-        <button className=' m-1 button-table button-create' style={{display: 'inline'}} onClick={handleNextPages}>Next</button>
+    <div>
+      <button className=' m-1 button-table button-create' style={{ display: 'inline' }} onClick={zoomIn}> Zoom in</button>
+      <button className=' m-1 button-table button-create' style={{ display: 'inline' }} onClick={zoomOut}>Zoom Out</button>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+        <div>
+
+          {listpage.map((pageNum: any) => renderPage(pageNum))}
+          <button className=' m-1 button-table button-create' style={{ display: 'inline' }} onClick={handlePreviousPages}>Trang trước</button>
+          <button className=' m-1 button-table button-create' style={{ display: 'inline' }} onClick={handleNextPages}>Trang sau</button>
+        </div>
       </div>
     </div>
+
   );
 };
 
