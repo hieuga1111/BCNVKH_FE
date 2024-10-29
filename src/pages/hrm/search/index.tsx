@@ -33,6 +33,7 @@ import dayjs from 'dayjs';
 
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.css';
+import IconX from '@/components/Icon/IconX';
 interface Props {
     [key: string]: any;
 }
@@ -146,12 +147,12 @@ const Duty = ({ ...props }: Props) => {
             {
                 pathname: router.pathname,
                 query: {
-                    ...router.query,
-                    ...(statDate !== undefined && { start_time: statDate }),
-                    ...(endDate !== undefined && { end_time: endDate }),
-                    ...(selectLevel !== undefined && { management_level_id: selectLevel }),
-                    ...(selectUnit !== undefined && { unit_id: selectUnit }),
-                    ...(selectType !== undefined && { report_type_id: selectType })
+
+                    ...(statDate !== undefined ? { start_time: statDate } : {}),
+                    ...(endDate !== undefined ? { end_time: endDate } : {}),
+                    ...(selectLevel !== undefined ? { management_level_id: selectLevel } : {}),
+                    ...(selectUnit !== undefined ? { unit_id: selectUnit } : {}),
+                    ...(selectType !== undefined ? { report_type_id: selectType } : {})
                 },
             }
         );
@@ -275,85 +276,125 @@ const Duty = ({ ...props }: Props) => {
             <div className="panel mt-6" style={{ overflowX: 'auto' }}>
                 <div className="mb-4.5 flex flex-col " style={{}}>
                     <div className='display-style' style={{ zIndex: '9999999', justifyContent: 'space-between' }}>
-                        <input autoComplete="off" type="text" className="form-input w-auto" placeholder={`${t('search')}`} value={filter?.search} onChange={(e) => handleSearch(e.target.value)} />
-                        <Select
-                            options={departmentparents?.data.map((item: any) => {
-                                return {
-                                    value: item.id,
-                                    label: item.name
-                                }
-                            })}
-                            placeholder={`Chọn đơn vị`}
-                            onChange={(e: any) => {
-                                SetSelectUnit(e.value);
-                            }}
 
-                        />
-                        <Select
-                            options={[{
-                                value: "B",
-                                label: "Bộ"
-                            },
-                            {
-                                value: "CS",
-                                label: "Cơ sở"
-                            },
-                            {
-                                value: "HV",
-                                label: "Học viện"
-                            },
-                            {
-                                value: "NN",
-                                label: "Nhà nước"
-                            }]}
-                            placeholder={`Chọn cấp`}
-                            onChange={(e: any) => {
-                                SetSelectLevel(e.value);
-                            }}
+                        <input style={{ width: '15%' }} autoComplete="off" type="text" className="form-input w-auto" placeholder={`${t('search')}`} value={filter?.search} onChange={(e) => handleSearch(e.target.value)} />
+                        <div style={{ width: '15%' }}>
 
-                        />
-                        <Select
-                            options={reporttypes?.data.map((item: any) => {
-                                return {
-                                    value: item.id,
-                                    label: item.name
-                                }
-                            })}
-                            placeholder={`Chọn nhóm`}
-                            onChange={(e: any) => {
-                                SetSelectType(e.value);
-                            }}
+                            <Select
+                                options={departmentparents?.data.map((item: any) => {
+                                    return {
+                                        value: item.id,
+                                        label: item.name
+                                    }
+                                })}
+                                placeholder={`Chọn đơn vị`}
+                                onChange={(e: any) => {
+                                    if (e) {
+                                        SetSelectUnit(e.value);
 
-                        />
-                        <Flatpickr
-                            options={{
-                                enableTime: false,
-                            }}
-                            onChange={e => {
-                                if (e.length > 0) {
-                                    SetStatDate(dayjs(e[0]).format('YYYY-MM-DD'));
-                                }
-                            }}
-                            className="form-input calender-input"
-                            placeholder={`Chọn thời gian bắt đầu`}
-                            style={{ width: '200px' }}
+                                    } else {
+                                        SetSelectUnit(undefined);
+                                    }
+                                }}
+                                isClearable={true}
+
+                            />
+                        </div>
+                        <div style={{ width: '13%' }}>
+
+                            <Select
+                                options={[{
+                                    value: "B",
+                                    label: "Bộ"
+                                },
+                                {
+                                    value: "CS",
+                                    label: "Cơ sở"
+                                },
+                                {
+                                    value: "HV",
+                                    label: "Học viện"
+                                },
+                                {
+                                    value: "NN",
+                                    label: "Nhà nước"
+                                }]}
+                                placeholder={`Chọn cấp`}
+                                onChange={(e: any) => {
+                                    if (e) {
+                                        SetSelectLevel(e.value);
+
+                                    } else {
+                                        SetSelectLevel(undefined);
+                                    }
+                                }}
+                                isClearable={true}
+
+                            />
+                        </div>
+                        <div style={{ width: '13%' }}>
+
+                            <Select
+                                options={reporttypes?.data.map((item: any) => {
+                                    return {
+                                        value: item.id,
+                                        label: item.name
+                                    }
+                                })}
+                                placeholder={`Chọn nhóm`}
+                                onChange={(e: any) => {
+                                    if (e) {
+                                        SetSelectType(e.value);
+
+                                    } else {
+                                        SetSelectType(undefined);
+                                    }
+                                }}
+                                isClearable={true}
+
+                            />
+                        </div>
+
+                        <div style={{ width: '20%', display: 'flex', alignItems: 'center' }}>
+
+                            <Flatpickr
+                                options={{
+                                    enableTime: false,
+
+                                }}
+                                value={statDate}
+                                onChange={e => {
+                                    if (e.length > 0) {
+                                        SetStatDate(dayjs(e[0]).format('YYYY-MM-DD'));
+                                    }
+                                }}
+                                className="form-input calender-input"
+                                placeholder={`Chọn thời gian bắt đầu`}
 
 
-                        />
-                        <Flatpickr
-                            options={{
-                                enableTime: false,
-                            }}
-                            onChange={e => {
-                                if (e.length > 0) {
-                                    SetEndDate(dayjs(e[0]).format('YYYY-MM-DD'));
-                                }
-                            }}
-                            style={{ width: '200px' }}
-                            className="form-input calender-input"
-                            placeholder={`Chọn thời gian kết thúc`}
+                            />
+                            <a style={{ borderColor: '#e0e6ed', borderWidth: 'thin', padding: '6px' }} onClick={e => SetStatDate(undefined)}><IconX></IconX></a>
+                        </div>
+                        <div style={{ width: '20%', display: 'flex', alignItems: 'center' }}>
 
-                        />
+                            <Flatpickr
+                                options={{
+                                    enableTime: false,
+
+                                }}
+                                value={endDate}
+                                onChange={e => {
+                                    if (e.length > 0) {
+                                        SetEndDate(dayjs(e[0]).format('YYYY-MM-DD'));
+                                    }
+                                }}
+                                className="form-input calender-input"
+                                placeholder={`Chọn thời gian bắt đầu`}
+
+
+                            />
+                            <a style={{ borderColor: '#e0e6ed', borderWidth: 'thin', padding: '6px' }} onClick={e => SetEndDate(undefined)}><IconX></IconX></a>
+                        </div>
                     </div>
                 </div>
                 <div className="mb-5">

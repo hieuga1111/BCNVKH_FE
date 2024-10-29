@@ -9,26 +9,26 @@ function App({ children }: PropsWithChildren) {
     const dispatch = useDispatch();
     const { i18n } = useTranslation();
     useEffect(() => {
-        const handleKeyDown = (event: any) => {
-            // Chặn phím F12
-            if (event.key === 'F12') {
-                event.preventDefault(); // Ngăn chặn hành động mặc định
-            }
-        };
+        // const handleKeyDown = (event: any) => {
+        //     // Chặn phím F12
+        //     if (event.key === 'F12') {
+        //         event.preventDefault(); // Ngăn chặn hành động mặc định
+        //     }
+        // };
 
-        const handleContextMenu = (event : any) => {
-            event.preventDefault(); // Ngăn chặn menu ngữ cảnh
-        };
+        // const handleContextMenu = (event : any) => {
+        //     event.preventDefault(); // Ngăn chặn menu ngữ cảnh
+        // };
 
-        // Thêm event listeners
-        document.addEventListener('keydown', handleKeyDown);
-        document.addEventListener('contextmenu', handleContextMenu);
+        // // Thêm event listeners
+        // document.addEventListener('keydown', handleKeyDown);
+        // document.addEventListener('contextmenu', handleContextMenu);
 
-        // Cleanup function để loại bỏ event listeners khi component unmount
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-            document.removeEventListener('contextmenu', handleContextMenu);
-        };
+        // // Cleanup function để loại bỏ event listeners khi component unmount
+        // return () => {
+        //     document.removeEventListener('keydown', handleKeyDown);
+        //     document.removeEventListener('contextmenu', handleContextMenu);
+        // };
     }, []); // Chỉ chạy 1 lần khi component mount
     useEffect(() => {
         dispatch(toggleTheme(localStorage.getItem('theme') || themeConfig.theme));

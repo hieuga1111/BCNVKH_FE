@@ -151,7 +151,6 @@ export const showMessage = (msg = '', type = 'success') => {
 export const formatdata = (data: any) => {
 	function formatCounts(counts: any) {
 		return categories
-			.filter(cat => counts[cat] > 0)
 			.map(cat => `${cat}: ${counts[cat]}`)
 			.join(", ");
 	}
@@ -201,16 +200,16 @@ export const formatdata = (data: any) => {
 		}
 
 		// Format counts as strings with "Tổng" included
-		row.chutri = categories.filter(cat => counts.chutri[cat] > 0).map(cat => `${cat}: ${counts.chutri[cat]}`).join(", ");
+		row.chutri = categories.map(cat => `${cat}: ${counts.chutri[cat]}`).join(", ");
 		if (counts.chutri.total > 0) row.chutri += `, Tổng: ${counts.chutri.total}`;
 
-		row.thuchien = categories.filter(cat => counts.thuchien[cat] > 0).map(cat => `${cat}: ${counts.thuchien[cat]}`).join(", ");
+		row.thuchien = categories.map(cat => `${cat}: ${counts.thuchien[cat]}`).join(", ");
 		if (counts.thuchien.total > 0) row.thuchien += `, Tổng: ${counts.thuchien.total}`;
 
-		row.phoiHop = categories.filter(cat => counts.phoiHop[cat] > 0).map(cat => `${cat}: ${counts.phoiHop[cat]}`).join(", ");
+		row.phoiHop = categories.map(cat => `${cat}: ${counts.phoiHop[cat]}`).join(", ");
 		if (counts.phoiHop.total > 0) row.phoiHop += `, Tổng: ${counts.phoiHop.total}`;
 
-		row.tong = categories.filter(cat => counts.tong[cat] > 0).map(cat => `${cat}: ${counts.tong[cat]}`).join(", ");
+		row.tong = categories.map(cat => `${cat}: ${counts.tong[cat]}`).join(", ");
 		if (counts.tong.total > 0) row.tong += `, Tổng: ${counts.tong.total}`;
 
 		list.push(row);
@@ -224,10 +223,11 @@ export const formatdata = (data: any) => {
 	// Initialize totalCounts for each category
 
 	for (const grade in data?.TOTAL?.results) {
-		totalCounts[grade] = data?.TOTAL?.results[grade];
+		console.log(data?.TOTAL?.results[grade])
+		totalCounts[grade] = data?.TOTAL?.results[grade] === undefined ? 0 : data?.TOTAL?.results[grade];
 	}
 
-	totalRow.tong = formatCounts(totalCounts) + `, Tổng: ${data?.TOTAL?.total}`;
+	totalRow.tong = formatCounts(totalCounts) + `, Tổng: ${data?.TOTAL?.total === undefined ? 0 : data?.TOTAL?.total}`;
 	list.push(totalRow);
 
 	return (list)
