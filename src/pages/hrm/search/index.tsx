@@ -196,9 +196,9 @@ const Duty = ({ ...props }: Props) => {
         },
         {
             accessor: 'release_time',
-            title: `Thời gian kết thúc`,
+            title: `Kết quả`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.scientific_report.end_time}</span>
+            render: (records: any, index: any) => <span>{records?.scientific_report.result}</span>
 
         },
 
