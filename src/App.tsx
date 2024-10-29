@@ -8,7 +8,28 @@ function App({ children }: PropsWithChildren) {
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
     const dispatch = useDispatch();
     const { i18n } = useTranslation();
+    useEffect(() => {
+        const handleKeyDown = (event: any) => {
+            // Chặn phím F12
+            if (event.key === 'F12') {
+                event.preventDefault(); // Ngăn chặn hành động mặc định
+            }
+        };
 
+        const handleContextMenu = (event : any) => {
+            event.preventDefault(); // Ngăn chặn menu ngữ cảnh
+        };
+
+        // Thêm event listeners
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('contextmenu', handleContextMenu);
+
+        // Cleanup function để loại bỏ event listeners khi component unmount
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('contextmenu', handleContextMenu);
+        };
+    }, []); // Chỉ chạy 1 lần khi component mount
     useEffect(() => {
         dispatch(toggleTheme(localStorage.getItem('theme') || themeConfig.theme));
         dispatch(toggleMenu(localStorage.getItem('menu') || themeConfig.menu));
@@ -25,9 +46,8 @@ function App({ children }: PropsWithChildren) {
 
     return (
         <div
-            className={`${(themeConfig.sidebar && 'toggle-sidebar') || ''} ${themeConfig.menu} ${themeConfig.layout} ${
-                themeConfig.rtlClass
-            } main-section relative font-mulish text-sm font-normal antialiased`}
+            className={`${(themeConfig.sidebar && 'toggle-sidebar') || ''} ${themeConfig.menu} ${themeConfig.layout} ${themeConfig.rtlClass
+                } main-section relative font-mulish text-sm font-normal antialiased`}
         >
             {children}
         </div>

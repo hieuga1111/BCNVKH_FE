@@ -135,7 +135,7 @@ const AddNewShift = ({ ...props }: Props) => {
             title: 'Thao tác',
             titleClassName: '!text-center',
             render: (records: any) => (
-               <a href={`/hrm/view-file?path=${records?.url.split('/')[1]}&id=${records?.id}&page=${records?.total_pages}`} target='_blank'>
+                <a href={`/hrm/view-file?path=${records?.url.split('/')[1]}&id=${records?.id}&page=${records?.total_pages}`} target='_blank'>
 
                     <div className="flex items-center w-max mx-auto gap-2">
                         <div className="w-[auto]">
@@ -171,8 +171,8 @@ const AddNewShift = ({ ...props }: Props) => {
             title: `Vai trò`,
             sortable: false,
             render: (records: any, index: any) => (records.participant_role_id === 'Collaborating') ? 'Cơ quan, đơn vị phối hợp' :
-            (records.participant_role_id === 'Executing') ? 'Cơ quan, đơn vị thực hiện' :
-            'Cơ quan, đơn vị chủ trì',
+                (records.participant_role_id === 'Executing') ? 'Cơ quan, đơn vị thực hiện' :
+                    'Cơ quan, đơn vị chủ trì',
         },
         {
             accessor: 'participant_role_id',
@@ -234,6 +234,7 @@ const AddNewShift = ({ ...props }: Props) => {
                     <Form className="space-y-5">
                         <div className='flex justify-between gap-5'>
                             <div className="mb-5 w-1/2">
+
                                 <label htmlFor="type" className='label'>
                                     {' '}
                                     Tình trạng
@@ -252,105 +253,156 @@ const AddNewShift = ({ ...props }: Props) => {
                                         Chưa hoàn thành
                                     </label>
                                 </div>
-                                {submitCount ? errors.status ? <div className="mt-1 text-danger"> {`${errors.status}`} </div> : null : ''}
                             </div>
-                            <div className="mb-5 w-1/2 flex justify-start gap-5" >
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="code" className='label'>
-                                    Mã:
-                                </label> {values.code}
+                                    {' '}
+                                    Mã
+                                </label>
+                                <Field disabled autoComplete="off" name="code" type="text" id="code_shift" className="form-input" />
                             </div>
 
                         </div>
                         <div className='flex justify-between gap-5'>
-                            <div className="mb-5 w-1/2 flex justify-start gap-5">
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="name" className='label'>
+                                    {' '}
                                     Tên
-                                </label> {values.name}
+                                </label>
+                                <Field disabled autoComplete="off" name="name" type="text" id="name" className="form-input" />
                             </div>
-                            <div className="mb-5 w-1/2  flex justify-start gap-5">
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="release_time" className='label'>
+                                    {' '}
                                     Lần ban hành
-                                </label>  {values.release_time}
+                                </label>
+                                <Field disabled autoComplete="off" name="release_time" type="number" id="release_time" className="form-input"
+
+                                />
                             </div>
                         </div>
                         <div className='flex justify-between gap-5'>
-                            <div className="mb-5 w-1/2 flex justify-start gap-5">
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="acceptance_council" className='label'>
                                     {' '}
                                     Hội đồng nghiệm thu
-                                </label> {values.acceptance_council}
+                                </label>
+                                <Field disabled autoComplete="off" name="acceptance_council" type="text" id="acceptance_council" className="form-input" />
                             </div>
-                            <div className="mb-5 w-1/2 flex justify-start gap-5">
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="assitant_chair" className='label'>
                                     {' '}
                                     Trợ lý hội đồng
                                 </label>
-                                {values.assitant_chair}
+                                <Field disabled autoComplete="off" name="assitant_chair" type="text" id="assitant_chair" className="form-input"
+
+                                />
                             </div>
                         </div>
                         <div className='flex justify-between gap-5'>
-                            <div className="mb-5 w-1/2 flex justify-start gap-5">
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="assitant_oversee" className='label'>
                                     {' '}
                                     Trợ lý giám sát
                                 </label>
-                                {values.assitant_oversee}
-
+                                <Field disabled autoComplete="off" name="assitant_oversee" type="text" id="assitant_oversee" className="form-input" />
                             </div>
-                            <div className="mb-5 w-1/2 flex justify-start gap-5">
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="execution_time" className='label'>
                                     {' '}
                                     Thời gian thực hiện
                                 </label>
-                                {values.execution_time}
+                                <Field disabled autoComplete="off" name="execution_time" type="text" id="execution_time" className="form-input"
 
+                                />
                             </div>
                         </div>
                         <div className='flex justify-between gap-5'>
 
-                            <div className="mb-5 w-1/2 flex justify-start gap-5">
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="result" className='label'>
                                     Kết quả
                                 </label>
-                                {values.result}
+                                <Select
+                                    isDisabled={true}
+                                    id="result"
+                                    name="result"
+
+                                    placeholder={`${values.result}`}
+                                    maxMenuHeight={160}
+                                />
                             </div>
-                            <div className="mb-5 w-1/2 flex justify-start gap-5">
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="end_time" className='label'>
                                     {' '}
                                     Thời gian kết thúc
                                 </label>
-                                {values.end_time}
+                                <Flatpickr
+                                    disabled={true}
+
+                                    options={{
+                                        enableTime: true,
+                                    }}
+                                    onChange={e => {
+                                        if (e.length > 0) {
+                                            setFieldValue('end_time', dayjs(e[0]).format('YYYY-MM-DD'));
+                                        }
+                                    }}
+                                    className="form-input calender-input"
+                                    placeholder={`${values.end_time}`}
+
+                                />
                             </div>
                         </div>
                         <div className='flex justify-between gap-5'>
-                            <div className="mb-5 w-1/2 flex justify-start gap-5">
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="keyword" className='label'>
                                     {' '}
                                     Từ khóa
                                 </label>
-                                {values.keyword}
-
+                                <Field disabled autoComplete="off" name="keyword" type="text" id="keyword" className="form-input" />
                             </div>
-                            <div className="mb-5 w-1/2 flex justify-start gap-5">
+
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="storage" className='label'>
                                     {' '}
                                     Nơi lưu trữ
                                 </label>
-                                {values.storage}
-
+                                <Field disabled autoComplete="off" name="storage" type="text" id="storage" className="form-input" />
                             </div>
                         </div>
                         <div className='flex justify-between gap-5'>
-                            <div className="mb-5 w-1/2 flex justify-start gap-5">
+                            <div className="mb-5 w-1/2">
                                 <label htmlFor="summary" className='label'>
                                     {' '}
                                     Tóm tắt
                                 </label>
-                                {values.summary}
+                                <Field disabled autoComplete="off" name="summary" as="textarea" rows="4" id="description" className="form-input" />
+                            </div>
+                            <div className="mb-5 w-1/2">
+                                <label htmlFor="summary" className='label'>
+                                    {' '}
+                                    Phân nhóm NVKH
+                                </label>
+                                <Select
+                                    name="unit_id"
+                                    options={reporttypes?.data.map((item: any) => {
+                                        return {
+                                            value: item.id,
+                                            label: item.name
+                                        }
+                                    })}
+                                    isDisabled={true}
+                                    maxMenuHeight={160}
+                                    onChange={(e: any) => {
+                                        setFieldValue("report_type_id", e.value);
+                                    }}
+
+                                />
                             </div>
                         </div>
                         <div className="mt-8 flex items-center justify-end ltr:text-right rtl:text-left gap-8">
-                           
+
                             {
                                 role_id === 'U' ? <></> : <Link href={`/hrm/scientific_reports_ministerial_academy/${router.query.id}`}>
                                     <button type="submit" className="btn :ml-4 rtl:mr-4 add-button">

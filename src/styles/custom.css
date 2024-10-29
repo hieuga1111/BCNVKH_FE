@@ -750,8 +750,8 @@ input:disabled, textarea:disabled {
 
 
 .button-table  {
-    height: 40px;
-    padding: 0 16 0 16;
+    height: 30px;
+    padding: 10;
     gap: 12px!important;
     border-radius: 20!important;
     background: #285a21 !important;
@@ -761,9 +761,8 @@ input:disabled, textarea:disabled {
     justify-content: center;
     align-items: center;
 }
-
 .button-table span {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     line-height: 18px;
     letter-spacing: 0em;

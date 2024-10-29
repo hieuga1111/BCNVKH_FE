@@ -3,15 +3,21 @@
 // src/components/PdfViewer.js
 import React, { useEffect, useState } from 'react';
 import * as PDFJS from 'pdfjs-dist/build/pdf';
+import { showMessage } from '@/@core/utils';
 
 PDFJS.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.min.js`;
+import Swal from 'sweetalert2';
+import { saveAs } from 'file-saver'
+import { downloadFile } from '@/services/apis/shift.api';
+import { useRouter } from 'next/router';
 
 // Dynamically import pdfjs only on the client-side
 
-const PdfViewer = ({ pdfUrl, total }: { pdfUrl: string, total: string }) => {
+const PdfViewer = ({ pdfUrl, total, id }: { pdfUrl: string, total: string, id: any }) => {
   const [pdfDocument, setPdfDocument] = useState<any>();
   const [currentPages, setCurrentPages] = useState([1]);
   const [listpage, setListPages] = useState<any>([1, 2, 3, 4, 5]);
+  const router = useRouter();
 
   useEffect(() => {
     const loadPdf = async () => {
@@ -30,7 +36,7 @@ const PdfViewer = ({ pdfUrl, total }: { pdfUrl: string, total: string }) => {
   const renderPage = (pageNum: any) => {
     return (
       <div key={pageNum} style={{ marginBottom: '20px' }}>
-        <canvas id={`pdf-page-${pageNum}`} style={{maxWidth:'1163px'}}/>
+        <canvas id={`pdf-page-${pageNum}`} style={{ maxWidth: '1163px' }} />
       </div>
     );
   };
@@ -131,8 +137,64 @@ const PdfViewer = ({ pdfUrl, total }: { pdfUrl: string, total: string }) => {
 
   };
 
+  const handlePrint = () => {
+    const swalDeletes = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-secondary',
+        cancelButton: 'btn btn-danger ltr:mr-3 rtl:ml-3',
+        popup: 'confirm-popup confirm-delete',
+      },
+      imageUrl: '/assets/images/delete_popup.png',
+      buttonsStyling: false,
+    });
+    swalDeletes
+      .fire({
+        title: `Bạn muốn tải tài liệu?`,
+        padding: '2em',
+        html: `
+                <input id="swal-input1" placeholder="Từ trang"  class="swal2-input">
+                <input id="swal-input2" placeholder="Đến trang" class="swal2-input">
+            `,
+        focusConfirm: false,
+        preConfirm: () => {
+          return [
+            (document.getElementById("swal-input1") as HTMLInputElement).value,
+            (document.getElementById("swal-input2") as HTMLInputElement).value,
+          ];
+        },
+        showCancelButton: true,
+        cancelButtonText: `Hủy`,
+        confirmButtonText: `Xác nhận`,
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.value) {
+          const data = {
+            startPage: (document.getElementById("swal-input1") as HTMLInputElement).value,
+            endPage: (document.getElementById("swal-input2") as HTMLInputElement).value
+          }
+          downloadFile(
+            data, id,
+          ).then(async (res) => {
+            fetch(`http://103.57.223.140:3001/${res.path}`).then((response) => {
+              response.blob().then((blob) => {
+
+                // Creating new object of PDF file
+                saveAs(blob, `${router.query.path}`)
+              });
+            });
+            showMessage(`${res.mess}`, 'success');
+          }).catch((err) => {
+            showMessage(`${err.response.data.mess}`, 'error');
+          });
+        }
+      });
+  }
   return (
     <div>
+      <button type="button" className=" m-1 button-table button-create" style={{ display: 'inline' }} onClick={() => handlePrint()}>
+        Tải tài liệu
+      </button>
       <button className=' m-1 button-table button-create' style={{ display: 'inline' }} onClick={zoomIn}> Zoom in</button>
       <button className=' m-1 button-table button-create' style={{ display: 'inline' }} onClick={zoomOut}>Zoom Out</button>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

@@ -73,59 +73,7 @@ const ViewFile = ({ ...props }: Props) => {
     const handleRightClick = (event: any) => {
         event.preventDefault(); // Ngăn chặn menu chuột phải mặc định
     };
-    const handlePrint = () => {
-        const swalDeletes = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-secondary',
-                cancelButton: 'btn btn-danger ltr:mr-3 rtl:ml-3',
-                popup: 'confirm-popup confirm-delete',
-            },
-            imageUrl: '/assets/images/delete_popup.png',
-            buttonsStyling: false,
-        });
-        swalDeletes
-            .fire({
-                title: `Bạn muốn tải tài liệu?`,
-                padding: '2em',
-                html: `
-                    <input id="swal-input1" placeholder="Từ trang"  class="swal2-input">
-                    <input id="swal-input2" placeholder="Đến trang" class="swal2-input">
-                `,
-                focusConfirm: false,
-                preConfirm: () => {
-                    return [
-                        (document.getElementById("swal-input1") as HTMLInputElement).value,
-                        (document.getElementById("swal-input2") as HTMLInputElement).value,
-                    ];
-                },
-                showCancelButton: true,
-                cancelButtonText: `${t('cancel')}`,
-                confirmButtonText: `${t('confirm')}`,
-                reverseButtons: true,
-            })
-            .then((result) => {
-                if (result.value) {
-                    const data = {
-                        startPage: (document.getElementById("swal-input1") as HTMLInputElement).value,
-                        endPage: (document.getElementById("swal-input2") as HTMLInputElement).value
-                    }
-                    downloadFile(
-                        data, router.query.id,
-                    ).then(async (res) => {
-                        fetch(`http://103.57.223.140:3001/${res.path}`).then((response) => {
-                            response.blob().then((blob) => {
-
-                                // Creating new object of PDF file
-                                saveAs(blob, `${router.query.path}`)
-                            });
-                        });
-                        showMessage(`${res.mess}`, 'success');
-                    }).catch((err) => {
-                        showMessage(`${err.response.data.mess}`, 'error');
-                    });
-                }
-            });
-    }
+   
     const disableContextMenu = () => {
         var myFrame = document.getElementById('pdfframe');
         console.log(myFrame)
@@ -154,14 +102,12 @@ const ViewFile = ({ ...props }: Props) => {
             >
                 <div className="flex md:items-center justify-between md:flex-row flex-col mb-4.5 gap-5">
                     <div className="flex items-center flex-wrap">
-                        <button type="button" className=" m-1 button-table button-create" onClick={() => handlePrint()}>
-                            <span className="uppercase">Tải tài liệu</span>
-                        </button>
+                        
 
                     </div>
                 </div>
                     
-                    <PdfViewer pdfUrl={`http://103.57.223.140:3001/files/${router.query.path}`} total={(router.query.page || 1).toString()}></PdfViewer>
+                    <PdfViewer pdfUrl={`http://103.57.223.140:3001/files/${router.query.path}`} total={(router.query.page || 1).toString()} id={router.query.id}></PdfViewer>
                 
             </div>
 

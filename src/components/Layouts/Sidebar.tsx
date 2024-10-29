@@ -404,6 +404,38 @@ const Sidebar = () => {
                                     </ul>
                                 </AnimateHeight>
                             </li>
+                            <li className="menu nav-item">
+                                {/* === QUẢN LÝ ĐƠN */}
+                                <button type="button" className={`${currentMenu === 'search' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('search')}>
+                                    <div className="flex items-center">
+                                        <IconMenuForm className="icon-menu icon-menu-1 shrink-0 group-hover:!text-primary" />
+                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">TÌM KIẾM THỐNG KÊ</span>
+                                    </div>
+                                    <div className={currentMenu !== 'search' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+                                <AnimateHeight duration={300} height={currentMenu === 'search' ? 'auto' : 0}>
+                                    <ul className="text-gray-500">
+                                        <li className="nav-item">
+                                            <Link href="/hrm/search" className="final-level-menu group">
+                                                <div className="flex items-center">
+                                                    <IconMenuFormLateEarly className="shrink-0 group-hover:!text-primary" />
+                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Tìm kiếm nâng cao</span>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link href="/hrm/statics" className="final-level-menu group">
+                                                <div className="flex items-center">
+                                                    <IconMenuFormExempt className="shrink-0 group-hover:!text-primary" />
+                                                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">Thống kê</span>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
+                            </li>
                             {/* === KẾT THÚC MENU QUẢN LÝ ĐƠN */}
 
                             {/* </RBACWrapper> */}

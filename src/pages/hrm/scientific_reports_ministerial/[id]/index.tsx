@@ -412,10 +412,7 @@ const AddNewShift = ({ ...props }: Props) => {
                     <Form className="space-y-5">
                         <div className='flex justify-between gap-5'>
                             <div className="mb-5 w-1/2">
-                                <label htmlFor="type" className='label'>
-                                    {' '}
-                                    {t('type_shift')} <span style={{ color: 'red' }}>* </span>
-                                </label>
+                                
                                 <label htmlFor="type" className='label'>
                                     {' '}
                                     Tình trạng <span style={{ color: 'red' }}>* </span>

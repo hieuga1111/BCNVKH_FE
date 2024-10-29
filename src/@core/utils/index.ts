@@ -124,9 +124,9 @@ export const formatDate = (date: any) => {
 	}
 	return '';
 };
-export const convertTimeFormat = (time : any) => {
-    const [hours, minutes] = time.split(':');
-    return `${hours}:${minutes}`;
+export const convertTimeFormat = (time: any) => {
+	const [hours, minutes] = time.split(':');
+	return `${hours}:${minutes}`;
 };
 
 export const showMessage = (msg = '', type = 'success') => {
@@ -148,6 +148,90 @@ export const showMessage = (msg = '', type = 'success') => {
 	});
 };
 
+export const formatdata = (data: any) => {
+	function formatCounts(counts: any) {
+		return categories
+			.filter(cat => counts[cat] > 0)
+			.map(cat => `${cat}: ${counts[cat]}`)
+			.join(", ");
+	}
+	type CountType = {
+		[key: string]: { [category: string]: number; total: number }
+	};
+	const categories = ["Xuất sắc", "Giỏi", "Khá", "Trung Bình"];
+	const list = [];
+
+	for (const unit in data) {
+		if (unit === "TOTAL") continue;
+		const row = { unit, chutri: "", thuchien: "", phoiHop: "", tong: "" };
+		const counts: CountType = {
+			chutri: { total: 0 },
+			thuchien: { total: 0 },
+			phoiHop: { total: 0 },
+			tong: { total: 0 }
+		};
+
+		// Initialize counts for each category and role
+		categories.forEach(category => {
+			counts.chutri[category] = 0;
+			counts.thuchien[category] = 0;
+			counts.phoiHop[category] = 0;
+			counts.tong[category] = 0;
+		});
+
+		// Fill counts based on the roles
+		for (const role in data[unit]) {
+			const roleData = data[unit][role];
+			const isChuTri = role === "Cơ quan, đơn vị chủ trì";
+			const isThucHien = role === "Cơ quan, đơn vị thực hiện";
+			const isPhoiHop = role === "Cơ quan, đơn vị phối hợp";
+
+			for (const grade in roleData.results) {
+				if (isChuTri) counts.chutri[grade] += roleData.results[grade];
+				if (isThucHien) counts.thuchien[grade] += roleData.results[grade];
+				if (isPhoiHop) counts.phoiHop[grade] += roleData.results[grade];
+				counts.tong[grade] += roleData.results[grade];
+			}
+
+			// Add totals for each role
+			if (isChuTri) counts.chutri.total = roleData.total;
+			if (isThucHien) counts.thuchien.total = roleData.total;
+			if (isPhoiHop) counts.phoiHop.total = roleData.total;
+			counts.tong.total += roleData.total;
+		}
+
+		// Format counts as strings with "Tổng" included
+		row.chutri = categories.filter(cat => counts.chutri[cat] > 0).map(cat => `${cat}: ${counts.chutri[cat]}`).join(", ");
+		if (counts.chutri.total > 0) row.chutri += `, Tổng: ${counts.chutri.total}`;
+
+		row.thuchien = categories.filter(cat => counts.thuchien[cat] > 0).map(cat => `${cat}: ${counts.thuchien[cat]}`).join(", ");
+		if (counts.thuchien.total > 0) row.thuchien += `, Tổng: ${counts.thuchien.total}`;
+
+		row.phoiHop = categories.filter(cat => counts.phoiHop[cat] > 0).map(cat => `${cat}: ${counts.phoiHop[cat]}`).join(", ");
+		if (counts.phoiHop.total > 0) row.phoiHop += `, Tổng: ${counts.phoiHop.total}`;
+
+		row.tong = categories.filter(cat => counts.tong[cat] > 0).map(cat => `${cat}: ${counts.tong[cat]}`).join(", ");
+		if (counts.tong.total > 0) row.tong += `, Tổng: ${counts.tong.total}`;
+
+		list.push(row);
+	}
+	const totalRow = { unit: "Tổng", chutri: "", thuchien: "", phoiHop: "", tong: "" };
+	type CountType1 = {
+		[key: string]: { total: number }
+	};
+	const totalCounts: CountType1 = {};
+
+	// Initialize totalCounts for each category
+
+	for (const grade in data?.TOTAL?.results) {
+		totalCounts[grade] = data?.TOTAL?.results[grade];
+	}
+
+	totalRow.tong = formatCounts(totalCounts) + `, Tổng: ${data?.TOTAL?.total}`;
+	list.push(totalRow);
+
+	return (list)
+}
 export async function downloadFile(fileName: any, api: any) {
 	return callApi(api, 'GET', null, null, true).then((response: any) => {
 		const url = window.URL.createObjectURL(new Blob([response]));
@@ -186,9 +270,9 @@ export function dateFormat(dt: any) {
 	return dt;
 }
 export function dateFormatDay(dt: any) {
-    const parts = dt.split('-');
+	const parts = dt.split('-');
 
-    const formattedDate = parts.reverse().join('-');
+	const formattedDate = parts.reverse().join('-');
 
-    return formattedDate;
+	return formattedDate;
 }
