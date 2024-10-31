@@ -193,7 +193,8 @@ const AddNewShift = ({ ...props }: Props) => {
                     status: 1,
                     description: "",
                     management_level_id: 'B',
-                    report_type_id: null
+                    report_type_id: null,
+                    confidentiality_level_id: null
 
                 }}
                 validationSchema={SubmittedForm}
@@ -400,6 +401,42 @@ const AddNewShift = ({ ...props }: Props) => {
                             </label>
                             <Field autoComplete="off" name="summary" as="textarea" rows="4" id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
                         </div>
+                        <div className='flex justify-between gap-5'>
+
+                            <div className="mb-5 w-1/2">
+                                <label htmlFor="confidentiality_level_id" className='label'>
+                                    Độ mật
+                                </label>
+                                <Select
+                                    id="confidentiality_level_id"
+                                    name="confidentiality_level_id"
+                                    options={[
+                                        {
+                                            value: "KM",
+                                            label: "Không mật",
+                                        },
+                                        {
+                                            value: "M",
+                                            label: 'Mật',
+                                        },
+                                        {
+                                            value: "TM",
+                                            label: 'Tối mật',
+                                        },
+                                        {
+                                            value: "TuM",
+                                            label: "Tuyệt mật",
+                                        },
+                                    ]}
+                                    defaultValue={values.confidentiality_level_id}
+                                    placeholder={`Chọn độ mật`}
+                                    maxMenuHeight={160}
+                                    onChange={(e: any) => {
+                                        setFieldValue("confidentiality_level_id", e.value);
+                                    }}
+                                />
+                            </div>
+                        </div>
                         {participants.map((input, index) => (
 
                             <div key={index}>
@@ -426,15 +463,15 @@ const AddNewShift = ({ ...props }: Props) => {
                                             options={[
                                                 {
                                                     value: "Collaborating",
-                                                    label: "Cơ quan, đơn vị phối hợp"
+                                                    label: "Phối hợp"
                                                 },
                                                 {
                                                     value: "Executing",
-                                                    label: "Cơ quan, đơn vị thực hiện"
+                                                    label: "Thực hiện"
                                                 },
                                                 {
                                                     value: "Lead",
-                                                    label: "Cơ quan, đơn vị chủ trì"
+                                                    label: "Chủ trì"
                                                 }
                                             ]}
                                             placeholder={`Chọn vai trò`}

@@ -170,13 +170,13 @@ const AddNewShift = ({ ...props }: Props) => {
             accessor: 'participant_role_id',
             title: `Vai trò`,
             sortable: false,
-            render: (records: any, index: any) => (records.participant_role_id === 'Collaborating') ? 'Cơ quan, đơn vị phối hợp' :
-                (records.participant_role_id === 'Executing') ? 'Cơ quan, đơn vị thực hiện' :
-                    'Cơ quan, đơn vị chủ trì',
+            render: (records: any, index: any) => (records.participant_role_id === 'Collaborating') ? 'Phối hợp' :
+                (records.participant_role_id === 'Executing') ? 'Thực hiện' :
+                    'Chủ trì',
         },
         {
             accessor: 'participant_role_id',
-            title: `Vai trò`,
+            title: `Đơn vị`,
             sortable: false,
             render: (records: any, index: any) => <span>{records?.unit.name}</span>
         }
@@ -223,6 +223,7 @@ const AddNewShift = ({ ...props }: Props) => {
                     status: detail?.status,
                     management_level_id: detail?.management_level_id,
                     report_type_id: detail?.report_type_id,
+                    confidentiality_level_id: detail?.confidentiality_level_id
 
                 }}
                 enableReinitialize
@@ -398,6 +399,23 @@ const AddNewShift = ({ ...props }: Props) => {
                                         setFieldValue("report_type_id", e.value);
                                     }}
 
+                                />
+                            </div>
+                        </div>
+                        <div className='flex justify-between gap-5'>
+                            
+                            <div className="mb-5 w-1/2">
+                                <label htmlFor="summary" className='label'>
+                                    {' '}
+                                    Độ mật
+                                </label>
+                                <Select
+                                    isDisabled={true}
+                                    id="confidentiality_level_id"
+                                    name="confidentiality_level_id"
+
+                                    placeholder={`${values.confidentiality_level_id}`}
+                                    maxMenuHeight={160}
                                 />
                             </div>
                         </div>

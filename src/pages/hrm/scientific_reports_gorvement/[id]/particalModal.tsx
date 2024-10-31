@@ -128,15 +128,15 @@ const ParticalModal = ({ ...props }: Props) => {
                                                             options={[
                                                                 {
                                                                     value: "Collaborating",
-                                                                    label: "Cơ quan, đơn vị phối hợp"
+                                                                    label: "Phối hợp"
                                                                 },
                                                                 {
                                                                     value: "Executing",
-                                                                    label: "Cơ quan, đơn vị thực hiện"
+                                                                    label: "Thực hiện"
                                                                 },
                                                                 {
                                                                     value: "Lead",
-                                                                    label: "Cơ quan, đơn vị chủ trì"
+                                                                    label: "Chủ trì"
                                                                 }
                                                             ]}
                                                             placeholder={`Chọn vai trò`}

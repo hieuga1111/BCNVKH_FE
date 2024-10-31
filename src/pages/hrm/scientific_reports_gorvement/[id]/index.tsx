@@ -301,13 +301,13 @@ const AddNewShift = ({ ...props }: Props) => {
             accessor: 'participant_role_id',
             title: `Vai trò`,
             sortable: false,
-            render: (records: any, index: any) => (records.participant_role_id === 'Collaborating') ? 'Cơ quan, đơn vị phối hợp' :
-            (records.participant_role_id === 'Executing') ? 'Cơ quan, đơn vị thực hiện' :
-            'Cơ quan, đơn vị chủ trì',
+            render: (records: any, index: any) => (records.participant_role_id === 'Collaborating') ? 'Phối hợp' :
+                (records.participant_role_id === 'Executing') ? 'Thực hiện' :
+                    'Chủ trì',
         },
         {
             accessor: 'participant_role_id',
-            title: `Vai trò`,
+            title: `Đơn vị`,
             sortable: false,
             render: (records: any, index: any) => <span>{records?.unit.name}</span>
         },
@@ -374,6 +374,7 @@ const AddNewShift = ({ ...props }: Props) => {
                     status: detail?.status,
                     management_level_id: detail?.management_level_id,
                     report_type_id: detail?.report_type_id,
+                    confidentiality_level_id: detail?.confidentiality_level_id
 
                 }}
                 enableReinitialize
@@ -386,7 +387,7 @@ const AddNewShift = ({ ...props }: Props) => {
                     <Form className="space-y-5">
                         <div className='flex justify-between gap-5'>
                             <div className="mb-5 w-1/2">
-                               
+
                                 <label htmlFor="type" className='label'>
                                     {' '}
                                     Tình trạng <span style={{ color: 'red' }}>* </span>
@@ -573,6 +574,42 @@ const AddNewShift = ({ ...props }: Props) => {
                                         setFieldValue("report_type_id", e.value);
                                     }}
 
+                                />
+                            </div>
+                        </div>
+                        <div className='flex justify-between gap-5'>
+
+                            <div className="mb-5 w-1/2">
+                                <label htmlFor="confidentiality_level_id" className='label'>
+                                    Độ mật
+                                </label>
+                                <Select
+                                    id="confidentiality_level_id"
+                                    name="confidentiality_level_id"
+                                    options={[
+                                        {
+                                            value: "KM",
+                                            label: "Không mật",
+                                        },
+                                        {
+                                            value: "M",
+                                            label: 'Mật',
+                                        },
+                                        {
+                                            value: "TM",
+                                            label: 'Tối mật',
+                                        },
+                                        {
+                                            value: "TuM",
+                                            label: "Tuyệt mật",
+                                        },
+                                    ]}
+                                    defaultValue={values.confidentiality_level_id}
+                                    placeholder={`Chọn độ mật`}
+                                    maxMenuHeight={160}
+                                    onChange={(e: any) => {
+                                        setFieldValue("confidentiality_level_id", e.value);
+                                    }}
                                 />
                             </div>
                         </div>

@@ -46,30 +46,30 @@ const AddNewShift = ({ ...props }: Props) => {
     const [typeShift, setTypeShift] = useState(1); // 0: time, 1: total hours
     useEffect(() => {
         const findIP = async () => {
-          try {
-            const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
-            const peerConnection = new RTCPeerConnection();
-    
-            peerConnection.createDataChannel('');
-            const offer = await peerConnection.createOffer();
-            await peerConnection.setLocalDescription(offer);
-    
-            peerConnection.onicecandidate = (event) => {
-              if (event && event.candidate && event.candidate.candidate) {
-                const ipMatch = event.candidate.candidate.match(ipRegex);
-                if (ipMatch) {
-                  setIp(ipMatch[1]);
-                  peerConnection.close();
-                }
-              }
-            };
-          } catch (err) {
-            console.error('Error retrieving IP: ', err);
-          }
+            try {
+                const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
+                const peerConnection = new RTCPeerConnection();
+
+                peerConnection.createDataChannel('');
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+
+                peerConnection.onicecandidate = (event) => {
+                    if (event && event.candidate && event.candidate.candidate) {
+                        const ipMatch = event.candidate.candidate.match(ipRegex);
+                        if (ipMatch) {
+                            setIp(ipMatch[1]);
+                            peerConnection.close();
+                        }
+                    }
+                };
+            } catch (err) {
+                console.error('Error retrieving IP: ', err);
+            }
         };
-    
+
         findIP();
-      }, []);
+    }, []);
     useEffect(() => {
         const id = router.query.id;
         if (id) {
@@ -299,13 +299,13 @@ const AddNewShift = ({ ...props }: Props) => {
             accessor: 'participant_role_id',
             title: `Vai trò`,
             sortable: false,
-            render: (records: any, index: any) => (records.participant_role_id === 'Collaborating') ? 'Cơ quan, đơn vị phối hợp' :
-            (records.participant_role_id === 'Executing') ? 'Cơ quan, đơn vị thực hiện' :
-            'Cơ quan, đơn vị chủ trì',
+            render: (records: any, index: any) => (records.participant_role_id === 'Collaborating') ? 'Phối hợp' :
+                (records.participant_role_id === 'Executing') ? 'Thực hiện' :
+                    'Chủ trì',
         },
         {
             accessor: 'participant_role_id',
-            title: `Vai trò`,
+            title: `Đơn vị`,
             sortable: false,
             render: (records: any, index: any) => <span>{records?.unit.name}</span>
         },
@@ -372,6 +372,7 @@ const AddNewShift = ({ ...props }: Props) => {
                     status: detail?.status,
                     management_level_id: detail?.management_level_id,
                     report_type_id: detail?.report_type_id,
+                    confidentiality_level_id: detail?.confidentiality_level_id
 
                 }}
                 enableReinitialize
@@ -384,7 +385,7 @@ const AddNewShift = ({ ...props }: Props) => {
                     <Form className="space-y-5">
                         <div className='flex justify-between gap-5'>
                             <div className="mb-5 w-1/2">
-                               
+
                                 <label htmlFor="type" className='label'>
                                     {' '}
                                     Tình trạng <span style={{ color: 'red' }}>* </span>
@@ -528,6 +529,42 @@ const AddNewShift = ({ ...props }: Props) => {
                             </div>
                         </div>
                         <div className='flex justify-between gap-5'>
+
+                            <div className="mb-5 w-1/2">
+                                <label htmlFor="confidentiality_level_id" className='label'>
+                                    Độ mật
+                                </label>
+                                <Select
+                                    id="confidentiality_level_id"
+                                    name="confidentiality_level_id"
+                                    options={[
+                                        {
+                                            value: "KM",
+                                            label: "Không mật",
+                                        },
+                                        {
+                                            value: "M",
+                                            label: 'Mật',
+                                        },
+                                        {
+                                            value: "TM",
+                                            label: 'Tối mật',
+                                        },
+                                        {
+                                            value: "TuM",
+                                            label: "Tuyệt mật",
+                                        },
+                                    ]}
+                                    defaultValue={values.confidentiality_level_id}
+                                    placeholder={`Chọn độ mật`}
+                                    maxMenuHeight={160}
+                                    onChange={(e: any) => {
+                                        setFieldValue("confidentiality_level_id", e.value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className='flex justify-between gap-5'>
                             <div className="mb-5 w-1/2">
                                 <label htmlFor="keyword" className='label'>
                                     {' '}
@@ -550,7 +587,7 @@ const AddNewShift = ({ ...props }: Props) => {
                                     {' '}
                                     Tóm tắt
                                 </label>
-                               <Field autoComplete="off" name="summary" as="textarea" rows="4"  id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
+                                <Field autoComplete="off" name="summary" as="textarea" rows="4" id="description" placeholder={'Nhập tóm tắt'} className="form-input" />
                             </div>
                             <div className="mb-5 w-1/2">
                                 <label htmlFor="summary" className='label'>
@@ -658,7 +695,7 @@ const AddNewShift = ({ ...props }: Props) => {
                 scientific_report_id={router.query.id}
                 setData={updatePar}
             />
-             <FilelModal
+            <FilelModal
                 openModal={openModalFile}
                 setOpenModal={setOpenModalFile}
                 scientific_report_id={router.query.id}

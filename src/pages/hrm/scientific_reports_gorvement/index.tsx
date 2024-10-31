@@ -165,17 +165,17 @@ const Duty = ({ ...props }: Props) => {
             render: (records: any, index: any) => <span>{records?.name}</span>
         },
         {
-            accessor: 'release_time',
-            title: `Thời gian phát hành`,
+            accessor: 'result',
+            title: `Kết quả`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.release_time}</span>
+            render: (records: any, index: any) => <span>{records?.result}</span>
 
         },
         {
-            accessor: 'acceptance_council',
-            title: `Hội đồng nghiệm thu`,
+            accessor: 'end_time',
+            title: `Thời gian kết thúc`,
             sortable: false,
-            render: (records: any, index: any) => <span>{records?.acceptance_council}</span>
+            render: (records: any, index: any) => <span>{records?.end_time}</span>
 
         },
 
