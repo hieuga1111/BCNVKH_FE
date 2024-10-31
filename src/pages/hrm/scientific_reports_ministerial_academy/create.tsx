@@ -78,6 +78,7 @@ const AddNewShift = ({ ...props }: Props) => {
         data.append('status', typeShift.toString());
         data.append('keyword', value.keyword);
         data.append('report_type_id', value.report_type_id);
+        data.append('confidentiality_level_id', value.confidentiality_level_id);
 
         data.append('storage', value.storage);
         data.append('management_level_id', 'HV');
@@ -433,7 +434,6 @@ const AddNewShift = ({ ...props }: Props) => {
                                             label: "Tuyệt mật",
                                         },
                                     ]}
-                                    defaultValue={values.confidentiality_level_id}
                                     placeholder={`Chọn độ mật`}
                                     maxMenuHeight={160}
                                     onChange={(e: any) => {
